@@ -4,13 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.DriveSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,16 +25,30 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final DriveSubsystem _driveSubsystem = new DriveSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+  private final Joystick _functionJoystick = new Joystick(1);
+  private final Joystick _functionJoystick2 = new Joystick(2);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the trigger bindings
+
+    // Button board configuration 
     configureBindings();
+    
+    // Smartdashboard dropdown 
+    autoChooserInit();
+    
+    // Resetting encoders
+    _driveSubsystem.syncEncoders();
+    
+    // Logging
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
   }
 
   /**
@@ -42,13 +61,52 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+    // Configuring teleoperated control
+    _driveSubsystem.setDefaultCommand(
+      new DriveWithJoystick(_driveSubsystem, _driverController)    
+    );
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    // Size is up to max id, not number of buttons
+    JoystickButton[] buttonBoard1 = new JoystickButton[9];
+    JoystickButton[] buttonBoard2 = new JoystickButton[13];
+
+    // Configuring remaining buttonboard buttons
+    for (int i = 1; i <= 8; i++) {
+      buttonBoard1[i] = new JoystickButton(_functionJoystick, i);
+    } 
+    for (int i = 1; i <= 7; i++) {
+      buttonBoard2[i] = new JoystickButton(_functionJoystick2, i);
+    }
+    for (int i = 9; i <= 12; i++) {
+      buttonBoard2[i] = new JoystickButton(_functionJoystick2, i);
+    }
+
+    // Testing - bottom left
+    buttonBoard1[6].whileTrue(
+     new DriveWithSpeed(_driveSubsystem, 2)
+    );
+
+    // Syncs encoders   
+    _driverController.b().onTrue(
+      Commands.runOnce(() -> _driveSubsystem.syncEncoders(), _driveSubsystem) 
+    );
+
+    _driverController.y().onTrue(new ResetGyro(_driveSubsystem));
+   
+    _driverController.y().onTrue(new ResetGyro(_driveSubsystem));
+
+    _driverController.povUp().onTrue(
+      Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(0), _driveSubsystem)
+    );
+    _driverController.povRight().onTrue(
+      Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(270), _driveSubsystem)
+    );
+    _driverController.povDown().onTrue(
+      Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(180), _driveSubsystem)
+    );
+    _driverController.povLeft().onTrue(
+      Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(90), _driveSubsystem)
+    );
   }
 
   /**
