@@ -33,7 +33,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.RobotConstants;
 
-public class Drive extends SubsystemBase implements VariableValues {
+public class Drive extends SubsystemBase {
 
   // top left, top right, bottom left, bottom right
   // the encoder offsets are overrided later :T
@@ -71,13 +71,13 @@ public class Drive extends SubsystemBase implements VariableValues {
   
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
+  public Drive() {
 
     _kinematics = RobotConstants.driveKinematics;
-        _config = MotorConstants.holonomicPathFollowerConfig;
-        _swerveModules = MotorConstants.getSwerveModules();
-        _headingPIDController = MotorConstants.headingPIDController;
-    }
+    _config = MotorConstants.holonomicPathFollowerConfig;
+    _swerveModules = MotorConstants.getSwerveModules();
+    _headingPIDController = MotorConstants.headingPIDController;
+    
 
     _odometry = new SwerveDriveOdometry(
       _kinematics,
@@ -141,28 +141,11 @@ public class Drive extends SubsystemBase implements VariableValues {
       Rotation2d.fromDegrees(getGyroAngle()),
       getModulePositions()
     );
-
-    if (Vision.hasPose()) {
-      
-      // _poseEstimator.addVisionMeasurement(Vision.getEstimatedPose(), Timer.getFPGATimestamp());
-    }
     
     _field.setRobotPose(getPose());
 
     this.log();
   }
-
-  // @Override
-  // public void simulationPeriodic() {
-  //   for (var module : _swerveModules) {
-  //     module.update();
-  //   }
-  //   _simHeading += getRobotRelativeSpeeds().omegaRadiansPerSecond * .02;
-  //   _poseEstimator.update(
-  //     Rotation2d.fromRadians(_simHeading),
-  //     getModulePositions()
-  //   );
-  // }
 
   /**
    * Scale inputs to velocities and use them as setpoints
@@ -206,7 +189,6 @@ public class Drive extends SubsystemBase implements VariableValues {
       freezeWheels();
     } else {
       setDesiredStates(_slewRateLimiterX.calculate(xVelocity), _slewRateLimiterY.calculate(yVelocity), angularVelocity);
-      // setDesiredStates(xVelocity, yVelocity, angularVelocity);
     } 
 
     NetworkTableInstance nt = NetworkTableInstance.getDefault();
@@ -222,14 +204,12 @@ public class Drive extends SubsystemBase implements VariableValues {
    * @param heading Desired heading to point towards (in degrees)
    */
   public void setDesiredHeading(double heading) {
-    //int compensationAngle = (int)(getGyroAngle()/360) * 360;
     _desiredHeading = heading; // + compensationAngle;
     _inYawLock = true;
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {
     return _kinematics.toChassisSpeeds(getModuleStates());
-    // return kinematics.toChassisSpeeds(getModuleStates());
   }
 
   public SwerveModuleState[] getModuleStates() {
@@ -250,7 +230,6 @@ public class Drive extends SubsystemBase implements VariableValues {
   }
 
   public void setDesiredRobotRelativeSpeeds(ChassisSpeeds robotRelativeSpeeds) {
-    // ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
 
     SwerveModuleState[] targetStates = _kinematics.toSwerveModuleStates(robotRelativeSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -454,35 +433,6 @@ public class Drive extends SubsystemBase implements VariableValues {
     // pose estimator 
     nt.getTable("DriveSubsystem").getEntry("Pose Estimator").setValue(_poseEstimator.getEstimatedPosition().toString());
 
-    // nt.getTable("DriveSubsystem").getEntry("Field").setValue(_field);
-  }
-
-  // public Command driveTowardsTargetCommand(double targetX, double targetY, double targetHeading, double speed) {
-  //   PathPlannerTrajectory trajectory = PathPlanner.generatePath(
-  //     new PathConstraints(speed, RobotConstants.maxDriveAcceleration), 
-  //     new PathPoint(new Translation2d(0., 0.), getPose().getRotation(), getPose().getRotation()), 
-  //     new PathPoint(new Translation2d(targetX, targetY), Rotation2d.fromDegrees(targetHeading), getPose().getRotation())
-  //   );
-  //   return Autos.followTrajectoryCommand(this, trajectory, true);
-  // }
-
-  @Override
-  public void setValues(double... values) {
-    for (var module : _swerveModules) {
-      module.setValues(values);
-    }   
-  }
-
-  @Override
-  public String[] getLabels() {
-      return new String[] {
-        "drive p", "drive i", "drive d", "drive ff"
-      };
-  }
-
-  @Override
-  public int getNumValues() {
-      return 4;
   }
 
   public void flipGyro() {

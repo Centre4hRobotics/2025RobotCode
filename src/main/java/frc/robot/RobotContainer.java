@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drive;
 
@@ -52,6 +53,12 @@ public class RobotContainer {
     DriverStation.startDataLog(DataLogManager.getLog());
   }
 
+  public void startTeleop() {
+    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+      _driveSubsystem.flipGyro();
+    }
+  }
+
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -64,7 +71,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Configuring teleoperated control
     _driveSubsystem.setDefaultCommand(
-      new DriveWithJoystick(_driveSubsystem, _driverController)    
+      new DriveWithJoystick(_driveSubsystem, m_driverController)    
     );
 
     // Size is up to max id, not number of buttons
@@ -82,30 +89,21 @@ public class RobotContainer {
       buttonBoard2[i] = new JoystickButton(_functionJoystick2, i);
     }
 
-    // Testing - bottom left
-    buttonBoard1[6].whileTrue(
-     new DriveWithSpeed(_driveSubsystem, 2)
-    );
-
     // Syncs encoders   
-    _driverController.b().onTrue(
+    m_driverController.b().onTrue(
       Commands.runOnce(() -> _driveSubsystem.syncEncoders(), _driveSubsystem) 
     );
 
-    _driverController.y().onTrue(new ResetGyro(_driveSubsystem));
-   
-    _driverController.y().onTrue(new ResetGyro(_driveSubsystem));
-
-    _driverController.povUp().onTrue(
+    m_driverController.povUp().onTrue(
       Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(0), _driveSubsystem)
     );
-    _driverController.povRight().onTrue(
+    m_driverController.povRight().onTrue(
       Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(270), _driveSubsystem)
     );
-    _driverController.povDown().onTrue(
+    m_driverController.povDown().onTrue(
       Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(180), _driveSubsystem)
     );
-    _driverController.povLeft().onTrue(
+    m_driverController.povLeft().onTrue(
       Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(90), _driveSubsystem)
     );
   }
@@ -117,6 +115,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    // return Autos.exampleAuto(m_exampleSubsystem);
+    return null;
   }
 }
