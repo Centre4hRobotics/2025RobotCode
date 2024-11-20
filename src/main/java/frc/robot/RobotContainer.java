@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Drive;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,7 +25,7 @@ import frc.robot.subsystems.DriveSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DriveSubsystem _driveSubsystem = new DriveSubsystem();
+  private final Drive _driveSubsystem = new Drive();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -41,7 +41,8 @@ public class RobotContainer {
     configureBindings();
     
     // Smartdashboard dropdown 
-    autoChooserInit();
+    // error because doesn't exist lol
+    //autoChooserInit();
     
     // Resetting encoders
     _driveSubsystem.syncEncoders();
