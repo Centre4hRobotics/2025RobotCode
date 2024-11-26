@@ -17,7 +17,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.subsystems.SwerveModule;
+import frc.robot.subsystems.KrakenSwerveModule;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -32,18 +32,27 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+  // implement everywhere else
+  public static enum RobotType {
+    PRACTICE,
+    COMPETITION
+  }
+
+  public static RobotType robotType = RobotType.PRACTICE;
+
   public static class RobotConstants {
     public static final double wheelDiameter = 3.83;
+    public static final double wheelCircumference = wheelDiameter*Math.PI;
     public static final double maxAttainableSpeed = 4.2; // arbitrary right now
-    public static final double maxSlowDriveSpeed = 2; // 2.75; //meters per second
+    public static final double maxSlowDriveSpeed = 2; //meters per second
     public static final double maxFastDriveSpeed = 4;
-    public static final double maxDriveAcceleration = 1; // 3 //meters per second squared
-    public static final double maxRotationSpeed = 1.5 * Math.PI; // 1.5*Math.PI; //radians per second
+    public static final double maxDriveAcceleration = 1; //meters per second squared
+    public static final double maxRotationSpeed = 1.5 * Math.PI; //radians per second
     public static final double maxRotationAcceleration = 3 * Math.PI; // guessed 2x max speed from PPLib examples
     public static final double maxSlewRate = 20;
     public static final double robotLength = .7; // meters
 
-    public static final double driveGearRatio = 7.13 * 11. / 12.;
+    public static final double driveGearRatio = 6.54;
     public static final double steerGearRatio = 11.3142;
 
     public static double trackWidth = Units.inchesToMeters(25);
@@ -65,12 +74,12 @@ public final class Constants {
     public static final double bottomLeftEncoderOffset = 4.988;
     public static final double bottomRightEncoderOffset = 5.859; 
 
-    public static SwerveModule[] getSwerveModules() {
-      return new SwerveModule[] {
-        new SwerveModule(3, 4, 0, topLeftEncoderOffset, "top left"), 
-        new SwerveModule(5, 6, 1, topRightEncoderOffset, "top right"),
-        new SwerveModule(1, 2, 2, bottomLeftEncoderOffset, "bottom left"),
-        new SwerveModule(7, 8, 3, bottomRightEncoderOffset, "bottom right")
+    public static KrakenSwerveModule[] getSwerveModules() {
+      return new KrakenSwerveModule[] {
+        new KrakenSwerveModule(3, 4, 0, topLeftEncoderOffset, "top left"), 
+        new KrakenSwerveModule(5, 6, 1, topRightEncoderOffset, "top right"),
+        new KrakenSwerveModule(1, 2, 2, bottomLeftEncoderOffset, "bottom left"),
+        new KrakenSwerveModule(7, 8, 3, bottomRightEncoderOffset, "bottom right")
       };
     }
 

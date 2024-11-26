@@ -39,13 +39,6 @@ public class Drive extends SubsystemBase {
   // the encoder offsets are overrided later :T
   private SwerveModuleBase[] _swerveModules;
 
-  // private SimSwerveModule[] _swerveModules = {
-  //   new SimSwerveModule(0, "top left"),
-  //   new SimSwerveModule(1, "top right"),
-  //   new SimSwerveModule(2, "bottom left"),
-  //   new SimSwerveModule(3, "bottom right"),
-  // };
-
   private AHRS _gyro = new AHRS(SPI.Port.kMXP);
 
   private SwerveDriveOdometry _odometry;
@@ -62,9 +55,6 @@ public class Drive extends SubsystemBase {
 
   // for logging to advantagescope
   private final Field2d _field = new Field2d();
-
-  // Simulation
-  private double _simHeading = 0;
 
   private HolonomicPathFollowerConfig _config;
   private SwerveDriveKinematics _kinematics;
@@ -120,10 +110,6 @@ public class Drive extends SubsystemBase {
       getModulePositions(),
       _odometry.getPoseMeters()
     );
-
-    if(RobotBase.isSimulation()){
-      SmartDashboard.putData("Field", _field);
-    }
 
     resetGyroAngle();
     setDesiredHeading(0);

@@ -15,14 +15,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.RobotConstants;
-
-
-
-//import edu.wpi.first.math.kinematics.SwerveModuleState;
-//import frc.robot.Constants.RobotConstants;
 //୨୧
 
-public class SwerveModule extends SwerveModuleBase {
+public class KrakenSwerveModule extends SwerveModuleBase {
 
     private TalonFX _drivingMotor;
     private TalonFX _turningMotor;
@@ -39,7 +34,7 @@ public class SwerveModule extends SwerveModuleBase {
     private final PositionVoltage anglePosition = new PositionVoltage(0);
 
   /** Creates a new SwerveModule. */
-  public SwerveModule (int driveDeviceId, int turnDeviceId, int absoluteEncoderId, double absoluteEncoderAngleOffset, String name) {
+  public KrakenSwerveModule (int driveDeviceId, int turnDeviceId, int absoluteEncoderId, double absoluteEncoderAngleOffset, String name) {
     super(absoluteEncoderId, absoluteEncoderAngleOffset, name);
 
     _drivingMotor = new TalonFX(driveDeviceId);
@@ -62,11 +57,9 @@ public class SwerveModule extends SwerveModuleBase {
 
   @Override
   public void setPIDReference(SwerveModuleState swerveModuleState) {
-    driveVelocity.Velocity = MPSToRPS(swerveModuleState.speedMetersPerSecond, RobotConstants.wheelDiameter * Math.PI);
+    driveVelocity.Velocity = MPSToRPS(swerveModuleState.speedMetersPerSecond, RobotConstants.wheelCircumference);
     _drivingMotor.setControl(driveVelocity); 
     _turningMotor.setControl(anglePosition.withPosition(swerveModuleState.angle.getRotations()));
-    // _drivingMotor.setControl(new VelocityVoltage(swerveModuleState.speedMetersPerSecond));
-    // _turningMotor.setControl(new PositionVoltage(swerveModuleState.angle.getRadians()));
   }
 
   @Override
@@ -91,24 +84,18 @@ public class SwerveModule extends SwerveModuleBase {
 
   @Override
   public double getDriveVelocity() {
-    return RPSToMPS(_drivingMotor.getVelocity().getValueAsDouble(), RobotConstants.wheelDiameter * Math.PI);
+    return RPSToMPS(_drivingMotor.getVelocity().getValueAsDouble(), RobotConstants.wheelCircumference);
   }
 
   @Override
   public double getDrivePosition() {
-    return rotationsToMeters(_drivingMotor.getPosition().getValueAsDouble(), RobotConstants.wheelDiameter * Math.PI);
+    return rotationsToMeters(_drivingMotor.getPosition().getValueAsDouble(), RobotConstants.wheelCircumference);
   }
 
   
 
   @Override
   public double getRelativeRotationPositionRad() {
-    //  return new SwerveModulePosition(
-    //         Conversions.rotationsToMeters(mDriveMotor.getPosition().getValue(), Constants.Swerve.wheelCircumference), 
-    //         Rotation2d.fromRotations(mAngleMotor.getPosition().getValue())
-    //     );
-    // return new SwerveModulePosition(RPSToMPS(_drivingMotor.getPosition().getValueAsDouble(), Constants.RobotConstants.wheelDiameter * Math.PI), 
-    //       Rotation2d.fromRotations(_turningMotor.getPosition().getValueAsDouble())).distanceMeters;
     return correctAngle(_turningMotor.getPosition().getValueAsDouble() * 2.0 * Math.PI);
   }
 

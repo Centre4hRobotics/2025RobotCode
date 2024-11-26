@@ -54,13 +54,6 @@ public class DriveWithJoystick extends Command {
       joystickXSpeedInput = 0; joystickYSpeedInput = 0;
     }
 
-    // TODO: slowdown button
-    // if (_controller.rightBumper().getAsBoolean()) {
-    //   joystickXSpeedInput *= .5;
-    //   joystickYSpeedInput *= .5;
-    //   joystickAngularVelocityInput *= .5;
-    // }
-
     _drive.drive(joystickXSpeedInput, joystickYSpeedInput, joystickAngularVelocityInput, _controller.getRightTriggerAxis());
   }
 
