@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -39,10 +42,12 @@ public class RobotContainer {
 
     // Button board configuration 
     configureBindings();
+
+    // smartdashboard dropdown
+    autoChooserInit();
     
     // Smartdashboard dropdown 
     // error because doesn't exist lol
-    //autoChooserInit();
     
     // Resetting encoders
     _driveSubsystem.syncEncoders();
@@ -107,14 +112,26 @@ public class RobotContainer {
     );
   }
 
+  public void autoChooserInit() {
+    String[] autoselector = {
+      "drive 3m"
+    };
+    SmartDashboard.putStringArray("Auto List", autoselector);
+    }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    // return Autos.exampleAuto(m_exampleSubsystem);
-    return null;
+    String selection = SmartDashboard.getString("Auto Selector", "None");
+    
+    Command autoCommand = Commands.runOnce(
+      () -> _driveSubsystem.freezeWheels(), _driveSubsystem
+    );  //The default command will be to freeze if nothing is selected
+
+    autoCommand = new PathPlannerAuto(selection);
+    return autoCommand;
   }
 }

@@ -172,7 +172,7 @@ public class Drive extends SubsystemBase {
     }
 
     if (Math.abs(xVelocity) < .02 && Math.abs(yVelocity) < .02 && Math.abs(angularVelocity) < .5) { 
-      freezeWheels();
+      setWheelsX();
     } else {
       setDesiredStates(_slewRateLimiterX.calculate(xVelocity), _slewRateLimiterY.calculate(yVelocity), angularVelocity);
     } 

@@ -60,8 +60,8 @@ public class DriveWithJoystick extends Command {
       //scales each component by using joystick angle
       double joystickAngle = Math.atan2(joystickYSpeedInput, joystickXSpeedInput);
       totalThrottle = Math.pow(totalThrottle, 2.3);
-      joystickXSpeedInput *= Math.cos(joystickAngle);
-      joystickYSpeedInput += Math.sin(joystickAngle);
+      joystickXSpeedInput = totalThrottle * Math.cos(joystickAngle);
+      joystickYSpeedInput = totalThrottle * Math.sin(joystickAngle);
     }
 
     _drive.drive(joystickXSpeedInput, joystickYSpeedInput, joystickAngularVelocityInput, _controller.getRightTriggerAxis());
