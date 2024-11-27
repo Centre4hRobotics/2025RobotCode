@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+
 import frc.robot.subsystems.KrakenSwerveModule;
 
 /**
@@ -57,7 +58,6 @@ public final class Constants {
 
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
-    // somewhat arbitrary max speeds
     public static final double maxAttainableSpeed; // arbitrary right now
     public static final double maxSlowDriveSpeed; //meters per second
     public static final double maxFastDriveSpeed;
@@ -217,7 +217,7 @@ public final class Constants {
           driveTimeThreshold = 0.1;
           steerCurrentThreshold = 50.0;
           steerTimeThreshold = 0.1;
-          b
+          break;
         case PRACTICE:
         default:
           wheelTurningP = 20;

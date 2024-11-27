@@ -38,7 +38,6 @@ public abstract class SwerveModuleBase {
         SwerveModuleState correctedState = new SwerveModuleState();
         correctedState.speedMetersPerSecond = state.speedMetersPerSecond;
         correctedState.angle = state.angle;
-        // correctedState.angle = state.angle.plus(new Rotation2d(_absoluteEncoderAngleOffset));
 
         // makes sure to never travel more than 90 degrees
         SwerveModuleState optimizedState = SwerveModuleState.optimize(
@@ -112,6 +111,12 @@ public abstract class SwerveModuleBase {
     public abstract double getDrivePosition();
 
     /**
+     * Get relative rotation in radians
+     * @return
+     */
+    public abstract double getRelativeRotationPositionRad();
+
+    /**
      * Get absolute rotation in rotations
      * @return
      */
@@ -126,12 +131,6 @@ public abstract class SwerveModuleBase {
         double _rotation = _absoluteTurningEncoder.getAbsolutePosition() * _absoluteTurningEncoder.getDistancePerRotation() - _absoluteEncoderAngleOffset;
         return correctAngle(_rotation);
     }
-
-    /**
-     * Get relative rotation in radians
-     * @return
-     */
-    public abstract double getRelativeRotationPositionRad();
 
     /**
      * Get the current state of the module based on encoders
@@ -213,6 +212,4 @@ public abstract class SwerveModuleBase {
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
         return nt.getTable("SwerveModule").getEntry("Module " + _name + " " + logName);
     }
-
-    public abstract void setValues(double... values);
 }

@@ -30,8 +30,8 @@ public class KrakenSwerveModule extends SwerveModuleBase {
     private TalonFXConfigurator _drivingConfigurator;
     private TalonFXConfigurator _turningConfigurator;
 
-    private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
-    private final PositionVoltage anglePosition = new PositionVoltage(0);
+    private final VelocityVoltage driveVelocity = new VelocityVoltage(0.0);
+    private final PositionVoltage anglePosition = new PositionVoltage(0.0);
 
   /** Creates a new SwerveModule. */
   public KrakenSwerveModule (int driveDeviceId, int turnDeviceId, int absoluteEncoderId, double absoluteEncoderAngleOffset, String name) {

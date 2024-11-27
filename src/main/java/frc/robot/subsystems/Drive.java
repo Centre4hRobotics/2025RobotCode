@@ -56,7 +56,7 @@ public class Drive extends SubsystemBase {
   // for logging to advantagescope
   private final Field2d _field = new Field2d();
 
-  private HolonomicPathFollowerConfig _config;
+  private HolonomicPathFollowerConfig _pathFollowerConfig;
   private SwerveDriveKinematics _kinematics;
   
 
@@ -64,7 +64,7 @@ public class Drive extends SubsystemBase {
   public Drive() {
 
     _kinematics = RobotConstants.driveKinematics;
-    _config = MotorConstants.holonomicPathFollowerConfig;
+    _pathFollowerConfig = MotorConstants.holonomicPathFollowerConfig;
     _swerveModules = MotorConstants.getSwerveModules();
     _headingPIDController = MotorConstants.headingPIDController;
     
@@ -88,7 +88,7 @@ public class Drive extends SubsystemBase {
       this::resetOdometry, 
       this::getRobotRelativeSpeeds, 
       this::setDesiredRobotRelativeSpeeds, 
-      _config, 
+      _pathFollowerConfig, 
       () -> {
         // Boolean supplier that controls when the path will be mirrored for the red alliance
         // This will flip the path being followed to the red side of the field.
