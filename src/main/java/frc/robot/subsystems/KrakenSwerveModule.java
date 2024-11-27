@@ -126,7 +126,7 @@ public class KrakenSwerveModule extends SwerveModuleBase {
     _turningConfiguration.Feedback.SensorToMechanismRatio = RobotConstants.steerGearRatio;
     _turningConfiguration.ClosedLoopGeneral.ContinuousWrap = true;    
     
-    _turningConfiguration.Slot0.kP = MotorConstants.turningP;
+    _turningConfiguration.Slot0.kP = MotorConstants.wheelTurningP;
 
     _turningConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 

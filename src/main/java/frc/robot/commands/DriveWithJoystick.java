@@ -50,8 +50,18 @@ public class DriveWithJoystick extends Command {
     // weird because x axis is forwards
     double joystickXSpeedInput = -_controller.getRightY();
     double joystickYSpeedInput = -_controller.getRightX();
-    if (Math.hypot(joystickXSpeedInput, joystickYSpeedInput) < .2) { // deadzone
+
+    // finds the magnitude
+    double totalThrottle = Math.hypot(joystickXSpeedInput, joystickYSpeedInput);
+    
+    if (totalThrottle < .2) { // deadzone
       joystickXSpeedInput = 0; joystickYSpeedInput = 0;
+    } else {
+      //scales each component by using joystick angle
+      double joystickAngle = Math.atan2(joystickYSpeedInput, joystickXSpeedInput);
+      totalThrottle = Math.pow(totalThrottle, 2.3);
+      joystickXSpeedInput *= Math.cos(joystickAngle);
+      joystickYSpeedInput += Math.sin(joystickAngle);
     }
 
     _drive.drive(joystickXSpeedInput, joystickYSpeedInput, joystickAngularVelocityInput, _controller.getRightTriggerAxis());
