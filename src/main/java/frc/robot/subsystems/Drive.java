@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -21,6 +22,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
@@ -28,7 +31,9 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.RobotConstants;
@@ -38,6 +43,7 @@ public class Drive extends SubsystemBase {
   // top left, top right, bottom left, bottom right
   // the encoder offsets are overrided later :T
   private SwerveModuleBase[] _swerveModules;
+  private SysIdRoutine _sysIdRoutine;
 
   private AHRS _gyro = new AHRS(SPI.Port.kMXP);
 
@@ -113,6 +119,20 @@ public class Drive extends SubsystemBase {
 
     resetGyroAngle();
     setDesiredHeading(0);
+  
+    _sysIdRoutine = new SysIdRoutine(
+      new SysIdRoutine.Config(
+        null,
+        Units.Volts.of(4),
+        null,
+        (state) -> SignalLogger.writeString("state", state.toString())
+      ),
+      new SysIdRoutine.Mechanism(
+         (volts) -> setDriveVoltages(volts.in(Units.Volts)),
+         null,
+         this
+      )
+    );
   }
 
   @Override
@@ -280,7 +300,9 @@ public class Drive extends SubsystemBase {
   public void setDriveVoltages(double voltage){
     for(SwerveModuleBase module : _swerveModules) {
       module.setDriveVoltage(voltage);
+      module.setTurnEncoderPIDTarget(0.0);
     }
+
   }
 
   public void setTurnEncoderPIDTarget(double target) {
@@ -424,5 +446,13 @@ public class Drive extends SubsystemBase {
   public void flipGyro() {
     resetGyroAngle(getGyroAngle() + 180);
     setDesiredHeading(getGyroAngle());
+  }
+
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return _sysIdRoutine.quasistatic(direction);
+  }
+
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return _sysIdRoutine.dynamic(direction);
   }
 }
