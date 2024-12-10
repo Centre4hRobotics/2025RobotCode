@@ -122,13 +122,14 @@ public class Drive extends SubsystemBase {
   
     _sysIdRoutine = new SysIdRoutine(
       new SysIdRoutine.Config(
-        null,
-        Units.Volts.of(4),
-        null,
+        null,                 // Use default ramp rate (1 V/s)
+        Units.Volts.of(4),   // Reduce dynamic step voltage to 4 to prevent brownout
+        null,                  // Use default timeout (10 s)
+                                       // Log state with Phoenix SignalLogger class
         (state) -> SignalLogger.writeString("state", state.toString())
       ),
       new SysIdRoutine.Mechanism(
-         (volts) -> setDriveVoltages(volts.in(Units.Volts)),
+         (volts) -> driveStraightWithVoltage(volts.in(Units.Volts)),
          null,
          this
       )
@@ -297,7 +298,7 @@ public class Drive extends SubsystemBase {
     return driveVelocities;
   }
 
-  public void setDriveVoltages(double voltage){
+  public void driveStraightWithVoltage(double voltage){
     for(SwerveModuleBase module : _swerveModules) {
       module.setDriveVoltage(voltage);
       module.setTurnEncoderPIDTarget(0.0);

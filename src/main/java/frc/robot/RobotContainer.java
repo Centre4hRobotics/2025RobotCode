@@ -103,8 +103,9 @@ public class RobotContainer {
 
     // In order to properly run characterization tests, it is best to be able to
     // manually control the stop/stop of the logger to remove as much noise.
-    m_driverController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
-    m_driverController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+    configureSysIdBindings();
+    
+    buttonBoard1[1].onTrue(Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(0), _driveSubsystem));
 
     buttonBoard1[5].whileTrue(_driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
     buttonBoard1[6].whileTrue(_driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
@@ -123,6 +124,12 @@ public class RobotContainer {
     m_driverController.povLeft().onTrue(
       Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(90), _driveSubsystem)
     );
+  }
+
+  public void configureSysIdBindings()
+  {
+    m_driverController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+    m_driverController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
   }
 
   public void autoChooserInit() {
