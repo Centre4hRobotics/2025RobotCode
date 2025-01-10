@@ -104,7 +104,7 @@ public class KrakenSwerveModule extends SwerveModuleBase {
     _drivingConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     _drivingConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
     _drivingConfiguration.CurrentLimits.StatorCurrentLimit = MotorConstants.driveCurrentThreshold; 
-    _drivingConfiguration.CurrentLimits.SupplyTimeThreshold = MotorConstants.driveTimeThreshold;
+    // _drivingConfiguration.CurrentLimits.SupplyTimeThreshold = MotorConstants.driveTimeThreshold;
 
     _drivingConfiguration.Feedback.SensorToMechanismRatio = RobotConstants.driveGearRatio;
     
@@ -121,7 +121,7 @@ public class KrakenSwerveModule extends SwerveModuleBase {
     _turningConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     _turningConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
     _turningConfiguration.CurrentLimits.StatorCurrentLimit = MotorConstants.steerCurrentThreshold; 
-    _turningConfiguration.CurrentLimits.SupplyTimeThreshold = MotorConstants.steerTimeThreshold;
+    // _turningConfiguration.CurrentLimits.SupplyTimeThreshold = MotorConstants.steerTimeThreshold;
 
     _turningConfiguration.Feedback.SensorToMechanismRatio = RobotConstants.steerGearRatio;
     _turningConfiguration.ClosedLoopGeneral.ContinuousWrap = true;    

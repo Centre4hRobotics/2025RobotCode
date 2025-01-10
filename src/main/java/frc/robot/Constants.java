@@ -6,9 +6,9 @@ package frc.robot;
 
 import javax.swing.undo.StateEdit;
 
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+// import com.pathplanner.lib.util.PIDConstants;
+// import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -252,13 +252,13 @@ public final class Constants {
     public static final PIDController headingPIDController = new PIDController(headingP, headingI, headingD);
 
     // HolonomicPathFollowerConfig, this should likely live in your Constants class
-    public static final HolonomicPathFollowerConfig holonomicPathFollowerConfig = new HolonomicPathFollowerConfig( 
-      new PIDConstants(autoDriveP, autoDriveI,autoDriveD), // Translation PID constants
-      new PIDConstants(autoTurningP, autoTurningI, autoTurningI), // Rotation PID constants
-      RobotConstants.maxAttainableSpeed, // Max module speed, in m/s
-      RobotConstants.robotDriveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
-      new ReplanningConfig(true, true) // can add thresholds for both values, see PPLib Java API for info
-    );
+    // public static final HolonomicPathFollowerConfig holonomicPathFollowerConfig = new HolonomicPathFollowerConfig( 
+    //   new PIDConstants(autoDriveP, autoDriveI,autoDriveD), // Translation PID constants
+    //   new PIDConstants(autoTurningP, autoTurningI, autoTurningI), // Rotation PID constants
+    //   RobotConstants.maxAttainableSpeed, // Max module speed, in m/s
+    //   RobotConstants.robotDriveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
+    //   new ReplanningConfig(true, true) // can add thresholds for both values, see PPLib Java API for info
+    // );
   }
 
   

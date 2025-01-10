@@ -111,18 +111,18 @@ public class RobotContainer {
     buttonBoard1[8].whileTrue(_driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
     buttonBoard1[7].whileTrue(_driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-    m_driverController.povUp().onTrue(
-      Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(0), _driveSubsystem)
-    );
-    m_driverController.povRight().onTrue(
-      Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(270), _driveSubsystem)
-    );
-    m_driverController.povDown().onTrue(
-      Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(180), _driveSubsystem)
-    );
-    m_driverController.povLeft().onTrue(
-      Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(90), _driveSubsystem)
-    );
+    // m_driverController.povUp().onTrue(
+    //   Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(0), _driveSubsystem)
+    // );
+    // m_driverController.povRight().onTrue(
+    //   Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(270), _driveSubsystem)
+    // );
+    // m_driverController.povDown().onTrue(
+    //   Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(180), _driveSubsystem)
+    // );
+    // m_driverController.povLeft().onTrue(
+    //   Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(90), _driveSubsystem)
+    // );
   }
 
   public void autoChooserInit() {
