@@ -46,8 +46,7 @@ public class Drive extends SubsystemBase {
   private SwerveModuleBase[] _swerveModules;
   private SysIdRoutine _sysIdRoutine;
 
-  private AHRS _gyro = new AHRS(SPI.Port.kMXP);
-
+  private AHRS _gyro = new AHRS(AHRS.NavXComType.kMXP_SPI);
   private SwerveDriveOdometry _odometry;
 
   private SwerveDrivePoseEstimator _poseEstimator;
