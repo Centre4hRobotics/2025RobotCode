@@ -4,17 +4,20 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveWithJoystick;
@@ -98,18 +101,28 @@ public class RobotContainer {
       Commands.runOnce(() -> _driveSubsystem.syncEncoders(), _driveSubsystem) 
     );
 
-    m_driverController.povUp().onTrue(
-      Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(0), _driveSubsystem)
-    );
-    m_driverController.povRight().onTrue(
-      Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(270), _driveSubsystem)
-    );
-    m_driverController.povDown().onTrue(
-      Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(180), _driveSubsystem)
-    );
-    m_driverController.povLeft().onTrue(
-      Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(90), _driveSubsystem)
-    );
+    // In order to properly run characterization tests, it is best to be able to
+    // manually control the stop/stop of the logger to remove as much noise.
+    m_driverController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+    m_driverController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+
+    buttonBoard1[5].whileTrue(_driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    buttonBoard1[6].whileTrue(_driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    buttonBoard1[8].whileTrue(_driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    buttonBoard1[7].whileTrue(_driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+    // m_driverController.povUp().onTrue(
+    //   Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(0), _driveSubsystem)
+    // );
+    // m_driverController.povRight().onTrue(
+    //   Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(270), _driveSubsystem)
+    // );
+    // m_driverController.povDown().onTrue(
+    //   Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(180), _driveSubsystem)
+    // );
+    // m_driverController.povLeft().onTrue(
+    //   Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(90), _driveSubsystem)
+    // );
   }
 
   public void autoChooserInit() {
