@@ -7,7 +7,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.SignalLogger;
 import com.studica.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
-// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.config.PIDConstants;
+// import com.pathplanner.lib.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.controllers.PPLTVController;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -63,6 +67,7 @@ public class Drive extends SubsystemBase {
   private final Field2d _field = new Field2d();
 
   // private HolonomicPathFollowerConfig _pathFollowerConfig;
+  private RobotConfig _config;
   private SwerveDriveKinematics _kinematics;
   
 
@@ -70,7 +75,14 @@ public class Drive extends SubsystemBase {
   public Drive() {
 
     _kinematics = RobotConstants.driveKinematics;
-    // _pathFollowerConfig = MotorConstants.holonomicPathFollowerConfig;
+    
+    try{
+      _config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }
+
     _swerveModules = MotorConstants.getSwerveModules();
     _headingPIDController = MotorConstants.headingPIDController;
     
@@ -89,25 +101,29 @@ public class Drive extends SubsystemBase {
     _headingPIDController.enableContinuousInput(0, 360);
     _desiredHeading = getGyroAngle();
 
-    // AutoBuilder.configureHolonomic(
-    //   this::getPose, 
-    //   this::resetOdometry, 
-    //   this::getRobotRelativeSpeeds, 
-    //   this::setDesiredRobotRelativeSpeeds, 
-    //   _pathFollowerConfig, 
-    //   () -> {
-    //     // Boolean supplier that controls when the path will be mirrored for the red alliance
-    //     // This will flip the path being followed to the red side of the field.
-    //     // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    AutoBuilder.configure(
+      this::getPose, 
+      this::resetOdometry, 
+      this::getRobotRelativeSpeeds, 
+      this::setDesiredRobotRelativeSpeeds, 
+      new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                    new PIDConstants(MotorConstants.autoDriveP, MotorConstants.autoDriveI, MotorConstants.autoDriveD), // Translation PID constants
+                    new PIDConstants(MotorConstants.autoTurningP, MotorConstants.autoTurningI, MotorConstants.autoTurningD) // Rotation PID constants
+            ),
+      _config, 
+      () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    //     var alliance = DriverStation.getAlliance();
-    //     if (alliance.isPresent()) {
-    //         return alliance.get() == DriverStation.Alliance.Red;
-    //     }
-    //     return false;
-    //   }, 
-    //   this
-    // );
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      }, 
+      this
+    );
 
 
     _poseEstimator = new SwerveDrivePoseEstimator(
@@ -211,7 +227,7 @@ public class Drive extends SubsystemBase {
    */
   public void setDesiredHeading(double heading) {
     _desiredHeading = heading; // + compensationAngle;
-    _inYawLock = true;
+    _inYawLock = false;
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {

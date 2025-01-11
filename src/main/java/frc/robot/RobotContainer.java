@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveWithJoystick;
+import frc.robot.commands.ResetGyro;
 import frc.robot.subsystems.Drive;
 
 /**
@@ -100,6 +101,8 @@ public class RobotContainer {
     m_driverController.b().onTrue(
       Commands.runOnce(() -> _driveSubsystem.syncEncoders(), _driveSubsystem) 
     );
+
+    m_driverController.y().onTrue(new ResetGyro(_driveSubsystem));
 
     // In order to properly run characterization tests, it is best to be able to
     // manually control the stop/stop of the logger to remove as much noise.

@@ -71,7 +71,7 @@ public final class Constants {
         case COMPETITION:
           maxAttainableSpeed = 4.2;
           maxSlowDriveSpeed = 2;
-          maxFastDriveSpeed = 4;
+          maxFastDriveSpeed = .7;
           maxDriveAcceleration = 1;
           maxRotationSpeed = 1.5 * Math.PI;
           maxRotationAcceleration = 3 * Math.PI;
@@ -80,7 +80,7 @@ public final class Constants {
         default:
           maxAttainableSpeed = 4.2;
           maxSlowDriveSpeed = 2;
-          maxFastDriveSpeed = 4;
+          maxFastDriveSpeed = .7;
           maxDriveAcceleration = 1;
           maxRotationSpeed = 1.5 * Math.PI;
           maxRotationAcceleration = 3 * Math.PI;
@@ -164,6 +164,7 @@ public final class Constants {
     public static final double drivingP;
     public static final double drivingI; 
     public static final double drivingD;
+    public static final double drivingS;
     public static final double drivingFF;
 
     // Auto refers to the autonomous mode (contains both drive and wheel).
@@ -199,6 +200,7 @@ public final class Constants {
           drivingP = 0;
           drivingI = 0; 
           drivingD = 0;
+          drivingS = 0.9;
           drivingFF = 0.76;
 
           autoDriveP = 0.7;
@@ -227,6 +229,7 @@ public final class Constants {
           drivingP = 0;
           drivingI = 0; 
           drivingD = 0;
+          drivingS = 0.9;
           drivingFF = 0.76;
 
           autoDriveP = 0.7;

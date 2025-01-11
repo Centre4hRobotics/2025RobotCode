@@ -16,7 +16,7 @@ public abstract class SwerveModuleBase {
     private String _name;
 
     public SwerveModuleBase(int absoluteEncoderId, double absoluteEncoderAngleOffset, String name) {
-        _absoluteTurningEncoder = new AnalogEncoder(absoluteEncoderId, 2*Math.PI, 0);
+        _absoluteTurningEncoder = new AnalogEncoder(absoluteEncoderId);
         _absoluteEncoderAngleOffset = absoluteEncoderAngleOffset;
 
         _name = name;
