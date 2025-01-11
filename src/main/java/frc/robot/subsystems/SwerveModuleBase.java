@@ -16,8 +16,7 @@ public abstract class SwerveModuleBase {
     private String _name;
 
     public SwerveModuleBase(int absoluteEncoderId, double absoluteEncoderAngleOffset, String name) {
-        _absoluteTurningEncoder = new AnalogEncoder(absoluteEncoderId);
-        _absoluteTurningEncoder.setDistancePerRotation(2 * Math.PI);
+        _absoluteTurningEncoder = new AnalogEncoder(absoluteEncoderId, 2*Math.PI, 0);
         _absoluteEncoderAngleOffset = absoluteEncoderAngleOffset;
 
         _name = name;
@@ -121,14 +120,14 @@ public abstract class SwerveModuleBase {
      * @return
      */
     public double getAbsoluteRotationPositionRotations() {
-        return _absoluteTurningEncoder.getAbsolutePosition() - (_absoluteEncoderAngleOffset / (2 * Math.PI));
+        return _absoluteTurningEncoder.get() - (_absoluteEncoderAngleOffset / (2 * Math.PI));
     }
 
     /**
      * Get absolute rotation in radians
      */
     public double getAbsoluteRotationPositionRad() {
-        double _rotation = _absoluteTurningEncoder.getAbsolutePosition() * _absoluteTurningEncoder.getDistancePerRotation() - _absoluteEncoderAngleOffset;
+        double _rotation = _absoluteTurningEncoder.get() * 2*Math.PI - _absoluteEncoderAngleOffset;
         return correctAngle(_rotation);
     }
 
