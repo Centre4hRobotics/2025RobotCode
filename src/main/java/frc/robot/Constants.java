@@ -232,10 +232,10 @@ public final class Constants {
           drivingS = 0.9;
           drivingFF = 0.76;
 
-          autoDriveP = 0.7;
+          autoDriveP = 0;
           autoDriveI = 0; 
           autoDriveD = 0;
-          autoTurningP = 0.8;
+          autoTurningP = 0;
           autoTurningI = 0; 
           autoTurningD = 0;
 

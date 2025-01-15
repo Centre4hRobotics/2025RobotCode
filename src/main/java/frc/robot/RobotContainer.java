@@ -22,6 +22,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ResetGyro;
+import frc.robot.commands.DriveWithSpeed;
 import frc.robot.subsystems.Drive;
 
 /**
@@ -108,6 +109,9 @@ public class RobotContainer {
     // manually control the stop/stop of the logger to remove as much noise.
     m_driverController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
     m_driverController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+
+    buttonBoard1[1].whileTrue(new DriveWithSpeed(_driveSubsystem, 1.0));
+    buttonBoard1[2].whileTrue(new DriveWithSpeed(_driveSubsystem, -1.0));
 
     buttonBoard1[5].whileTrue(_driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
     buttonBoard1[6].whileTrue(_driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));

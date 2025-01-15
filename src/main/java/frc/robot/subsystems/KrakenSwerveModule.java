@@ -112,7 +112,7 @@ public class KrakenSwerveModule extends SwerveModuleBase {
     _drivingConfiguration.Slot0.kI = MotorConstants.drivingI;
     _drivingConfiguration.Slot0.kD = MotorConstants.drivingD;
     _drivingConfiguration.Slot0.kV = MotorConstants.drivingFF;
-    _drivingConfiguration.Slot0.kS = MotorConstants.drivingS;
+    //_drivingConfiguration.Slot0.kS = MotorConstants.drivingS;
 
     _drivingConfigurator.apply(_drivingConfiguration);
   }
