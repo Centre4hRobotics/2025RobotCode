@@ -130,7 +130,8 @@ public class RobotContainer {
 
   public void autoChooserInit() {
     String[] autoselector = {
-      "drive 3m"
+      "drive 3m",
+      "d4,c4,b4"
     };
     SmartDashboard.putStringArray("Auto List", autoselector);
     }
