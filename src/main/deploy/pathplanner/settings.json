@@ -3,12 +3,25 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "characterization",
+    "l",
+    "a",
     "b",
     "c",
-    "d"
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "z"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "not processor side coral",
+    "characterization",
+    "processor side coral"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
