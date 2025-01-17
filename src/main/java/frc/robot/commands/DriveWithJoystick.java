@@ -10,7 +10,7 @@ import frc.robot.subsystems.Drive;
 
 public class DriveWithJoystick extends Command {
 
-  private Drive _drive;
+  private Drive _driveSubsystem;
   private CommandXboxController _controller;
 
   /**
@@ -21,12 +21,12 @@ public class DriveWithJoystick extends Command {
    * 
    * Comment By: EternalSyntaxError
    */
-  public DriveWithJoystick(Drive drive, CommandXboxController controller) {
-    _drive = drive;
+  public DriveWithJoystick(Drive driveSubsystem, CommandXboxController controller) {
+    _driveSubsystem = driveSubsystem;
     _controller = controller;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drive);
+    addRequirements(driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -64,13 +64,13 @@ public class DriveWithJoystick extends Command {
       joystickYSpeedInput = totalThrottle * Math.sin(joystickAngle);
     }
 
-    _drive.drive(joystickXSpeedInput, joystickYSpeedInput, joystickAngularVelocityInput, _controller.getRightTriggerAxis());
+    _driveSubsystem.drive(joystickXSpeedInput, joystickYSpeedInput, joystickAngularVelocityInput, _controller.getRightTriggerAxis());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    _drive.setDesiredStates(0, 0, 0);
+    _driveSubsystem.setDesiredStates(0, 0, 0);
   }
 
   // Returns true when the command should end.
