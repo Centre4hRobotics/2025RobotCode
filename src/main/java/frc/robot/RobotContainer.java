@@ -135,9 +135,13 @@ public class RobotContainer {
   public void autoChooserInit() {
     String[] autoselector = {
       "drive 3m",
-      "d4,c4,b4"
+      "c4,b4,a4",
+      "d4,c4,b4",
+      "e4,d4,c4",
+      "f4,e4,d4"
     };
     SmartDashboard.putStringArray("Auto List", autoselector);
+    System.out.print("Loading selections");
     }
 
   /**

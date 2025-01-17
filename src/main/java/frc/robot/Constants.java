@@ -226,16 +226,16 @@ public final class Constants {
           wheelTurningI = 0;
           wheelTurningD = 0;
 
-          drivingP = 0;
+          drivingP = 0.1;
           drivingI = 0; 
           drivingD = 0;
           drivingS = 0.9;
           drivingFF = 0.76;
 
-          autoDriveP = 0;
+          autoDriveP = 0.7;
           autoDriveI = 0; 
           autoDriveD = 0;
-          autoTurningP = 0;
+          autoTurningP = 0.4;
           autoTurningI = 0; 
           autoTurningD = 0;
 
