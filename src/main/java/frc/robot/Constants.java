@@ -175,6 +175,11 @@ public final class Constants {
     public static final double autoTurningI; 
     public static final double autoTurningD;
 
+    // Tag refers to the april tag positioning system
+    public static final double tagTurningP;
+    public static final double tagTurningI; 
+    public static final double tagTurningD;
+
     // Heading refers to the heading of the entire robot as a whole.
     public static final double headingP; 
     public static final double headingI; 
@@ -210,6 +215,10 @@ public final class Constants {
           autoTurningI = 0; 
           autoTurningD = 0;
 
+          tagTurningP = 0.8;
+          tagTurningI = 0; 
+          tagTurningD = 0;
+
           headingP = 0.11; 
           headingI = 0.02; 
           headingD = 0;
@@ -239,6 +248,10 @@ public final class Constants {
           autoTurningI = 0; 
           autoTurningD = 0;
 
+          tagTurningP = 0.8;
+          tagTurningI = 0; 
+          tagTurningD = 0;
+
           headingP = 0.11; 
           headingI = 0.02; 
           headingD = 0;
@@ -253,6 +266,8 @@ public final class Constants {
     }
 
     public static final PIDController headingPIDController = new PIDController(headingP, headingI, headingD);
+    public static final PIDController tagHeadingPIDController = new PIDController(tagTurningP, tagTurningI, tagTurningD);
+
 
     // HolonomicPathFollowerConfig, this should likely live in your Constants class
     // public static final HolonomicPathFollowerConfig holonomicPathFollowerConfig = new HolonomicPathFollowerConfig( 
