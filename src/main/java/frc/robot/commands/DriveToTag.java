@@ -14,27 +14,42 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.MotorConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Vision;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveToTag extends Command {
 
   private Drive _driveSubsystem;
+  private Vision _vision;
+
+  private Transform2d _position;
+  private double _rotation, _posX, _posY;
+
   private Transform3d _tagFieldTransform3d;
   private double _deltaX, _deltaY;
 
   private PIDController _tagHeadingPIDController; 
-  private PIDController _tagDrivePIDController;
+  private PIDController _tagDriveXPIDController;
+  private PIDController _tagDriveYPIDController;
   
   /** Creates a new DriveToTag. */
-  public DriveToTag(Drive driveSubsystem, Transform3d tagFieldTransform3d, double deltaX, double deltaY) {
+  public DriveToTag(Drive driveSubsystem, Vision vision, Transform3d tagFieldTransform3d, double deltaX, double deltaY) {
     _driveSubsystem = driveSubsystem;
-    _tagFieldTransform3d = tagFieldTransform3d;
+    _vision = vision;
+    _position = _vision.getCameraToAprilTag();
+    _rotation = _position.getRotation().getDegrees();
+    _posX = _position.getX();
+    _posY = _position.getY();
+
     _deltaX = deltaX;
     _deltaY = deltaY;
 
-    _tagHeadingPIDController = new PIDController(MotorConstants.tagTurningP, MotorConstants.tagTurningI, MotorConstants.tagTurningD);
-    _tagDrivePIDController = new PIDController(MotorConstants.tagDriveP, MotorConstants.tagDriveI, MotorConstants.tagDriveD);
+    _tagHeadingPIDController = new PIDController(VisionConstants.tagTurningP, VisionConstants.tagTurningI, VisionConstants.tagTurningD);
+    _tagDriveXPIDController = new PIDController(VisionConstants.tagDriveXP, VisionConstants.tagDriveXI, VisionConstants.tagDriveXD);
+    _tagDriveYPIDController = new PIDController(VisionConstants.tagDriveYP, VisionConstants.tagDriveYI, VisionConstants.tagDriveYD);
+    
     
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveSubsystem);
@@ -49,13 +64,9 @@ public class DriveToTag extends Command {
   public void execute() {
     // TODO: Update transform from vision
 
-    // TODO: Add offset for camera position/bumper position/height/etc
-    Transform3d robotFieldTransform3d = _tagFieldTransform3d.inverse().plus(new Transform3d(_deltaX, _deltaY, 0, new Rotation3d(0.0, 0.0, 0.0)));
-    
-
-    double velocityX = _tagDrivePIDController.calculate(robotFieldTransform3d.getX()-_deltaX);
-    double velocityY = _tagDrivePIDController.calculate(robotFieldTransform3d.getY()-_deltaY);
-    double velocityTheta = _tagHeadingPIDController.calculate(robotFieldTransform3d.getRotation().getAngle());
+    double velocityX = _tagDriveXPIDController.calculate(_posX-_deltaX);
+    double velocityY = _tagDriveYPIDController.calculate(_posY-_deltaY);
+    double velocityTheta = _tagHeadingPIDController.calculate(_rotation);
     
     _driveSubsystem.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(velocityX, velocityY, velocityTheta));
 

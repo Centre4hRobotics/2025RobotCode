@@ -186,14 +186,6 @@ public final class Constants {
     public static final double autoTurningI; 
     public static final double autoTurningD;
 
-    // Tag refers to the april tag positioning system
-    public static final double tagDriveP;
-    public static final double tagDriveI; 
-    public static final double tagDriveD;
-    public static final double tagTurningP;
-    public static final double tagTurningI; 
-    public static final double tagTurningD;
-
     // Heading refers to the heading of the entire robot as a whole.
     public static final double headingP; 
     public static final double headingI; 
@@ -229,13 +221,6 @@ public final class Constants {
           autoTurningI = 0; 
           autoTurningD = 0;
 
-          tagDriveP = 0;
-          tagDriveI = 0;
-          tagDriveD = 0;
-          tagTurningP = 0.8;
-          tagTurningI = 0; 
-          tagTurningD = 0;
-
           headingP = 0.11; 
           headingI = 0.02; 
           headingD = 0;
@@ -264,13 +249,6 @@ public final class Constants {
           autoTurningP = 0.4;
           autoTurningI = 0; 
           autoTurningD = 0;
-
-          tagDriveP = 0;
-          tagDriveI = 0;
-          tagDriveD = 0;
-          tagTurningP = 0.8;
-          tagTurningI = 0; 
-          tagTurningD = 0;
 
           headingP = 0.11; 
           headingI = 0.02; 
@@ -309,6 +287,47 @@ public final class Constants {
     public static final double cameraRoll = 0.0;
     public static final double cameraPitch = 0.0;
     public static final double cameraYaw = 0.0;
+
+    // Tag refers to the april tag positioning system
+    public static final double tagDriveXP;
+    public static final double tagDriveXI; 
+    public static final double tagDriveXD;
+    public static final double tagDriveYP;
+    public static final double tagDriveYI; 
+    public static final double tagDriveYD;
+    public static final double tagTurningP;
+    public static final double tagTurningI; 
+    public static final double tagTurningD;
+
+    static {
+      switch (robotType)
+      {
+        case COMPETITION:
+          tagDriveXP = 0;
+          tagDriveXI = 0;
+          tagDriveXD = 0;
+          tagDriveYP = 0;
+          tagDriveYI = 0;
+          tagDriveYD = 0;
+          tagTurningP = 0.8;
+          tagTurningI = 0; 
+          tagTurningD = 0;
+          break;
+        case PRACTICE:
+        default:
+          tagDriveXP = 0;
+          tagDriveXI = 0;
+          tagDriveXD = 0;
+          tagDriveYP = 0;
+          tagDriveYI = 0;
+          tagDriveYD = 0;
+          tagTurningP = 0.8;
+          tagTurningI = 0; 
+          tagTurningD = 0;
+          break;
+      }
+    }
+
   }
 
   public static enum FieldSide {
