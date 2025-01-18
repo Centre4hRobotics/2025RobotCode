@@ -42,6 +42,10 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.Constants.GyroConstants;
+
+import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 public class Drive extends SubsystemBase {
 
@@ -49,8 +53,9 @@ public class Drive extends SubsystemBase {
   // the encoder offsets are overrided later :T
   private SwerveModuleBase[] _swerveModules;
   private SysIdRoutine _sysIdRoutine;
+  
+  private Pigeon2 _gyro = new Pigeon2(GyroConstants.pigeonID);
 
-  private AHRS _gyro = new AHRS(AHRS.NavXComType.kMXP_SPI);
   private SwerveDriveOdometry _odometry;
 
   private SwerveDrivePoseEstimator _poseEstimator;
@@ -69,7 +74,6 @@ public class Drive extends SubsystemBase {
   // private HolonomicPathFollowerConfig _pathFollowerConfig;
   private RobotConfig _config;
   private SwerveDriveKinematics _kinematics;
-  
 
   /** Creates a new DriveSubsystem. */
   public Drive() {
@@ -396,25 +400,24 @@ public class Drive extends SubsystemBase {
    * @return gyro angle
    */
   public double getGyroAngle() {
-    return -_gyro.getAngle();
+    return _gyro.getYaw().getValueAsDouble();
   }
 
   public double getGyroAngularVelocity() {
-    return -_gyro.getRate();
+    return -_gyro.getAngularVelocityZWorld().getValueAsDouble();
   }
 
   public double getGyroRoll() {
-    return _gyro.getRoll();
+    return _gyro.getRoll().getValueAsDouble();
   }
 
   public void resetGyroAngle() {
     _gyro.reset();
-    _gyro.setAngleAdjustment(0);
   }
 
   public void resetGyroAngle(double angle) {
     _gyro.reset();
-    _gyro.setAngleAdjustment(-angle);
+    _gyro.setYaw(-angle);
   }
 
   public void log() {
