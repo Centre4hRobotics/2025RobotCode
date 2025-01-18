@@ -4,19 +4,16 @@
 
 package frc.robot;
 
-import javax.swing.undo.StateEdit;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 // import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 // import com.pathplanner.lib.util.PIDConstants;
 // import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
-
 import frc.robot.subsystems.KrakenSwerveModule;
 
 /**
@@ -51,7 +48,7 @@ public final class Constants {
           break;
         case PRACTICE:
         default:
-          wheelDiameter = 3.83;
+          wheelDiameter = 4.0;
           break;
       }
     }
@@ -120,12 +117,21 @@ public final class Constants {
     );
   }
 
+  public static class GyroConstants{
+    public static final int pigeonID = 11;
+
+    public static final double mountPoseYawDegrees = 0;
+    public static final double mountPosePitchDegrees = 0;
+    public static final double mountPoseRollDegrees = 0;
+  }
+
   public static class MotorConstants{
     
     public static final double topLeftEncoderOffset;
     public static final double topRightEncoderOffset;
     public static final double bottomLeftEncoderOffset;
     public static final double bottomRightEncoderOffset;
+    public static final InvertedValue inverted;
     
     static {
       switch (robotType)
@@ -135,6 +141,7 @@ public final class Constants {
           topRightEncoderOffset = 2.928;
           bottomLeftEncoderOffset = 4.988;
           bottomRightEncoderOffset = 5.859;
+          inverted = InvertedValue.Clockwise_Positive;
           break;
         case PRACTICE:
         default:
@@ -142,6 +149,7 @@ public final class Constants {
           topRightEncoderOffset = 2.928;
           bottomLeftEncoderOffset = 4.988;
           bottomRightEncoderOffset = 5.859;
+          inverted = InvertedValue.CounterClockwise_Positive;
           break;
       }
     }

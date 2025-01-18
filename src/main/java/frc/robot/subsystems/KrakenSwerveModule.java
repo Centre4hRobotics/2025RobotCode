@@ -102,6 +102,7 @@ public class KrakenSwerveModule extends SwerveModuleBase {
   // figure out what config stuff we want yay
   private void configDriveMotor() {
     _drivingConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    _drivingConfiguration.MotorOutput.Inverted = MotorConstants.inverted;
     _drivingConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
     _drivingConfiguration.CurrentLimits.StatorCurrentLimit = MotorConstants.driveCurrentThreshold; 
     _drivingConfiguration.CurrentLimits.SupplyCurrentLowerTime = MotorConstants.driveTimeThreshold;
@@ -120,6 +121,7 @@ public class KrakenSwerveModule extends SwerveModuleBase {
   // figure out what config stuff we want yay !!
   private void configTurnMotor() {
     _turningConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    _turningConfiguration.MotorOutput.Inverted = MotorConstants.inverted;
     _turningConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
     _turningConfiguration.CurrentLimits.StatorCurrentLimit = MotorConstants.steerCurrentThreshold; 
     _turningConfiguration.CurrentLimits.SupplyCurrentLowerTime = MotorConstants.steerTimeThreshold;
