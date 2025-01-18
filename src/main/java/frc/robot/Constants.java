@@ -62,6 +62,8 @@ public final class Constants {
     public static final double maxRotationSpeed; //radians per second
     public static final double maxRotationAcceleration; // guessed 2x max speed from PPLib examples
 
+    public static final double driveGearRatio;
+    public static final double steerGearRatio;
     static {
       switch (robotType)
       {
@@ -72,6 +74,8 @@ public final class Constants {
           maxDriveAcceleration = 1;
           maxRotationSpeed = 1.5 * Math.PI;
           maxRotationAcceleration = 3 * Math.PI;
+          driveGearRatio = 6.2;
+          steerGearRatio = 12.1;
           break;
         case PRACTICE:
         default:
@@ -81,15 +85,14 @@ public final class Constants {
           maxDriveAcceleration = 1;
           maxRotationSpeed = 1.5 * Math.PI;
           maxRotationAcceleration = 3 * Math.PI;
+          driveGearRatio = 6.54;
+          steerGearRatio = 11.3142;
           break;
       }
     }
 
     public static final double maxSlewRate = 20;
     public static final double robotLength = .7; // meters
-
-    public static final double driveGearRatio = 6.54;
-    public static final double steerGearRatio = 11.3142;
 
     public static double trackWidth;
 
@@ -184,6 +187,9 @@ public final class Constants {
     public static final double autoTurningD;
 
     // Tag refers to the april tag positioning system
+    public static final double tagDriveP;
+    public static final double tagDriveI; 
+    public static final double tagDriveD;
     public static final double tagTurningP;
     public static final double tagTurningI; 
     public static final double tagTurningD;
@@ -223,6 +229,9 @@ public final class Constants {
           autoTurningI = 0; 
           autoTurningD = 0;
 
+          tagDriveP = 0;
+          tagDriveI = 0;
+          tagDriveD = 0;
           tagTurningP = 0.8;
           tagTurningI = 0; 
           tagTurningD = 0;
@@ -256,6 +265,9 @@ public final class Constants {
           autoTurningI = 0; 
           autoTurningD = 0;
 
+          tagDriveP = 0;
+          tagDriveI = 0;
+          tagDriveD = 0;
           tagTurningP = 0.8;
           tagTurningI = 0; 
           tagTurningD = 0;
@@ -274,7 +286,6 @@ public final class Constants {
     }
 
     public static final PIDController headingPIDController = new PIDController(headingP, headingI, headingD);
-    public static final PIDController tagHeadingPIDController = new PIDController(tagTurningP, tagTurningI, tagTurningD);
 
 
     // HolonomicPathFollowerConfig, this should likely live in your Constants class

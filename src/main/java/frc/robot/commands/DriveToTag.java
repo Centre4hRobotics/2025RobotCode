@@ -21,16 +21,20 @@ public class DriveToTag extends Command {
 
   private Drive _driveSubsystem;
   private Transform3d _tagFieldTransform3d;
-  private PIDController _tagHeadingPIDController;
   private double _deltaX, _deltaY;
+
+  private PIDController _tagHeadingPIDController; 
+  private PIDController _tagDrivePIDController;
   
   /** Creates a new DriveToTag. */
   public DriveToTag(Drive driveSubsystem, Transform3d tagFieldTransform3d, double deltaX, double deltaY) {
     _driveSubsystem = driveSubsystem;
     _tagFieldTransform3d = tagFieldTransform3d;
-    _tagHeadingPIDController = MotorConstants.tagHeadingPIDController;
     _deltaX = deltaX;
     _deltaY = deltaY;
+
+    _tagHeadingPIDController = new PIDController(MotorConstants.tagTurningP, MotorConstants.tagTurningI, MotorConstants.tagTurningD);
+    _tagDrivePIDController = new PIDController(MotorConstants.tagDriveP, MotorConstants.tagDriveI, MotorConstants.tagDriveD);
     
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveSubsystem);
@@ -49,8 +53,8 @@ public class DriveToTag extends Command {
     Transform3d robotFieldTransform3d = _tagFieldTransform3d.inverse().plus(new Transform3d(_deltaX, _deltaY, 0, new Rotation3d(0.0, 0.0, 0.0)));
     
 
-    double velocityX = 0;//_tagXPIDController.calculate(robotFieldTransform3d.getX());
-    double velocityY = 0;
+    double velocityX = _tagDrivePIDController.calculate(robotFieldTransform3d.getX()-_deltaX);
+    double velocityY = _tagDrivePIDController.calculate(robotFieldTransform3d.getY()-_deltaY);
     double velocityTheta = _tagHeadingPIDController.calculate(robotFieldTransform3d.getRotation().getAngle());
     
     _driveSubsystem.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(velocityX, velocityY, velocityTheta));
