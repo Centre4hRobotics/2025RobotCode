@@ -19,11 +19,14 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.DriveWithSpeed;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -33,7 +36,8 @@ import frc.robot.subsystems.Drive;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Drive _driveSubsystem = new Drive();
+  private final Drive _drive = new Drive();
+  private final Vision _vision = new Vision();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -55,7 +59,7 @@ public class RobotContainer {
     // error because doesn't exist lol
     
     // Resetting encoders
-    _driveSubsystem.syncEncoders();
+    _drive.syncEncoders();
     
     // Logging
     DataLogManager.start();
@@ -64,7 +68,7 @@ public class RobotContainer {
 
   public void startTeleop() {
     if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-      _driveSubsystem.flipGyro();
+      _drive.flipGyro();
     }
   }
 
@@ -79,8 +83,8 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Configuring teleoperated control
-    _driveSubsystem.setDefaultCommand(
-      new DriveWithJoystick(_driveSubsystem, m_driverController)    
+    _drive.setDefaultCommand(
+      new DriveWithJoystick(_drive, m_driverController)    
     );
 
     // Size is up to max id, not number of buttons
@@ -100,36 +104,26 @@ public class RobotContainer {
 
     // Syncs encoders   
     m_driverController.b().onTrue(
-      Commands.runOnce(() -> _driveSubsystem.syncEncoders(), _driveSubsystem) 
+      Commands.runOnce(() -> _drive.syncEncoders(), _drive) 
     );
 
-    m_driverController.y().onTrue(new ResetGyro(_driveSubsystem));
+    m_driverController.y().onTrue(new ResetGyro(_drive));
 
     // In order to properly run characterization tests, it is best to be able to
     // manually control the stop/stop of the logger to remove as much noise.
     m_driverController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
     m_driverController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
 
-    buttonBoard1[1].whileTrue(new DriveWithSpeed(_driveSubsystem, 1.0));
-    buttonBoard1[2].whileTrue(new DriveWithSpeed(_driveSubsystem, -1.0));
+    buttonBoard1[1].whileTrue(new DriveWithSpeed(_drive, 1.0));
+    buttonBoard1[2].whileTrue(new DriveWithSpeed(_drive, -1.0));
 
-    buttonBoard1[5].whileTrue(_driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    buttonBoard1[6].whileTrue(_driveSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    buttonBoard1[8].whileTrue(_driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    buttonBoard1[7].whileTrue(_driveSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    buttonBoard1[5].whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    buttonBoard1[6].whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    buttonBoard1[8].whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    buttonBoard1[7].whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-    // m_driverController.povUp().onTrue(
-    //   Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(0), _driveSubsystem)
-    // );
-    // m_driverController.povRight().onTrue(
-    //   Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(270), _driveSubsystem)
-    // );
-    // m_driverController.povDown().onTrue(
-    //   Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(180), _driveSubsystem)
-    // );
-    // m_driverController.povLeft().onTrue(
-    //   Commands.runOnce(() -> _driveSubsystem.setDesiredHeading(90), _driveSubsystem)
-    // );
+    Command driveToTagCommand = new DriveToTag(_drive, _vision, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
+    m_driverController.leftTrigger().whileTrue(driveToTagCommand);
   }
 
   public void autoChooserInit() {
@@ -153,7 +147,7 @@ public class RobotContainer {
     String selection = SmartDashboard.getString("Auto Selector", "None");
     
     Command autoCommand = Commands.runOnce(
-      () -> _driveSubsystem.freezeWheels(), _driveSubsystem
+      () -> _drive.freezeWheels(), _drive
     );  //The default command will be to freeze if nothing is selected
 
     autoCommand = new PathPlannerAuto(selection);

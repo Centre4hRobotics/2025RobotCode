@@ -104,7 +104,7 @@ public final class Constants {
           break;
         case PRACTICE:
         default:
-          trackWidth = Units.inchesToMeters(25);
+          trackWidth = Units.inchesToMeters(23);
           break;
       }
     }
@@ -289,6 +289,8 @@ public final class Constants {
     public static final double cameraYaw = 0.0;
 
     public static final double distanceTolerance = 0.05;
+    public static final double centeredDeltaX = 0;
+    public static final double centeredDeltaY = RobotConstants.trackWidth/2;
 
     // Tag refers to the april tag positioning system
     public static final double tagDriveXP;
