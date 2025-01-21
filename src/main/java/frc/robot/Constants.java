@@ -288,6 +288,8 @@ public final class Constants {
     public static final double cameraPitch = 0.0;
     public static final double cameraYaw = 0.0;
 
+    public static final double distanceTolerance = 0.05;
+
     // Tag refers to the april tag positioning system
     public static final double tagDriveXP;
     public static final double tagDriveXI; 
