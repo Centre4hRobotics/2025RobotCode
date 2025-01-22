@@ -54,19 +54,21 @@ public class DriveToTag extends Command {
   @Override
   public void execute() {
     _position = _vision.getCameraToAprilTag();
-    _rotation = _position.getRotation().getDegrees();
-    _posX = _position.getX();
-    _posY = _position.getY();
+    if(_position != null) {
+      _rotation = _position.getRotation().getDegrees();
+      _posX = _position.getX();
+      _posY = _position.getY();
 
-    if(Math.hypot(_posX-_deltaX, _posY-_deltaY) < VisionConstants.distanceTolerance) {
-      _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
-      _isFinished = true;
-    } else {
-      double velocityX = _tagDriveXPIDController.calculate(_posX-_deltaX);
-      double velocityY = _tagDriveYPIDController.calculate(_posY-_deltaY);
-      double velocityTheta = _tagHeadingPIDController.calculate(_rotation);
-      _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(velocityX, velocityY, velocityTheta));
-      _isFinished = false;
+      if(Math.hypot(_posX-_deltaX, _posY-_deltaY) < VisionConstants.distanceTolerance) {
+       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
+       _isFinished = true;
+      } else {
+       double velocityX = _tagDriveXPIDController.calculate(_posX-_deltaX);
+       double velocityY = _tagDriveYPIDController.calculate(_posY-_deltaY);
+       double velocityTheta = _tagHeadingPIDController.calculate(_rotation);
+       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(velocityX, velocityY, velocityTheta));
+       _isFinished = false;
+      }
     }
   }
 
