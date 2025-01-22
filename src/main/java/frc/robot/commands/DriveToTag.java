@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Drive;
@@ -66,6 +67,8 @@ public class DriveToTag extends Command {
        double velocityX = _tagDriveXPIDController.calculate(_posX-_deltaX);
        double velocityY = _tagDriveYPIDController.calculate(_posY-_deltaY);
        double velocityTheta = _tagHeadingPIDController.calculate(_rotation);
+       NetworkTableInstance nt = NetworkTableInstance.getDefault();
+       nt.getTable("AprilTag Vision").getEntry("velocity theta").setDouble(velocityTheta);
        _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(velocityX, velocityY, velocityTheta));
        _isFinished = false;
       }
