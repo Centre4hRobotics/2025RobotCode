@@ -69,7 +69,7 @@ public class DriveToTag extends Command {
        double velocityTheta = _tagHeadingPIDController.calculate(_rotation);
        NetworkTableInstance nt = NetworkTableInstance.getDefault();
        nt.getTable("AprilTag Vision").getEntry("velocity theta").setDouble(velocityTheta);
-       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(velocityX, velocityY, velocityTheta));
+       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(velocityX, velocityY, velocityTheta)); // always says 0 ?????
        _isFinished = false;
       }
     }
