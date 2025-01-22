@@ -305,10 +305,10 @@ public final class Constants {
           tagDriveXP = 0.1;
           tagDriveXI = 0;
           tagDriveXD = 0;
-          tagDriveYP = 0;
+          tagDriveYP = 0.1;
           tagDriveYI = 0;
           tagDriveYD = 0;
-          tagTurningP = 0.8;
+          tagTurningP = 0.1;
           tagTurningI = 0; 
           tagTurningD = 0;
           break;
@@ -320,7 +320,7 @@ public final class Constants {
           tagDriveYP = 0;
           tagDriveYI = 0;
           tagDriveYD = 0;
-          tagTurningP = 0.8;
+          tagTurningP = 10;
           tagTurningI = 0; 
           tagTurningD = 0;
           break;

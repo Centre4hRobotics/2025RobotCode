@@ -55,7 +55,7 @@ public class DriveToTag extends Command {
   public void execute() {
     _position = _vision.getCameraToAprilTag();
     if(_position != null) {
-      _rotation = _position.getRotation().getDegrees();
+      _rotation = _position.getRotation().getRadians();
       _posX = _position.getX();
       _posY = _position.getY();
 
