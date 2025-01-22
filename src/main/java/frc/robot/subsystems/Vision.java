@@ -19,7 +19,8 @@ public class Vision {
             nt.getTable("AprilTag Vision").getEntry("Pose X").getDouble(_posX);
             nt.getTable("AprilTag Vision").getEntry("Pose Y").getDouble(_posY);
             nt.getTable("AprilTag Vision").getEntry("Tag Rotation").getDouble(_rotation);
-            return new Transform2d(_posX, _posY, new Rotation2d(_rotation));
+            if(_rotation < 0) {_rotation += Math.PI;} else {_rotation -= Math.PI;}
+            return new Transform2d(_posX, _posY, new Rotation2d(_rotation + Math.PI));
         }
         return new Transform2d();
     }

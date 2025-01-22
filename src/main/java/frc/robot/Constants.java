@@ -279,11 +279,6 @@ public final class Constants {
   
   public static class VisionConstants
   {
-    // assuming X is forwards
-    public static final double cameraOffsetX = 0;
-    public static final double cameraOffsetY = 0.25;
-    public static final double cameraOffsetZ = 0.3;
-
     public static final double cameraRoll = 0.0;
     public static final double cameraPitch = 0.0;
     public static final double cameraYaw = 0.0;
@@ -307,7 +302,7 @@ public final class Constants {
       switch (robotType)
       {
         case COMPETITION:
-          tagDriveXP = 0;
+          tagDriveXP = 0.1;
           tagDriveXI = 0;
           tagDriveXD = 0;
           tagDriveYP = 0;
