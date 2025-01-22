@@ -5,17 +5,12 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Vision {
-    private double _posX, _posY, _rotation;
-    private int _tagID;
-    private boolean _tagPresent;
 
-    public Vision() {
-        _posX = 0; // "Pose X"
-        _posY = 0; // "Pose Y"
-        _rotation = 0; // "Tag Rotation"
-        _tagID = -1; // "Widest Tag ID"
-        _tagPresent = false; // "AprilTag Presence"
-    }
+    private double _posX; // "Pose X"
+    private double _posY; // "Pose Y"
+    private double _rotation; // "Tag Rotation"
+    private int _tagID; // "Widest Tag ID"
+    private boolean _tagPresent; // "AprilTag Presence"
 
     public Transform2d getCameraToAprilTag() {
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
