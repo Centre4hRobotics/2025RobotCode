@@ -286,7 +286,7 @@ public final class Constants {
     public static final double distanceTolerance = 0.05;
     public static final double rotationTolerance = 0.05;
 
-    public static final double centeredDeltaX = RobotConstants.trackWidth;
+    public static final double centeredDeltaX = RobotConstants.trackWidth + 0.125;
     // Positive offset is to the right
     public static final double centeredDeltaY = -0.0704;
 
@@ -318,17 +318,17 @@ public final class Constants {
         case PRACTICE:
         default:
           // Forwards
-          tagDriveXP = 0.0; //0.9
-          tagDriveXI = 0.0; //0.1
-          tagDriveXD = 0;
+          tagDriveXP = 1; //0.9
+          tagDriveXI = 0.1; //0.1
+          tagDriveXD = 0.1;
           // Side
-          tagDriveYP = 4;
-          tagDriveYI = 0.3; //0.25
-          tagDriveYD = 0.4;  //0.2
+          tagDriveYP = 3;  //4
+          tagDriveYI = 0.3; //0.3
+          tagDriveYD = 0.5;  //0.3
           // Turning
-          tagTurningP = 0.0; //0.1
-          tagTurningI = 0.0; //0.025
-          tagTurningD = 0.0; //0.2
+          tagTurningP = 0.2; //0.1
+          tagTurningI = 0.1; //0.005
+          tagTurningD = 0.1; //0.2
           break;
       }
     }
