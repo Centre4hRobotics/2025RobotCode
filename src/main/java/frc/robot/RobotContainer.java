@@ -25,7 +25,11 @@ import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.DriveWithSpeed;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Funnel;
+import frc.robot.subsystems.Scorer;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -38,6 +42,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drive _drive = new Drive();
   private final Vision _vision = new Vision();
+  private final Funnel _funnel = new Funnel();
+  private final Elevator _elevator = new Elevator();
+  private final Scorer _scorer = new Scorer();
+  private final Climb _climb = new Climb();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =

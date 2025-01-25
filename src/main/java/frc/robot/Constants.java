@@ -331,6 +331,45 @@ public final class Constants {
 
   }
 
+  public static class ElevatorConstants {
+    public static final double heightL1 = 0;
+    public static final double heightL2 = 0;
+    public static final double heightL3 = 0;
+    public static final double heightL4 = 0;
+
+    public static final double elevatorP = 0;
+    public static final double elevatorI = 0;
+    public static final double elevatorD = 0;
+  }
+
+  public static class ScorerConstants {
+    public static final double heightAlgae = 0;
+    public static final double heightL23 = 0;
+    public static final double heightDefault = 0;
+    public static final double heightL4 = 0;
+
+    public static final double rotationP = 0;
+    public static final double rotationI = 0;
+    public static final double rotationD = 0;
+
+    public static final double scoringP = 0;
+    public static final double scoringI = 0;
+    public static final double scoringD = 0;
+  }
+
+  public static class FunnelConstants {
+    public static final double heightStation = 0;
+    public static final double heightClimb = 0;
+
+    public static final double funnelP = 0;
+    public static final double funnelI = 0;
+    public static final double funnelD = 0;
+  }
+
+  public static class ClimbConstants {
+
+  }
+
   public static enum FieldSide {
     LEFT, RIGHT
   }
