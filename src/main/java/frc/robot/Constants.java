@@ -140,10 +140,10 @@ public final class Constants {
       switch (robotType)
       {
         case COMPETITION:
-          topLeftEncoderOffset = 4.338;
-          topRightEncoderOffset = 2.928;
-          bottomLeftEncoderOffset = 4.988;
-          bottomRightEncoderOffset = 5.859;
+          bottomLeftEncoderOffset = 6.224;
+          bottomRightEncoderOffset = 0.322;
+          topLeftEncoderOffset = 5.246;
+          topRightEncoderOffset = 3.136;
           inverted = InvertedValue.Clockwise_Positive;
           break;
         case PRACTICE:
@@ -284,8 +284,10 @@ public final class Constants {
     public static final double cameraYaw = 0.0;
 
     public static final double distanceTolerance = 0.05;
-    public static final double centeredDeltaX = 0;
-    public static final double centeredDeltaY = RobotConstants.trackWidth/2;
+    public static final double rotationTolerance = 0.05;
+
+    public static final double centeredDeltaX = RobotConstants.trackWidth;
+    public static final double centeredDeltaY = 0;
 
     // Tag refers to the april tag positioning system
     public static final double tagDriveXP;
@@ -302,25 +304,25 @@ public final class Constants {
       switch (robotType)
       {
         case COMPETITION:
-          tagDriveXP = 0.1;
-          tagDriveXI = 0;
-          tagDriveXD = 0;
-          tagDriveYP = 0.1;
-          tagDriveYI = 0;
-          tagDriveYD = 0;
-          tagTurningP = 0.1;
-          tagTurningI = 0; 
-          tagTurningD = 0;
-          break;
-        case PRACTICE:
-        default:
           tagDriveXP = 0;
           tagDriveXI = 0;
           tagDriveXD = 0;
           tagDriveYP = 0;
           tagDriveYI = 0;
           tagDriveYD = 0;
-          tagTurningP = 10;
+          tagTurningP = 0;
+          tagTurningI = 0; 
+          tagTurningD = 0;
+          break;
+        case PRACTICE:
+        default:
+          tagDriveXP = 0.5;
+          tagDriveXI = 0;
+          tagDriveXD = 0;
+          tagDriveYP = 0.9;
+          tagDriveYI = 0;
+          tagDriveYD = 0;
+          tagTurningP = 0;
           tagTurningI = 0; 
           tagTurningD = 0;
           break;

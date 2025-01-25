@@ -60,24 +60,29 @@ public class DriveToTag extends Command {
       _posX = _position.getX();
       _posY = _position.getY();
 
-      if(Math.hypot(_posX-_deltaX, _posY-_deltaY) < VisionConstants.distanceTolerance) {
+      //if(Math.hypot(_posX-_deltaX, _posY-_deltaY) < VisionConstants.distanceTolerance) {
+      if(Math.abs(_rotation) < VisionConstants.rotationTolerance) {
        _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
        _isFinished = true;
       } else {
        double velocityX = _tagDriveXPIDController.calculate(_posX-_deltaX);
        double velocityY = _tagDriveYPIDController.calculate(_posY-_deltaY);
        double velocityTheta = _tagHeadingPIDController.calculate(_rotation);
-       NetworkTableInstance nt = NetworkTableInstance.getDefault();
-       nt.getTable("AprilTag Vision").getEntry("velocity theta").setDouble(velocityTheta);
-       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(velocityX, velocityY, velocityTheta)); // always says 0 ?????
+       System.out.println(velocityTheta);
+       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(velocityX, velocityY, velocityTheta)); 
        _isFinished = false;
-      }
+    }
+    } else {
+      _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
     }
   }
+  
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    _drive.setDesiredHeading(_drive.getHeading());
+  }
 
   // Returns true when the command should end.
   @Override

@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.networktables.BooleanSubscriber;
+import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -13,14 +16,28 @@ public class Vision extends SubsystemBase {
     private int _tagID; // "Widest Tag ID"
     private boolean _tagPresent; // "AprilTag Presence"
 
+    private BooleanSubscriber _tagPresenceSub;
+    private DoubleSubscriber _rotationSub;
+    private DoubleSubscriber _posXSub;
+    private DoubleSubscriber _posYSub;
+
+    public Vision() {
+        NetworkTableInstance inst = NetworkTableInstance.getDefault();
+        NetworkTable table = inst.getTable("AprilTag Vision");
+        _tagPresenceSub = table.getBooleanTopic("AprilTag Presence").subscribe(false);
+        _rotationSub = table.getDoubleTopic("Tag Rotation").subscribe(0);
+        _posXSub = table.getDoubleTopic("Pose X").subscribe(0);
+        _posYSub = table.getDoubleTopic("Pose Y").subscribe(0);
+    }
+
     public Transform2d getCameraToAprilTag() {
-        NetworkTableInstance nt = NetworkTableInstance.getDefault();
-        nt.getTable("AprilTag Vision").getEntry("AprilTag Presence").getBoolean(_tagPresent);
+        _tagPresent = _tagPresenceSub.get();
+        System.out.println(_tagPresent);
         if(_tagPresent == true) {
-            nt.getTable("AprilTag Vision").getEntry("Pose X").getDouble(_posX);
-            nt.getTable("AprilTag Vision").getEntry("Pose Y").getDouble(_posY);
-            nt.getTable("AprilTag Vision").getEntry("Tag Rotation").getDouble(_rotation);
-            if(_rotation < 0) {_rotation += Math.PI;} else {_rotation -= Math.PI;}
+            _rotation = _rotationSub.get();
+            _posX = _posXSub.get();
+            _posY = _posYSub.get();
+            System.out.println("rotation: " + _rotation + "pos x:" + _posX + "pos y:" + _posY);
             return new Transform2d(_posX, _posY, new Rotation2d(_rotation));
         }
         return null;
