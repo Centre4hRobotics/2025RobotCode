@@ -41,8 +41,8 @@ public class Elevator extends SubsystemBase {
         config.inverted(false);
         config.idleMode(IdleMode.kBrake);
 
-        config.encoder.positionConversionFactor(1000);
-        config.encoder.velocityConversionFactor(1000);
+        config.encoder.positionConversionFactor(1.0/1000);
+        config.encoder.velocityConversionFactor(1.0/1000);
 
         config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
         config.closedLoop.pid(ElevatorConstants.elevatorP, ElevatorConstants.elevatorI, ElevatorConstants.elevatorD);

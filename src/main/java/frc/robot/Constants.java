@@ -336,13 +336,12 @@ public final class Constants {
   }
 
   public static class ElevatorConstants {
-    public static enum elevatorPosition {L1, L2, L3, L4, DEFAULT};
-
+    // coral
     public static final double heightL1 = 0;
     public static final double heightL2 = 0;
     public static final double heightL3 = 0;
     public static final double heightL4 = 0;
-    public static final double heightDefault = 0;
+    public static final double[] heightEncoderValuesReef = {heightL1, heightL2, heightL3, heightL4};
 
     public static final double elevatorP = 0;
     public static final double elevatorI = 0;
@@ -350,10 +349,13 @@ public final class Constants {
   }
 
   public static class ScorerConstants {
-    public static final double rotationAlgae = 0;
-    public static final double rotationL23 = 0;
-    public static final double rotationDefault = 0;
+    //coral
+    public static final double rotationL123 = 0;
     public static final double rotationL4 = 0;
+    public static final double[] rotationEncoderValuesReef = {rotationL123, rotationL123, rotationL123, rotationL4};
+
+    // algae
+    public static final double rotationAlgae = 0;
 
     public static final double rotationP = 0;
     public static final double rotationI = 0;

@@ -32,12 +32,10 @@ public class Vision extends SubsystemBase {
 
     public Transform2d getCameraToAprilTag() {
         _tagPresent = _tagPresenceSub.get();
-        System.out.println(_tagPresent);
         if(_tagPresent == true) {
             _rotation = _rotationSub.get();
             _posX = _posXSub.get();
             _posY = _posYSub.get();
-            System.out.println("rotation: " + _rotation + "pos x:" + _posX + "pos y:" + _posY);
             return new Transform2d(_posX, _posY, new Rotation2d(_rotation));
         }
         return null;
