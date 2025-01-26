@@ -142,10 +142,10 @@ public class RobotContainer {
     Command moveScorer = new RunCommand(() -> _scorer.setRotationVoltage(m_functionController.getRightX() * 0.1), _scorer);
     m_functionController.start().whileTrue(moveScorer);
 
-    Command spinScorerIn = new RunCommand(() -> _scorer.setScoringVoltage(m_functionController.getLeftTriggerAxis() * 0.5));
+    Command spinScorerIn = new RunCommand(() -> _scorer.setScoringVoltage(m_functionController.getLeftTriggerAxis() * 0.5), _scorer);
     m_functionController.start().whileTrue(spinScorerIn);
 
-    Command spinScorerOut = new RunCommand(() -> _scorer.setScoringVoltage(m_functionController.getRightTriggerAxis() * -0.5));
+    Command spinScorerOut = new RunCommand(() -> _scorer.setScoringVoltage(m_functionController.getRightTriggerAxis() * -0.5), _scorer);
     m_functionController.start().whileTrue(spinScorerOut);
   }
 
