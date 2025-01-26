@@ -27,6 +27,7 @@ import frc.robot.subsystems.KrakenSwerveModule;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kFunctionControllerPort = 1;
   }
 
   // implement everywhere else

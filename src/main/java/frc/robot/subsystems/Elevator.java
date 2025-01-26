@@ -31,6 +31,10 @@ public class Elevator extends SubsystemBase {
         _elevatorPID.setReference(position, ControlType.kPosition);
     }
 
+    public void setVoltage(double voltage) {
+        _elevatorMotor.setVoltage(voltage);
+    }
+
     public double getHeight() {
         return _elevatorEncoder.getPosition();
     }

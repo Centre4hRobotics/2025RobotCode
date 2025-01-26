@@ -45,6 +45,14 @@ public class Scorer extends SubsystemBase {
         _rotationPID.setReference(position, ControlType.kPosition);
     }
 
+    public void setRotationVoltage(double voltage) {
+        _rotationMotor.setVoltage(voltage);
+    }
+
+    public void setScoringVoltage(double voltage) {
+        _scoringMotor.setVoltage(voltage);
+    }
+
     public double getRotation() {
         return _rotationEncoder.getPosition();
     }
