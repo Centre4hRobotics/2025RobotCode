@@ -233,9 +233,9 @@ public final class Constants {
           break;
         case PRACTICE:
         default:
-          wheelTurningP = 20;
+          wheelTurningP = 19.526;
           wheelTurningI = 0;
-          wheelTurningD = 0;
+          wheelTurningD = 0.27154;
 
           drivingP = 0.1;
           drivingI = 0; 
@@ -286,8 +286,9 @@ public final class Constants {
     public static final double distanceTolerance = 0.05;
     public static final double rotationTolerance = 0.05;
 
-    public static final double centeredDeltaX = RobotConstants.trackWidth;
-    public static final double centeredDeltaY = 0;
+    public static final double centeredDeltaX = RobotConstants.trackWidth + 0.125;
+    // Positive offset is to the right
+    public static final double centeredDeltaY = -0.0704;
 
     // Tag refers to the april tag positioning system
     public static final double tagDriveXP;
@@ -316,15 +317,18 @@ public final class Constants {
           break;
         case PRACTICE:
         default:
-          tagDriveXP = 0.5;
-          tagDriveXI = 0;
-          tagDriveXD = 0;
-          tagDriveYP = 0.9;
-          tagDriveYI = 0;
-          tagDriveYD = 0;
-          tagTurningP = 0;
-          tagTurningI = 0; 
-          tagTurningD = 0;
+          // Forwards
+          tagDriveXP = 1; //0.9
+          tagDriveXI = 0.1; //0.1
+          tagDriveXD = 0.1;
+          // Side
+          tagDriveYP = 3;  //4
+          tagDriveYI = 0.3; //0.3
+          tagDriveYD = 0.5;  //0.3
+          // Turning
+          tagTurningP = 0.2; //0.1
+          tagTurningI = 0.1; //0.005
+          tagTurningD = 0.1; //0.2
           break;
       }
     }

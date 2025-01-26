@@ -66,7 +66,15 @@ public class DriveToTag extends Command {
       } else {
        double velocityX = _tagDriveXPIDController.calculate(_posX-_deltaX);
        double velocityY = _tagDriveYPIDController.calculate(_posY-_deltaY);
-       double velocityTheta = _tagHeadingPIDController.calculate(_rotation);
+       double velocityTheta;
+       if (Math.abs(_rotation) >= 3.07)
+       {
+        velocityTheta = 0.0;
+       }
+       else
+       {
+        velocityTheta = _tagHeadingPIDController.calculate(_rotation);
+       }
        System.out.println(velocityTheta);
        _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(velocityX, velocityY, velocityTheta)); 
        _isFinished = false;
