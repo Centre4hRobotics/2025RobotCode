@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.IntegerSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,6 +21,7 @@ public class Vision extends SubsystemBase {
     private DoubleSubscriber _rotationSub;
     private DoubleSubscriber _posXSub;
     private DoubleSubscriber _posYSub;
+    private IntegerSubscriber _tagIDSub;
 
     public Vision() {
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -28,6 +30,7 @@ public class Vision extends SubsystemBase {
         _rotationSub = table.getDoubleTopic("Tag Rotation").subscribe(0);
         _posXSub = table.getDoubleTopic("Pose X").subscribe(0);
         _posYSub = table.getDoubleTopic("Pose Y").subscribe(0);
+        _tagIDSub = table.getIntegerTopic("Widest Tag ID").subscribe(0);
     }
 
     public Transform2d getCameraToAprilTag() {
@@ -42,8 +45,7 @@ public class Vision extends SubsystemBase {
     }
 
     public int getBestAprilTagID () {
-        NetworkTableInstance nt = NetworkTableInstance.getDefault();
-        nt.getTable("AprilTag Vision").getEntry("Widest Tag ID").getInteger(_tagID);
+        _tagID =  _tagIDSub.get();
         return _tagID;
     }
 }

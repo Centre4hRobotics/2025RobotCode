@@ -38,7 +38,7 @@ public class Scorer extends SubsystemBase {
     }
 
     public void setScoringVelocity(double velocity) {
-        _scoringPID.setReference(velocity, ControlType.kPosition);
+        _scoringPID.setReference(velocity, ControlType.kVelocity);
     }
 
     public void setRotation(double position) {
