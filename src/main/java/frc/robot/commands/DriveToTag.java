@@ -22,7 +22,7 @@ public class DriveToTag extends Command {
   private Transform2d _position;
   private double _rotation, _posX, _posY;
 
-  private double _deltaX, _deltaY;
+  private double _deltaX, _deltaY, _laser;
 
   private PIDController _tagHeadingPIDController; 
   private PIDController _tagDriveXPIDController;
@@ -36,6 +36,7 @@ public class DriveToTag extends Command {
     _vision = vision;
     _deltaX = deltaX;
     _deltaY = deltaY;
+    _laser = -42.0;
 
     _tagHeadingPIDController = new PIDController(VisionConstants.tagTurningP, VisionConstants.tagTurningI, VisionConstants.tagTurningD);
     _tagDriveXPIDController = new PIDController(VisionConstants.tagDriveXP, VisionConstants.tagDriveXI, VisionConstants.tagDriveXD);
@@ -59,25 +60,36 @@ public class DriveToTag extends Command {
       _rotation = _position.getRotation().getRadians();
       _posX = _position.getX();
       _posY = _position.getY();
+      _laser = _vision.getLaserDistance();
 
       //if(Math.hypot(_posX-_deltaX, _posY-_deltaY) < VisionConstants.distanceTolerance) {
       if(Math.abs(_rotation) < VisionConstants.rotationTolerance) {
        _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
        _isFinished = true;
       } else {
-       double velocityX = _tagDriveXPIDController.calculate(_posX-_deltaX);
-       double velocityY = _tagDriveYPIDController.calculate(_posY-_deltaY);
-       double velocityTheta;
+       double velocityX, velocityY, velocityTheta;
+       velocityY = _tagDriveYPIDController.calculate(_posY - _deltaY);
+
        if (Math.abs(_rotation) >= 3.07)
        {
         velocityTheta = 0.0;
+        if (Math.abs(_deltaY) <= 0.1)
+        {
+         velocityX = _tagDriveXPIDController.calculate(_posX - _laser);
+        }
+        else
+        {
+          velocityX = _tagDriveXPIDController.calculate(_posX - _deltaX);
+        }
        }
        else
        {
         velocityTheta = _tagHeadingPIDController.calculate(_rotation);
+        velocityX = _tagDriveXPIDController.calculate(_posX - _deltaX);
        }
+
        System.out.println(velocityTheta);
-       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(velocityX, velocityY, velocityTheta)); 
+       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, -velocityY, velocityTheta)); 
        _isFinished = false;
     }
     } else {
