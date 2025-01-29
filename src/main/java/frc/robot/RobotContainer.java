@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -25,7 +26,11 @@ import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.DriveWithSpeed;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Funnel;
+import frc.robot.subsystems.Scorer;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -38,13 +43,19 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drive _drive = new Drive();
   private final Vision _vision = new Vision();
+  private final Funnel _funnel = new Funnel();
+  private final Elevator _elevator = new Elevator();
+  private final Scorer _scorer = new Scorer();
+  private final Climb _climb = new Climb();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_functionController = 
+      new CommandXboxController(OperatorConstants.kFunctionControllerPort);
 
-  private final Joystick _functionJoystick = new Joystick(1);
-  private final Joystick _functionJoystick2 = new Joystick(2);
+  //private final Joystick _functionJoystick = new Joystick(1);
+  //private final Joystick _functionJoystick2 = new Joystick(2);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -87,20 +98,20 @@ public class RobotContainer {
       new DriveWithJoystick(_drive, m_driverController)    
     );
 
-    // Size is up to max id, not number of buttons
-    JoystickButton[] buttonBoard1 = new JoystickButton[9];
-    JoystickButton[] buttonBoard2 = new JoystickButton[13];
+    // // Size is up to max id, not number of buttons
+    // JoystickButton[] buttonBoard1 = new JoystickButton[9];
+    // JoystickButton[] buttonBoard2 = new JoystickButton[13];
 
-    // Configuring remaining buttonboard buttons
-    for (int i = 1; i <= 8; i++) {
-      buttonBoard1[i] = new JoystickButton(_functionJoystick, i);
-    } 
-    for (int i = 1; i <= 7; i++) {
-      buttonBoard2[i] = new JoystickButton(_functionJoystick2, i);
-    }
-    for (int i = 9; i <= 12; i++) {
-      buttonBoard2[i] = new JoystickButton(_functionJoystick2, i);
-    }
+    // // Configuring remaining buttonboard buttons
+    // for (int i = 1; i <= 8; i++) {
+    //   buttonBoard1[i] = new JoystickButton(_functionJoystick, i);
+    // } 
+    // for (int i = 1; i <= 7; i++) {
+    //   buttonBoard2[i] = new JoystickButton(_functionJoystick2, i);
+    // }
+    // for (int i = 9; i <= 12; i++) {
+    //   buttonBoard2[i] = new JoystickButton(_functionJoystick2, i);
+    // }
 
     // Syncs encoders   
     m_driverController.b().onTrue(
@@ -114,16 +125,28 @@ public class RobotContainer {
     m_driverController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
     m_driverController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
 
-    buttonBoard1[1].whileTrue(new DriveWithSpeed(_drive, 1.0));
-    buttonBoard1[2].whileTrue(new DriveWithSpeed(_drive, -1.0));
+    // buttonBoard1[1].whileTrue(new DriveWithSpeed(_drive, 1.0));
+    // buttonBoard1[2].whileTrue(new DriveWithSpeed(_drive, -1.0));
 
-    buttonBoard1[5].whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    buttonBoard1[6].whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    buttonBoard1[8].whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    buttonBoard1[7].whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    // buttonBoard1[5].whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    // buttonBoard1[6].whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    // buttonBoard1[8].whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    // buttonBoard1[7].whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     Command driveToTagCommand = new DriveToTag(_drive, _vision, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
     m_driverController.leftTrigger().whileTrue(driveToTagCommand);
+
+    Command moveElevator = new RunCommand(() -> _elevator.setVoltage(m_functionController.getLeftY() * 0.2), _elevator);
+    m_functionController.start().whileTrue(moveElevator);
+
+    Command moveScorer = new RunCommand(() -> _scorer.setRotationVoltage(m_functionController.getRightX() * 0.1), _scorer);
+    m_functionController.start().whileTrue(moveScorer);
+
+    Command spinScorerIn = new RunCommand(() -> _scorer.setScoringVoltage(m_functionController.getLeftTriggerAxis() * 0.5), _scorer);
+    m_functionController.start().whileTrue(spinScorerIn);
+
+    Command spinScorerOut = new RunCommand(() -> _scorer.setScoringVoltage(m_functionController.getRightTriggerAxis() * -0.5), _scorer);
+    m_functionController.start().whileTrue(spinScorerOut);
   }
 
   public void autoChooserInit() {
