@@ -75,6 +75,7 @@ public class DriveToTag extends Command {
         if (Math.abs(_deltaY) <= 0.1)
         {
          velocityX = _tagDriveXPIDController.calculate(_posX - _laser);
+         velocityY = 0.0;
         }
         else
         {
@@ -84,11 +85,12 @@ public class DriveToTag extends Command {
        else
        {
         velocityTheta = _tagHeadingPIDController.calculate(_rotation);
-        velocityX = _tagDriveXPIDController.calculate(_posX - _deltaX);
+        velocityX = 0.0;
+        // velocityX = _tagDriveXPIDController.calculate(_posX - _deltaX);
        }
 
        System.out.println(velocityTheta);
-       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, -velocityY, velocityTheta)); 
+       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, -velocityY, -velocityTheta)); 
        _isFinished = false;
     }
     } else {
