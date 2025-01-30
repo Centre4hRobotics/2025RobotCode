@@ -69,19 +69,31 @@ public class DriveToTag extends Command {
        double velocityX, velocityY, velocityTheta;
        velocityY = _tagDriveYPIDController.calculate(_posY - _deltaY);
 
+       // if robot is facing towards the tag (might need change after rotating camera)
        if (Math.abs(_rotation) >= 3.07)
        {
+        // don't turn if facing tag
         velocityTheta = 0.0;
+        // if close horizontally, don't move more horizontally
         if (Math.abs(_deltaY) <= 0.1)
         {
-         velocityX = _tagDriveXPIDController.calculate(_posX - _laser);
+          // if the laser gives a good reading <2m, use it
+          if (_laser < 2.0) {
+            velocityX = _tagDriveXPIDController.calculate(_posX - _laser);
+          }
+          else
+          {
+            velocityX = _tagDriveXPIDController.calculate(_posX - _deltaX);
+          }
          velocityY = 0.0;
         }
+        // if not close horizontally, keep moving horizontally, don't use laser
         else
         {
           velocityX = _tagDriveXPIDController.calculate(_posX - _deltaX);
         }
        }
+       // if not facing correct direction, don't move forwards
        else
        {
         velocityTheta = _tagHeadingPIDController.calculate(_rotation);
