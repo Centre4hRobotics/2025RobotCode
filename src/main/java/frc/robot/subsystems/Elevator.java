@@ -1,55 +1,59 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.MotorConstants;
+import frc.robot.Constants.RobotConstants;
 
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+
 
 public class Elevator extends SubsystemBase {
 
-    private SparkMax _elevatorMotor;
-    private SparkClosedLoopController _elevatorPID;
-    private final RelativeEncoder _elevatorEncoder;
+    private TalonFX _leadMotor;
+    private TalonFX _followMotor;
 
     public Elevator() {
-        _elevatorMotor = new SparkMax(21, MotorType.kBrushless);
-        configElevatorMotor();
-        _elevatorPID = _elevatorMotor.getClosedLoopController();
-        _elevatorEncoder = _elevatorMotor.getEncoder();
+        _leadMotor = new TalonFX(21);
+        _followMotor = new TalonFX(22);
+
+        configLeadMotor();
+        configFollowMotor();
     }
 
     public void setHeight(double position) {
-        _elevatorPID.setReference(position, ControlType.kPosition);
+        _leadMotor.setPosition(position);
     }
 
     public void setVoltage(double voltage) {
-        _elevatorMotor.setVoltage(voltage);
+        _leadMotor.set(voltage);
     }
 
     public double getHeight() {
-        return _elevatorEncoder.getPosition();
+        return _leadMotor.get();
     }
 
-    private void configElevatorMotor() {
-        SparkMaxConfig config = new SparkMaxConfig();
+    private void configLeadMotor() {
+        TalonFXConfiguration _leadConfiguration = new TalonFXConfiguration();
+        _leadConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        _leadConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        _leadConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
+        _leadConfiguration.CurrentLimits.StatorCurrentLimit = ElevatorConstants.leadCurrentThreshold; 
 
-        config.inverted(false);
-        config.idleMode(IdleMode.kBrake);
+        _leadConfiguration.Slot0.kP = ElevatorConstants.elevatorP;
+        _leadConfiguration.Slot0.kI = ElevatorConstants.elevatorI;
+        _leadConfiguration.Slot0.kD = ElevatorConstants.elevatorD;
 
-        config.encoder.positionConversionFactor(1.0/1000);
-        config.encoder.velocityConversionFactor(1.0/1000);
+        _leadMotor.getConfigurator().apply(_leadConfiguration);
+    }
 
-        config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-        config.closedLoop.pid(ElevatorConstants.elevatorP, ElevatorConstants.elevatorI, ElevatorConstants.elevatorD);
-        _elevatorMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    private void configFollowMotor() {
+        _followMotor.setControl(new Follower(_leadMotor.getDeviceID(), true));
     }
 }

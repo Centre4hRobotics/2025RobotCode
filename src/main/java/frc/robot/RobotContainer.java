@@ -26,6 +26,7 @@ import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.DriveWithSpeed;
+import frc.robot.commands.OperateWithJoystick;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
@@ -98,21 +99,6 @@ public class RobotContainer {
       new DriveWithJoystick(_drive, m_driverController)    
     );
 
-    // // Size is up to max id, not number of buttons
-    // JoystickButton[] buttonBoard1 = new JoystickButton[9];
-    // JoystickButton[] buttonBoard2 = new JoystickButton[13];
-
-    // // Configuring remaining buttonboard buttons
-    // for (int i = 1; i <= 8; i++) {
-    //   buttonBoard1[i] = new JoystickButton(_functionJoystick, i);
-    // } 
-    // for (int i = 1; i <= 7; i++) {
-    //   buttonBoard2[i] = new JoystickButton(_functionJoystick2, i);
-    // }
-    // for (int i = 9; i <= 12; i++) {
-    //   buttonBoard2[i] = new JoystickButton(_functionJoystick2, i);
-    // }
-
     // Syncs encoders   
     m_driverController.b().onTrue(
       Commands.runOnce(() -> _drive.syncEncoders(), _drive) 
@@ -125,28 +111,9 @@ public class RobotContainer {
     m_driverController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
     m_driverController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
 
-    // buttonBoard1[1].whileTrue(new DriveWithSpeed(_drive, 1.0));
-    // buttonBoard1[2].whileTrue(new DriveWithSpeed(_drive, -1.0));
-
-    // buttonBoard1[5].whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    // buttonBoard1[6].whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    // buttonBoard1[8].whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    // buttonBoard1[7].whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-
-    Command driveToTagCommand = new DriveToTag(_drive, _vision, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
-    m_driverController.leftTrigger().whileTrue(driveToTagCommand);
-
-    Command moveElevator = new RunCommand(() -> _elevator.setVoltage(m_functionController.getLeftY() * 0.2), _elevator);
-    m_functionController.start().whileTrue(moveElevator);
-
-    Command moveScorer = new RunCommand(() -> _scorer.setRotationVoltage(m_functionController.getRightX() * 0.1), _scorer);
-    m_functionController.start().whileTrue(moveScorer);
-
-    Command spinScorerIn = new RunCommand(() -> _scorer.setScoringVoltage(m_functionController.getLeftTriggerAxis() * 0.5), _scorer);
-    m_functionController.start().whileTrue(spinScorerIn);
-
-    Command spinScorerOut = new RunCommand(() -> _scorer.setScoringVoltage(m_functionController.getRightTriggerAxis() * -0.5), _scorer);
-    m_functionController.start().whileTrue(spinScorerOut);
+    Command operate = new OperateWithJoystick(_elevator, _scorer, m_functionController);
+    _elevator.setDefaultCommand(operate);
+    _scorer.setDefaultCommand(operate);
   }
 
   public void autoChooserInit() {

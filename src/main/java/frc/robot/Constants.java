@@ -347,6 +347,9 @@ public final class Constants {
     public static final double elevatorP = 0;
     public static final double elevatorI = 0;
     public static final double elevatorD = 0;
+
+    public static final double leadCurrentThreshold = 50;
+    public static final double followCurrentThreshold = 50;
   }
 
   public static class ScorerConstants {
@@ -365,6 +368,7 @@ public final class Constants {
     public static final double scoringP = 0;
     public static final double scoringI = 0;
     public static final double scoringD = 0;
+
   }
 
   public static class FunnelConstants {
