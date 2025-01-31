@@ -32,6 +32,7 @@ public class Vision extends SubsystemBase {
         _rotationSub = table.getDoubleTopic("Tag Rotation").subscribe(0);
         _posXSub = table.getDoubleTopic("Pose X").subscribe(0);
         _posYSub = table.getDoubleTopic("Pose Y").subscribe(0);
+        
 
         _laser = new LaserCan(12);
         try {

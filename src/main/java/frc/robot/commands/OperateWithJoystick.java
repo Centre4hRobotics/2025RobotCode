@@ -37,17 +37,14 @@ public class OperateWithJoystick extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Command moveElevator = new RunCommand(() -> _elevator.setVoltage(_controller.getLeftY() * 0.2), _elevator);
-    _controller.leftStick().whileTrue(moveElevator);
 
-    Command moveScorer = new RunCommand(() -> _scorer.setRotationVoltage(_controller.getRightX() * 0.1), _scorer);
-    _controller.rightStick().whileTrue(moveScorer);
+    _elevator.setVoltage(_controller.getLeftY() * 0.2);
 
-    Command spinScorerIn = new RunCommand(() -> _scorer.setScoringVoltage(_controller.getLeftTriggerAxis() * 0.5), _scorer);
-    _controller.leftTrigger().whileTrue(spinScorerIn);
+    _scorer.setRotationVoltage(_controller.getRightX() * 0.1);
 
-    Command spinScorerOut = new RunCommand(() -> _scorer.setScoringVoltage(_controller.getRightTriggerAxis() * -0.5), _scorer);
-    _controller.rightTrigger().whileTrue(spinScorerOut);
+    _scorer.setScoringVoltage(_controller.getLeftTriggerAxis() * 0.5);
+
+    _scorer.setScoringVoltage(_controller.getRightTriggerAxis() * -0.5);
   }
 
   // Returns true when the command should end.
