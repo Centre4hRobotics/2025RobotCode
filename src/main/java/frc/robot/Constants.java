@@ -369,6 +369,9 @@ public final class Constants {
     public static final double scoringI = 0;
     public static final double scoringD = 0;
 
+    public static final int rotationCurrentThreshold = 10;
+    public static final int scoringCurrentThreshold = 40;
+
   }
 
   public static class FunnelConstants {

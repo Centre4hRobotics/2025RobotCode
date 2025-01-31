@@ -9,7 +9,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ScorerConstants;
@@ -58,24 +58,29 @@ public class Scorer extends SubsystemBase {
     }
 
     private void configScoringMotor() {
-        SparkMaxConfig config = new SparkMaxConfig();
+        SparkFlexConfig config = new SparkFlexConfig();
 
         config.inverted(false);
         config.idleMode(IdleMode.kBrake);
 
+        config.smartCurrentLimit(ScorerConstants.scoringCurrentThreshold);
+
         config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
         config.closedLoop.pid(ScorerConstants.scoringP, ScorerConstants.scoringI, ScorerConstants.scoringD);
+
         _scoringMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     private void configRotationMotor() {
-        SparkMaxConfig config = new SparkMaxConfig();
+        SparkFlexConfig config = new SparkFlexConfig();
 
         config.inverted(false);
         config.idleMode(IdleMode.kBrake);
 
         config.encoder.positionConversionFactor(1000);
         config.encoder.velocityConversionFactor(1000);
+
+        config.smartCurrentLimit(ScorerConstants.rotationCurrentThreshold);
 
         config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
         config.closedLoop.pid(ScorerConstants.rotationP, ScorerConstants.rotationI, ScorerConstants.rotationD);

@@ -26,7 +26,8 @@ import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.DriveWithSpeed;
-import frc.robot.commands.OperateWithJoystick;
+import frc.robot.commands.OperateElevatorWithJoystick;
+import frc.robot.commands.OperateScorerWithJoystick;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
@@ -111,9 +112,8 @@ public class RobotContainer {
     m_driverController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
     m_driverController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
 
-    Command operate = new OperateWithJoystick(_elevator, _scorer, m_functionController);
-    _elevator.setDefaultCommand(operate);
-    _scorer.setDefaultCommand(operate);
+    _elevator.setDefaultCommand(new OperateElevatorWithJoystick(_elevator, m_functionController));
+    _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, m_functionController));
   }
 
   public void autoChooserInit() {
