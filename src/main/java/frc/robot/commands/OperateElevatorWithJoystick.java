@@ -33,7 +33,11 @@ public class OperateElevatorWithJoystick extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _elevator.setVoltage(_controller.getLeftY() * 0.2);
+    if(Math.abs(_controller.getLeftY()) > 0.2) {
+      _elevator.setVoltage(_controller.getLeftY() * 0.3);
+    } else {
+      _elevator.setVoltage(0);
+    }
   }
 
   // Returns true when the command should end.

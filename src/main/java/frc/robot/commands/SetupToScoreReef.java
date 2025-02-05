@@ -7,15 +7,20 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Scorer;
 
 //ONLY CALL IN CORAL MODE !!
-public class ScoreReef extends Command {
+public class SetupToScoreReef extends Command {
     private Elevator _elevator;
     private Scorer _scorer;
     private int _reefLevel;
+
+    private boolean _isFinished;
     
-    public ScoreReef(Elevator elevator, Scorer scorer, int reefLevel) {
+    public SetupToScoreReef(Elevator elevator, Scorer scorer, int reefLevel) {
         _elevator = elevator;
         _scorer = scorer;
         _reefLevel = reefLevel;
+
+        _isFinished = false;
+
         addRequirements(elevator, scorer);
     }
     @Override
@@ -24,10 +29,15 @@ public class ScoreReef extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        _elevator.setHeight(ElevatorConstants.heightEncoderValuesReef[_reefLevel]);
-        _scorer.setRotation(ScorerConstants.rotationEncoderValuesReef[_reefLevel]);
+        
     }
 
     @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
+
+  @Override
+  public boolean isFinished() {
+    return _isFinished;
+  }
 }

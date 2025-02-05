@@ -4,7 +4,10 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.SignalLogger;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -22,9 +25,12 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.DefaultPosition;
 import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ResetGyro;
+import frc.robot.commands.ManipulateGamePiece;
+import frc.robot.commands.SetupToScoreReef;
 import frc.robot.commands.DriveWithSpeed;
 import frc.robot.commands.OperateElevatorWithJoystick;
 import frc.robot.commands.OperateScorerWithJoystick;
@@ -44,7 +50,8 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drive _drive = new Drive();
-  private final Vision _vision = new Vision();
+  private final Vision _rightCamera = new Vision("RIGHT");
+  private final Vision _leftCamera = new Vision("LEFT");
   private final Funnel _funnel = new Funnel();
   private final Elevator _elevator = new Elevator();
   private final Scorer _scorer = new Scorer();
@@ -61,6 +68,26 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    // register pathplanner commands
+
+    BooleanSupplier coral = () -> true;
+    // NamedCommands.registerCommand("score coral L1", new SetupToScoreReef(_elevator, _scorer, 1)
+    //   .andThen(new ManipulateGamePiece(_scorer, "coral", "eject")).withTimeout(0.2)
+    //   .andThen(new DefaultPosition(_scorer, _elevator, coral))
+    // );
+    // NamedCommands.registerCommand("score coral L2", new SetupToScoreReef(_elevator, _scorer, 2)
+    //   .andThen(new ManipulateGamePiece(_scorer, "coral", "eject")).withTimeout(0.2)
+    //   .andThen(new DefaultPosition(_scorer, _elevator, coral))
+    // );
+    // NamedCommands.registerCommand("score coral L3", new SetupToScoreReef(_elevator, _scorer, 3)
+    //   .andThen(new ManipulateGamePiece(_scorer, "coral", "eject")).withTimeout(0.2)
+    //   .andThen(new DefaultPosition(_scorer, _elevator, coral))
+    // );
+    // NamedCommands.registerCommand("score coral L4", new SetupToScoreReef(_elevator, _scorer, 4)
+    //   .andThen(new ManipulateGamePiece(_scorer, "coral", "eject")).withTimeout(0.2)
+    //   .andThen(new DefaultPosition(_scorer, _elevator, coral))
+    // );
 
     // Button board configuration 
     configureBindings();
@@ -106,6 +133,12 @@ public class RobotContainer {
     );
 
     m_driverController.y().onTrue(new ResetGyro(_drive));
+
+    Command driveToRightTag = new DriveToTag(_drive, _rightCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
+    m_driverController.rightBumper().whileTrue(driveToRightTag);
+
+    Command driveToLeftTag = new DriveToTag(_drive, _leftCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
+    m_driverController.leftBumper().whileTrue(driveToLeftTag);
 
     // In order to properly run characterization tests, it is best to be able to
     // manually control the stop/stop of the logger to remove as much noise.

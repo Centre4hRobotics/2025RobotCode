@@ -141,10 +141,10 @@ public final class Constants {
       switch (robotType)
       {
         case COMPETITION:
-          bottomLeftEncoderOffset = 6.224;
-          bottomRightEncoderOffset = 0.322;
-          topLeftEncoderOffset = 5.246;
-          topRightEncoderOffset = 3.136;
+          bottomLeftEncoderOffset = 6.23;
+          bottomRightEncoderOffset = 3.51;
+          topLeftEncoderOffset = 2.13;
+          topRightEncoderOffset = 3.14;
           inverted = InvertedValue.Clockwise_Positive;
           break;
         case PRACTICE:
@@ -338,40 +338,59 @@ public final class Constants {
 
   public static class ElevatorConstants {
     // coral
-    public static final double heightL1 = 0;
-    public static final double heightL2 = 0;
-    public static final double heightL3 = 0;
-    public static final double heightL4 = 0;
-    public static final double[] heightEncoderValuesReef = {heightL1, heightL2, heightL3, heightL4};
+    public static final double heightCoralL1 = 0; 
+    public static final double heightCoralL2 = 0; //add
+    public static final double heightCoralL3 = 0; //add
+    public static final double heightCoralL4 = 0; //add
+    public static final double[] heightCoralReef = {heightCoralL1, heightCoralL2, heightCoralL3, heightCoralL4};
 
-    public static final double elevatorP = 0;
+    public static final double heightAlgaeProcessor = 0; //add
+    public static final double heightAlgaeL2 = 0; //add
+    public static final double heightAlgaeL3 = 0; //add
+    public static final double[] heightAlgae = {heightAlgaeProcessor, heightAlgaeL2, heightAlgaeL3};
+
+    public static final double heightBelowCrossbeam = 0; //add
+    public static final double heightAboveCrossbeam = 0; //add
+
+    public static final double elevatorP = 0; //add
     public static final double elevatorI = 0;
     public static final double elevatorD = 0;
 
     public static final double leadCurrentThreshold = 50;
     public static final double followCurrentThreshold = 50;
+
+    public static final double positionTolerance = 0; //add
   }
 
   public static class ScorerConstants {
     //coral
-    public static final double rotationL123 = 0;
-    public static final double rotationL4 = 0;
-    public static final double[] rotationEncoderValuesReef = {rotationL123, rotationL123, rotationL123, rotationL4};
+    public static final double rotationL1 = 0; 
+    public static final double rotationL2 = 0; //add
+    public static final double rotationL3 = 0; //add
+    public static final double rotationL4 = 0; //add
+    public static final double[] rotationEncoderValuesReef = {rotationL1, rotationL2, rotationL3, rotationL4};
 
     // algae
-    public static final double rotationAlgae = 0;
+    public static final double rotationCoralDefault = 0; //add
+    public static final double rotationAlgaeDefault = 0; //add
 
-    public static final double rotationP = 0;
+    public static final double rotationP = 0; //add
     public static final double rotationI = 0;
     public static final double rotationD = 0;
 
-    public static final double scoringP = 0;
+    public static final double scoringP = 0; //add
     public static final double scoringI = 0;
     public static final double scoringD = 0;
 
-    public static final int rotationCurrentThreshold = 10;
+    public static final int rotationCurrentThreshold = 40;
     public static final int scoringCurrentThreshold = 40;
 
+    public static final double positionTolerance = 0; //add
+
+    public static final double lowestElevatingRotationCoral = 0; //add
+    public static final double highestElevatingRotationCoral = 0; //add
+    public static final double lowestElevatingRotationAlgae = 0; //add
+    public static final double highestElevatingRotationAlgae = 0; //add
   }
 
   public static class FunnelConstants {

@@ -18,10 +18,11 @@ public class DriveToTag extends Command {
   private Drive _drive;
   private Vision _vision;
 
-  private Transform2d _position;
-  private double _rotation, _posX, _posY;
+  private double _cameraRotationToTag, _cameraDistanceToTagX, _cameraDistanceToTagY;
 
-  private double _deltaX, _deltaY, _laser;
+  private double _offsetX, _offsetY;
+  
+  private double _laserDistanceToTagX;
 
   private PIDController _tagHeadingPIDController; 
   private PIDController _tagDriveXPIDController;
@@ -30,12 +31,12 @@ public class DriveToTag extends Command {
   private Boolean _isFinished;
   
   /** Creates a new DriveToTag. */
-  public DriveToTag(Drive drive, Vision vision, double deltaX, double deltaY) {
+  public DriveToTag(Drive drive, Vision vision, double offsetX, double offsetY) {
     _drive = drive;
     _vision = vision;
-    _deltaX = deltaX;
-    _deltaY = deltaY;
-    _laser = -42.0;
+    _offsetX = offsetX;
+    _offsetY = offsetY;
+    _laserDistanceToTagX = -42.0;
 
     _tagHeadingPIDController = new PIDController(VisionConstants.tagTurningP, VisionConstants.tagTurningI, VisionConstants.tagTurningD);
     _tagDriveXPIDController = new PIDController(VisionConstants.tagDriveXP, VisionConstants.tagDriveXI, VisionConstants.tagDriveXD);
@@ -54,57 +55,21 @@ public class DriveToTag extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _position = _vision.getCameraToAprilTag();
-    if(_position != null) {
-      _rotation = _position.getRotation().getRadians();
-      _posX = _position.getX();
-      _posY = _position.getY();
-      _laser = _vision.getLaserDistance();
-
-      //if(Math.hypot(_posX-_deltaX, _posY-_deltaY) < VisionConstants.distanceTolerance) {
-      if(Math.abs(_rotation) < VisionConstants.rotationTolerance) {
-       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
-       _isFinished = true;
-      } else {
+    Transform2d position = _vision.getCameraToAprilTag();
+    if(position != null) {
+      _cameraRotationToTag = position.getRotation().getRadians();
+      _cameraDistanceToTagX = position.getX();
+      _cameraDistanceToTagY = position.getY();
+      _laserDistanceToTagX = _vision.getLaserDistance();
+      
        double velocityX, velocityY, velocityTheta;
-       velocityY = _tagDriveYPIDController.calculate(_posY - _deltaY);
 
-       // if robot is facing towards the tag (might need change after rotating camera)
-       if (Math.abs(_rotation) >= 3.07)
-       {
-        // don't turn if facing tag
-        velocityTheta = 0.0;
-        // if close horizontally, don't move more horizontally
-        if (Math.abs(_deltaY) <= 0.1)
-        {
-          // if the laser gives a good reading <2m, use it
-          if (_laser < 2.0) {
-            velocityX = _tagDriveXPIDController.calculate(_posX - _laser);
-          }
-          else
-          {
-            velocityX = _tagDriveXPIDController.calculate(_posX - _deltaX);
-          }
-         velocityY = 0.0;
-        }
-        // if not close horizontally, keep moving horizontally, don't use laser
-        else
-        {
-          velocityX = _tagDriveXPIDController.calculate(_posX - _deltaX);
-        }
-       }
-       // if not facing correct direction, don't move forwards
-       else
-       {
-        velocityTheta = _tagHeadingPIDController.calculate(_rotation);
-        velocityX = 0.0;
-        // velocityX = _tagDriveXPIDController.calculate(_posX - _deltaX);
-       }
+       velocityY = _tagDriveYPIDController.calculate(_cameraDistanceToTagY);
+        velocityX = 0;
+        velocityTheta = _tagHeadingPIDController.calculate(_cameraRotationToTag);
 
-       System.out.println(velocityTheta);
-       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, -velocityY, -velocityTheta)); 
+       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(velocityX, velocityY, velocityTheta)); 
        _isFinished = false;
-    }
     } else {
       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
     }

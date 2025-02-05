@@ -33,13 +33,16 @@ public class OperateScorerWithJoystick extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    _scorer.setRotationVoltage(_controller.getRightX() * 0.1);
+    if (Math.abs(_controller.getRightX()) > 0.2) {
+      _scorer.setRotationVoltage(_controller.getRightX() * 5);
+    } else {
+      _scorer.setRotationVoltage(0);
+    }
 
     if(_controller.getLeftTriggerAxis() > 0)
-        _scorer.setScoringVoltage(_controller.getLeftTriggerAxis() * 0.5);
+        _scorer.setScoringVoltage(_controller.getLeftTriggerAxis() * 10);
     else
-        _scorer.setScoringVoltage(_controller.getRightTriggerAxis() * -0.5);
+        _scorer.setScoringVoltage(_controller.getRightTriggerAxis() * -10);
   }
 
   // Returns true when the command should end.

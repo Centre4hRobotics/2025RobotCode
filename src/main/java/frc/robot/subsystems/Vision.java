@@ -17,6 +17,7 @@ public class Vision extends SubsystemBase {
     private double _rotation; // "Tag Rotation"
     private int _tagID; // "Widest Tag ID"
     private boolean _tagPresent; // "AprilTag Presence"
+    private String _side;
 
     private BooleanSubscriber _tagPresenceSub;
     private DoubleSubscriber _rotationSub;
@@ -25,13 +26,15 @@ public class Vision extends SubsystemBase {
     
     private LaserCan _laser;
 
-    public Vision() {
+    public Vision(String side) {
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         NetworkTable table = inst.getTable("AprilTag Vision");
+        table.getEntry("Using Camera").setValue(side);
         _tagPresenceSub = table.getBooleanTopic("AprilTag Presence").subscribe(false);
         _rotationSub = table.getDoubleTopic("Tag Rotation").subscribe(0);
         _posXSub = table.getDoubleTopic("Pose X").subscribe(0);
         _posYSub = table.getDoubleTopic("Pose Y").subscribe(0);
+        _side = side;
         
 
         _laser = new LaserCan(12);
@@ -45,6 +48,9 @@ public class Vision extends SubsystemBase {
     }
 
     public Transform2d getCameraToAprilTag() {
+        NetworkTableInstance inst = NetworkTableInstance.getDefault();
+        NetworkTable table = inst.getTable("AprilTag Vision");
+        table.getEntry("Using Camera").setValue(_side);
         _tagPresent = _tagPresenceSub.get();
         System.out.println(_tagPresent);
         if(_tagPresent == true) {
@@ -69,7 +75,7 @@ public class Vision extends SubsystemBase {
         if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
             return measurement.distance_mm / 1000;
         } else {
-            System.out.println("Oh no! The target is out of range, or we can't get a reliable measurement!");
+            System.out.println("Oh no! The target is out of range or we can't get a reliable measurement!");
             return -42;
         }
     }

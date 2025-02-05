@@ -53,6 +53,21 @@ public class Scorer extends SubsystemBase {
         _scoringMotor.setVoltage(voltage);
     }
 
+    public boolean safeToElevateCoral() {
+        return _rotationEncoder.getPosition() > ScorerConstants.lowestElevatingRotationCoral 
+        && _rotationEncoder.getPosition() < ScorerConstants.highestElevatingRotationCoral;
+    }
+
+    public boolean safeToElevateAlgae() {
+        return _rotationEncoder.getPosition() > ScorerConstants.lowestElevatingRotationAlgae 
+        && _rotationEncoder.getPosition() < ScorerConstants.highestElevatingRotationAlgae;
+    }
+
+    // rotation of scorer is clear of crossbeam
+    public boolean safeToElevate() {
+        return safeToElevateAlgae() || safeToElevateCoral();
+    }
+
     public double getRotation() {
         return _rotationEncoder.getPosition();
     }
