@@ -125,7 +125,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Configuring teleoperated control
     _drive.setDefaultCommand(
-      new DriveWithJoystick(_drive, m_driverController)    
+      new DriveWithJoystick(_drive, m_driverController, _elevator) 
     );
 
     // Syncs encoders   
