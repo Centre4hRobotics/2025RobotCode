@@ -72,22 +72,23 @@ public class RobotContainer {
     // register pathplanner commands
 
     BooleanSupplier coral = () -> true;
-    // NamedCommands.registerCommand("score coral L1", new SetupToScoreReef(_elevator, _scorer, 1)
-    //   .andThen(new ManipulateGamePiece(_scorer, "coral", "eject")).withTimeout(0.2)
-    //   .andThen(new DefaultPosition(_scorer, _elevator, coral))
-    // );
-    // NamedCommands.registerCommand("score coral L2", new SetupToScoreReef(_elevator, _scorer, 2)
-    //   .andThen(new ManipulateGamePiece(_scorer, "coral", "eject")).withTimeout(0.2)
-    //   .andThen(new DefaultPosition(_scorer, _elevator, coral))
-    // );
-    // NamedCommands.registerCommand("score coral L3", new SetupToScoreReef(_elevator, _scorer, 3)
-    //   .andThen(new ManipulateGamePiece(_scorer, "coral", "eject")).withTimeout(0.2)
-    //   .andThen(new DefaultPosition(_scorer, _elevator, coral))
-    // );
-    // NamedCommands.registerCommand("score coral L4", new SetupToScoreReef(_elevator, _scorer, 4)
-    //   .andThen(new ManipulateGamePiece(_scorer, "coral", "eject")).withTimeout(0.2)
-    //   .andThen(new DefaultPosition(_scorer, _elevator, coral))
-    // );
+    BooleanSupplier alage = () -> false;
+    NamedCommands.registerCommand("score coral L1", new SetupToScoreReef(_elevator, _scorer, 1)
+      .andThen(new ManipulateGamePiece(_scorer, coral, "eject")).withTimeout(0.2)
+      .andThen(new DefaultPosition(_scorer, _elevator, coral))
+    );
+    NamedCommands.registerCommand("score coral L2", new SetupToScoreReef(_elevator, _scorer, 2)
+      .andThen(new ManipulateGamePiece(_scorer, coral, "eject")).withTimeout(0.2)
+      .andThen(new DefaultPosition(_scorer, _elevator, coral))
+    );
+    NamedCommands.registerCommand("score coral L3", new SetupToScoreReef(_elevator, _scorer, 3)
+      .andThen(new ManipulateGamePiece(_scorer, coral, "eject")).withTimeout(0.2)
+      .andThen(new DefaultPosition(_scorer, _elevator, coral))
+    );
+    NamedCommands.registerCommand("score coral L4", new SetupToScoreReef(_elevator, _scorer, 4)
+      .andThen(new ManipulateGamePiece(_scorer, coral, "eject")).withTimeout(0.2)
+      .andThen(new DefaultPosition(_scorer, _elevator, coral))
+    );
 
     // Button board configuration 
     configureBindings();

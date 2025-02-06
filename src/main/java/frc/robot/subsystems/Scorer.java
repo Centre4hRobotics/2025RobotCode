@@ -12,6 +12,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ScorerConstants;
 
 public class Scorer extends SubsystemBase {
@@ -70,6 +71,10 @@ public class Scorer extends SubsystemBase {
 
     public double getRotation() {
         return _rotationEncoder.getPosition();
+    }
+
+    public boolean isOnTarget(double target) {
+        return Math.abs(getRotation() - target) < ScorerConstants.rotationTolerance;
     }
 
     private void configScoringMotor() {

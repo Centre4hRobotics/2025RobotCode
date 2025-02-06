@@ -51,6 +51,14 @@ public class Elevator extends SubsystemBase {
         return aboveCrossbeam() || belowCrossbeam();
     }
 
+    public boolean isOnTarget(double target) {
+        return Math.abs(getHeight() - target) < ElevatorConstants.heightTolerance;
+    }
+
+    public double heightFraction() {
+        return getHeight()/ElevatorConstants.maxHeight;
+    }
+
     private void configLeadMotor() {
         TalonFXConfiguration _leadConfiguration = new TalonFXConfiguration();
         _leadConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;

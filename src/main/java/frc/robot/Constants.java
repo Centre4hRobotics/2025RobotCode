@@ -352,6 +352,8 @@ public final class Constants {
     public static final double heightBelowCrossbeam = 0; //add
     public static final double heightAboveCrossbeam = 0; //add
 
+    public static final double maxHeight = 0; //add
+
     public static final double elevatorP = 0; //add
     public static final double elevatorI = 0;
     public static final double elevatorD = 0;
@@ -359,7 +361,7 @@ public final class Constants {
     public static final double leadCurrentThreshold = 50;
     public static final double followCurrentThreshold = 50;
 
-    public static final double positionTolerance = 0; //add
+    public static final double heightTolerance = 0; //add
   }
 
   public static class ScorerConstants {
@@ -385,7 +387,7 @@ public final class Constants {
     public static final int rotationCurrentThreshold = 40;
     public static final int scoringCurrentThreshold = 40;
 
-    public static final double positionTolerance = 0; //add
+    public static final double rotationTolerance = 0; //add
 
     public static final double lowestElevatingRotationCoral = 0; //add
     public static final double highestElevatingRotationCoral = 0; //add

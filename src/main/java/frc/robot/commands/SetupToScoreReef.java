@@ -29,7 +29,12 @@ public class SetupToScoreReef extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        
+      double elevatorHeight = ElevatorConstants.heightCoralReef[_reefLevel];
+      double scorerRotation = ScorerConstants.rotationEncoderValuesReef[_reefLevel];
+      _elevator.setHeight(elevatorHeight);
+      _scorer.setRotation(scorerRotation);
+
+      _isFinished = _elevator.isOnTarget(elevatorHeight) && _scorer.isOnTarget(scorerRotation);
     }
 
     @Override
