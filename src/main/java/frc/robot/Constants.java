@@ -352,9 +352,9 @@ public final class Constants {
     public static final double heightBelowCrossbeam = 0; //add
     public static final double heightAboveCrossbeam = 0; //add
 
-    public static final double maxHeight = 0; //add
+    public static final double maxHeight = 40; //add
 
-    public static final double elevatorP = 0; //add
+    public static final double elevatorP = 2;
     public static final double elevatorI = 0;
     public static final double elevatorD = 0;
 

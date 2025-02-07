@@ -34,7 +34,7 @@ public class OperateElevatorWithJoystick extends Command {
   @Override
   public void execute() {
     if(Math.abs(_controller.getLeftY()) > 0.2) {
-      _elevator.setVoltage(_controller.getLeftY() * 0.3);
+      // _elevator.setVoltage(_controller.getLeftY() * 0.3);
     } else {
       _elevator.setVoltage(0);
     }

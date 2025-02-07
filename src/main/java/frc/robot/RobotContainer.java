@@ -22,16 +22,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ScorerConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.DefaultPosition;
 import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ResetGyro;
+import frc.robot.commands.RotateScorer;
 import frc.robot.commands.ManipulateGamePiece;
-import frc.robot.commands.SetupToScoreReef;
 import frc.robot.commands.DriveWithSpeed;
+import frc.robot.commands.ElevatorToHeight;
 import frc.robot.commands.OperateElevatorWithJoystick;
 import frc.robot.commands.OperateScorerWithJoystick;
 import frc.robot.subsystems.Climb;
@@ -72,22 +74,10 @@ public class RobotContainer {
     // register pathplanner commands
 
     BooleanSupplier coral = () -> true;
-    BooleanSupplier alage = () -> false;
-    NamedCommands.registerCommand("score coral L1", new SetupToScoreReef(_elevator, _scorer, 1)
-      .andThen(new ManipulateGamePiece(_scorer, coral, "eject")).withTimeout(0.2)
-      .andThen(new DefaultPosition(_scorer, _elevator, coral))
-    );
-    NamedCommands.registerCommand("score coral L2", new SetupToScoreReef(_elevator, _scorer, 2)
-      .andThen(new ManipulateGamePiece(_scorer, coral, "eject")).withTimeout(0.2)
-      .andThen(new DefaultPosition(_scorer, _elevator, coral))
-    );
-    NamedCommands.registerCommand("score coral L3", new SetupToScoreReef(_elevator, _scorer, 3)
-      .andThen(new ManipulateGamePiece(_scorer, coral, "eject")).withTimeout(0.2)
-      .andThen(new DefaultPosition(_scorer, _elevator, coral))
-    );
-    NamedCommands.registerCommand("score coral L4", new SetupToScoreReef(_elevator, _scorer, 4)
-      .andThen(new ManipulateGamePiece(_scorer, coral, "eject")).withTimeout(0.2)
-      .andThen(new DefaultPosition(_scorer, _elevator, coral))
+    NamedCommands.registerCommand("score coral L1", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralReef[1])
+      .alongWith(new RotateScorer(_scorer, ScorerConstants.rotationEncoderValuesReef[1]))
+      .andThen(new ManipulateGamePiece(_scorer, coral, "eject"))
+      .andThen(new ElevatorToHeight(_elevator, 0))
     );
 
     // Button board configuration 
@@ -135,6 +125,10 @@ public class RobotContainer {
 
     m_driverController.y().onTrue(new ResetGyro(_drive));
 
+    m_functionController.a().onTrue(new ElevatorToHeight(_elevator, 0));
+    m_functionController.b().onTrue(new ElevatorToHeight(_elevator, 20));
+    m_functionController.x().onTrue(new ElevatorToHeight(_elevator, 30));
+
     Command driveToRightTag = new DriveToTag(_drive, _rightCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
     m_driverController.rightBumper().whileTrue(driveToRightTag);
 
@@ -146,7 +140,7 @@ public class RobotContainer {
     m_driverController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
     m_driverController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
 
-    _elevator.setDefaultCommand(new OperateElevatorWithJoystick(_elevator, m_functionController));
+    //_elevator.setDefaultCommand(new OperateElevatorWithJoystick(_elevator, m_functionController));
     _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, m_functionController));
   }
 
