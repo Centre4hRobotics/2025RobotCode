@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "score coral L1"
+            "name": "score coral L2"
           }
         },
         {
@@ -23,21 +23,15 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "ps to d"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "score coral L2"
           }
         },
         {
@@ -47,21 +41,15 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "ps to c"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "score coral L2"
           }
         }
       ]

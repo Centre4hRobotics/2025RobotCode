@@ -79,6 +79,11 @@ public class RobotContainer {
       .andThen(new ManipulateGamePiece(_scorer, coral, "eject"))
       .andThen(new ElevatorToHeight(_elevator, 0))
     );
+    NamedCommands.registerCommand("score coral L2", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralReef[2])
+      .alongWith(new RotateScorer(_scorer, ScorerConstants.rotationEncoderValuesReef[2]))
+      .andThen(new ManipulateGamePiece(_scorer, coral, "eject"))
+      .andThen(new ElevatorToHeight(_elevator, 0))
+    );
 
     // Button board configuration 
     configureBindings();
