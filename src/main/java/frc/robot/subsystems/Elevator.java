@@ -77,7 +77,7 @@ public class Elevator extends SubsystemBase {
     private void configLeadMotor() {
         TalonFXConfiguration _leadConfiguration = new TalonFXConfiguration();
         _leadConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        _leadConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        _leadConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         _leadConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
         _leadConfiguration.CurrentLimits.StatorCurrentLimit = ElevatorConstants.leadCurrentThreshold; 
 

@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "start to e"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "start to e"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "lower funnel"
+                }
+              }
+            ]
           }
         },
         {
@@ -20,6 +33,12 @@
           "type": "path",
           "data": {
             "pathName": "e to ps"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake coral from station"
           }
         },
         {
@@ -38,6 +57,12 @@
           "type": "path",
           "data": {
             "pathName": "d to ps"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake coral from station"
           }
         },
         {

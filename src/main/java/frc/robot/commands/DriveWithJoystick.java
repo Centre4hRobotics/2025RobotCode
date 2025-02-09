@@ -7,13 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Elevator;
 
 public class DriveWithJoystick extends Command {
 
   private Drive _driveSubsystem;
   private CommandXboxController _controller;
-  private Elevator _elevator;
 
   /**
    * This command is responsible for teleop drive.
@@ -23,10 +21,9 @@ public class DriveWithJoystick extends Command {
    * 
    * Comment By: EternalSyntaxError
    */
-  public DriveWithJoystick(Drive driveSubsystem, CommandXboxController controller, Elevator elevator) {
+  public DriveWithJoystick(Drive driveSubsystem, CommandXboxController controller) {
     _driveSubsystem = driveSubsystem;
     _controller = controller;
-    _elevator = elevator;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveSubsystem);
@@ -62,7 +59,7 @@ public class DriveWithJoystick extends Command {
     } else {
       //scales each component by using joystick angle
       double joystickAngle = Math.atan2(joystickYSpeedInput, joystickXSpeedInput);
-      totalThrottle = Math.pow(totalThrottle, 2.3) * (1-_elevator.heightFraction());
+      totalThrottle = Math.pow(totalThrottle, 2.3); //(1-_elevator.heightFraction())
       joystickXSpeedInput = totalThrottle * Math.cos(joystickAngle);
       joystickYSpeedInput = totalThrottle * Math.sin(joystickAngle);
     }

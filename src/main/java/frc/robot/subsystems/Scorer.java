@@ -11,6 +11,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ScorerConstants;
@@ -77,6 +78,13 @@ public class Scorer extends SubsystemBase {
         return Math.abs(getRotation() - target) < ScorerConstants.rotationTolerance;
     }
 
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        NetworkTableInstance nt = NetworkTableInstance.getDefault();
+        nt.getTable("Scorer").getEntry("rotation encoder value").setValue(getRotation());
+    }
+
     private void configScoringMotor() {
         SparkFlexConfig config = new SparkFlexConfig();
 
@@ -96,9 +104,6 @@ public class Scorer extends SubsystemBase {
 
         config.inverted(false);
         config.idleMode(IdleMode.kBrake);
-
-        config.encoder.positionConversionFactor(1000);
-        config.encoder.velocityConversionFactor(1000);
 
         config.smartCurrentLimit(ScorerConstants.rotationCurrentThreshold);
 

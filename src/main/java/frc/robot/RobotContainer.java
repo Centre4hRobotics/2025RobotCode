@@ -30,6 +30,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ResetGyro;
+import frc.robot.commands.RotateFunnel;
 import frc.robot.commands.RotateScorer;
 import frc.robot.commands.ManipulateGamePiece;
 import frc.robot.commands.DriveWithSpeed;
@@ -65,6 +66,9 @@ public class RobotContainer {
   private final CommandXboxController m_functionController = 
       new CommandXboxController(OperatorConstants.kFunctionControllerPort);
 
+      private final Joystick _functionJoystick1 = new Joystick(2);
+      private final Joystick _functionJoystick2 = new Joystick(3);
+
   //private final Joystick _functionJoystick = new Joystick(1);
   //private final Joystick _functionJoystick2 = new Joystick(2);
 
@@ -74,6 +78,9 @@ public class RobotContainer {
     // register pathplanner commands
 
     BooleanSupplier coral = () -> true;
+    BooleanSupplier station = () -> true;
+    NamedCommands.registerCommand("lower funnel", new RotateFunnel(_funnel, station));
+    NamedCommands.registerCommand("intake coral from station", new ManipulateGamePiece(_scorer, coral, "out").withTimeout(1));
     NamedCommands.registerCommand("score coral L1", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralReef[1])
       .alongWith(new RotateScorer(_scorer, ScorerConstants.rotationEncoderValuesReef[1]))
       .andThen(new ManipulateGamePiece(_scorer, coral, "eject"))
@@ -120,8 +127,51 @@ public class RobotContainer {
   private void configureBindings() {
     // Configuring teleoperated control
     _drive.setDefaultCommand(
-      new DriveWithJoystick(_drive, m_driverController, _elevator) 
+      new DriveWithJoystick(_drive, m_driverController) 
     );
+
+     // size is up to max id, not number of buttons
+     JoystickButton[] buttonBoard1 = new JoystickButton[13];
+     JoystickButton[] buttonBoard2 = new JoystickButton[8];
+
+     for (int i = 1; i <= 12; i++) {
+      buttonBoard1[i] = new JoystickButton(_functionJoystick1, i);
+    }
+
+    for (int i = 1; i <= 4; i++) {
+      buttonBoard2[i] = new JoystickButton(_functionJoystick2, i);
+    }
+    for (int i = 6; i <= 7; i++) {
+      buttonBoard2[i] = new JoystickButton(_functionJoystick2, i);
+    }
+
+    // if(buttonBoard2[7].getAsBoolean())
+    // {
+      buttonBoard1[8].onTrue(
+        new ElevatorToHeight(_elevator, Constants.ElevatorConstants.heightCoralL2).andThen(new RotateScorer(_scorer, Constants.ScorerConstants.rotationCoralDefault))
+      );
+      // buttonBoard1[5].onTrue(
+      //   new ElevatorToHeight(_elevator, Constants.ElevatorConstants.heightCoralL3).andThen(new RotateScorer(_scorer, Constants.ScorerConstants.rotationCoralDefault))
+      // );
+      // buttonBoard1[6].onTrue(
+      //   new ElevatorToHeight(_elevator, Constants.ElevatorConstants.heightCoralL4).andThen(new RotateScorer(_scorer, Constants.ScorerConstants.rotationCoralDefault))
+      // );
+      // buttonBoard1[4].onTrue(
+      //   new ElevatorToHeight(_elevator, 0.0)
+      // );
+    // }
+    // else
+    // {
+    //   buttonBoard1[8].onTrue(
+    //     new ElevatorToHeight(_elevator, Constants.ElevatorConstants.heightAlgaeL2).andThen(new RotateScorer(_scorer, Constants.ScorerConstants.rotationAlgaeDefault))
+    //   );
+    //   buttonBoard1[5].onTrue(
+    //     new ElevatorToHeight(_elevator, Constants.ElevatorConstants.heightAlgaeL3).andThen(new RotateScorer(_scorer, Constants.ScorerConstants.rotationAlgaeDefault))
+    //   );
+    //   // buttonBoard1[6].onTrue(
+    //   //   new ElevatorToHeight(_elevator, Constants.ElevatorConstants.heightCoralL4).andThen(new RotateScorer(_scorer, Constants.ScorerConstants.rotationCoralDefault))
+    //   // );
+    // }
 
     // Syncs encoders   
     m_driverController.b().onTrue(
@@ -130,9 +180,9 @@ public class RobotContainer {
 
     m_driverController.y().onTrue(new ResetGyro(_drive));
 
-    m_functionController.a().onTrue(new ElevatorToHeight(_elevator, 0));
-    m_functionController.b().onTrue(new ElevatorToHeight(_elevator, 20));
-    m_functionController.x().onTrue(new ElevatorToHeight(_elevator, 30));
+    // m_functionController.a().onTrue(new ElevatorToHeight(_elevator, 0));
+    // m_functionController.b().onTrue(new ElevatorToHeight(_elevator, 20));
+    // m_functionController.x().onTrue(new ElevatorToHeight(_elevator, 30)); 
 
     Command driveToRightTag = new DriveToTag(_drive, _rightCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
     m_driverController.rightBumper().whileTrue(driveToRightTag);
@@ -147,6 +197,7 @@ public class RobotContainer {
 
     //_elevator.setDefaultCommand(new OperateElevatorWithJoystick(_elevator, m_functionController));
     _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, m_functionController));
+    _elevator.setDefaultCommand(new OperateElevatorWithJoystick(_elevator, m_functionController));
   }
 
   public void autoChooserInit() {

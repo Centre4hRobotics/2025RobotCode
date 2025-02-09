@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Drive;
@@ -61,14 +62,22 @@ public class DriveToTag extends Command {
       _cameraDistanceToTagX = position.getX();
       _cameraDistanceToTagY = position.getY();
       _laserDistanceToTagX = _vision.getLaserDistance();
+      NetworkTableInstance nt = NetworkTableInstance.getDefault();
+      nt.getTable("AprilTag Vision").getEntry("laser reading").setValue(_laserDistanceToTagX);
+
       
        double velocityX, velocityY, velocityTheta;
 
        velocityY = _tagDriveYPIDController.calculate(_cameraDistanceToTagY);
-        velocityX = 0;
+
+       if(_laserDistanceToTagX > 0) {
+        velocityX = _tagDriveXPIDController.calculate(_laserDistanceToTagX);
+       } else  {
+        velocityX = _tagDriveXPIDController.calculate(_cameraDistanceToTagX);
+       }
         velocityTheta = _tagHeadingPIDController.calculate(_cameraRotationToTag);
 
-       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(velocityX, velocityY, velocityTheta)); 
+       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, -velocityY, velocityTheta)); 
        _isFinished = false;
     } else {
       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));

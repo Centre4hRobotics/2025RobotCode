@@ -34,15 +34,15 @@ public class OperateScorerWithJoystick extends Command {
   @Override
   public void execute() {
     if (Math.abs(_controller.getRightX()) > 0.2) {
-      _scorer.setRotationVoltage(_controller.getRightX() * 5);
+      _scorer.setRotationVoltage(_controller.getRightX() * 9);
     } else {
       _scorer.setRotationVoltage(0);
     }
 
     if(_controller.getLeftTriggerAxis() > 0)
-        _scorer.setScoringVoltage(_controller.getLeftTriggerAxis() * 10);
+        _scorer.setScoringVoltage(_controller.getLeftTriggerAxis() * 12);
     else
-        _scorer.setScoringVoltage(_controller.getRightTriggerAxis() * -10);
+        _scorer.setScoringVoltage(_controller.getRightTriggerAxis() * -12);
   }
 
   // Returns true when the command should end.
