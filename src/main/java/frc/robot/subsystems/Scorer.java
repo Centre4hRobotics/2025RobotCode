@@ -13,7 +13,6 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ScorerConstants;
 
 public class Scorer extends SubsystemBase {

@@ -36,7 +36,7 @@ public final class Constants {
     COMPETITION
   }
 
-  public static RobotType robotType = RobotType.COMPETITION;
+  public static RobotType robotType = RobotType.PRACTICE;
 
   public static class RobotConstants {
     public static final double wheelDiameter;
@@ -287,7 +287,7 @@ public final class Constants {
     public static final double distanceTolerance = 0.05;
     public static final double rotationTolerance = 0.05;
 
-    public static final double centeredDeltaX = RobotConstants.trackWidth;
+    public static final double centeredDeltaX = RobotConstants.trackWidth/2.0;
     // Positive offset is to the right
     public static final double centeredDeltaY = 0;
 
@@ -319,17 +319,17 @@ public final class Constants {
         case PRACTICE:
         default:
           // Forwards
-          tagDriveXP = 0; //.55 
+          tagDriveXP = .7; //.55
           tagDriveXI = 0; 
           tagDriveXD = 0;
           // Side
-          tagDriveYP = 3.5; 
+          tagDriveYP = 1.2; 
           tagDriveYI = 0; 
           tagDriveYD = 0;  
           // Turning
-          tagTurningP = 0; //.1
-          tagTurningI = 0; 
-          tagTurningD = 0;
+          tagTurningP = 0.13; //.1
+          tagTurningI = 0.03; 
+          tagTurningD = 0.03;
           break;
       }
     }
@@ -339,22 +339,23 @@ public final class Constants {
   public static class ElevatorConstants {
     // coral
     public static double heightCoralL1 = 0; 
-    public static double heightCoralL2 = 11; //add
-    public static double heightCoralL3 = 25; //add
-    public static double heightCoralL4 = 46; //add
+    public static double heightCoralL2 = 11;
+    public static double heightCoralL3 = 25;
+    public static double heightCoralL4 = 46; 
     public static double[] heightCoralReef = {heightCoralL1, heightCoralL2, heightCoralL3, heightCoralL4};
 
-    public static double heightAlgaeProcessor = 0; //add
-    public static double heightAlgaeL2 = 18; //add
-    public static double heightAlgaeL3 = 29; //add
-    public static double[] heightAlgae = {heightAlgaeProcessor, heightAlgaeL2, heightAlgaeL3};
+    public static double heightAlgaeProcessor = 18; 
+    public static double heightAlgaeL2 = 18; 
+    public static double heightAlgaeL3 = 29; 
+    public static double heightAlgaeBarge = 29; 
+    public static double[] heightAlgae = {heightAlgaeProcessor, heightAlgaeL2, heightAlgaeL3, heightAlgaeBarge};
 
     public static final double heightBelowCrossbeam = 0; //add
     public static final double heightAboveCrossbeam = 0; //add
 
     public static final double maxHeight = 40; //add
 
-    public static final double elevatorP = 2;
+    public static final double elevatorP = 5;
     public static final double elevatorI = 0;
     public static final double elevatorD = 0;
 
@@ -367,16 +368,19 @@ public final class Constants {
   public static class ScorerConstants {
     //coral
     public static final double rotationL1 = 0; 
-    public static final double rotationL2 = 0; //add
-    public static final double rotationL3 = 0; //add
-    public static final double rotationL4 = 9.33; //add
-    public static final double[] rotationEncoderValuesReef = {rotationL1, rotationL2, rotationL3, rotationL4};
+    public static final double rotationL2 = 0; 
+    public static final double rotationL3 = 0;
+    public static final double rotationL4 = 9.33; 
+    public static final double[] rotationsCoral = {rotationL1, rotationL2, rotationL3, rotationL4};
 
     // algae
-    public static final double rotationCoralDefault = 0; //add
-    public static final double rotationAlgaeDefault = 24; //add
+    public static final double rotationAlgaeTop = 40; 
+    public static final double rotationAlgaeBottom = 40;
+    public static final double rotationAlgaeDefault = 40; 
+    public static final double rotationAlgaeBarge = 40; //this is a meme
+    public static final double[] rotationsAlgae = {rotationAlgaeDefault, rotationAlgaeBottom, rotationAlgaeTop, rotationAlgaeBarge};
 
-    public static final double rotationP = 0; //add
+    public static final double rotationP = 3;
     public static final double rotationI = 0;
     public static final double rotationD = 0;
 

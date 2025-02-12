@@ -32,7 +32,6 @@ public class Elevator extends SubsystemBase {
     }
 
     public void setHeight(double position) {
-        System.out.print(_positionVoltage.withPosition(position));
         _leadMotor.setControl(_positionVoltage.withPosition(position));
     }
 
@@ -44,18 +43,6 @@ public class Elevator extends SubsystemBase {
         return _leadMotor.getPosition().getValueAsDouble();
     }
 
-    public boolean belowCrossbeam() {
-        return _leadMotor.get() < ElevatorConstants.heightBelowCrossbeam;
-    }
-
-    public boolean aboveCrossbeam() {
-        return _leadMotor.get() > ElevatorConstants.heightAboveCrossbeam;
-    }
-
-    public boolean clearCrossbeam() {
-        return aboveCrossbeam() || belowCrossbeam();
-    }
-
     public boolean isOnTarget(double target) {
         return Math.abs(getHeight() - target) < ElevatorConstants.heightTolerance;
     }
@@ -65,6 +52,10 @@ public class Elevator extends SubsystemBase {
         if(fraction > 0 && fraction <= 1) {return fraction; }
         else if(fraction <= 0) {return 0; }
         else {return 1; }
+    }
+
+    public void syncEncoders() {
+        _leadMotor.setPosition(0);
     }
 
     @Override

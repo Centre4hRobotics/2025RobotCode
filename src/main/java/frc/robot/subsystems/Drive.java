@@ -335,10 +335,12 @@ public class Drive extends SubsystemBase {
    * Point wheels in an X so robot doesn't move
    */
   public void setWheelsX() {
-    _swerveModules[0].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-    _swerveModules[1].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
-    _swerveModules[2].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
-    _swerveModules[3].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+    // _swerveModules[0].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+    // _swerveModules[1].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    // _swerveModules[2].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    // _swerveModules[3].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+
+    freezeWheels();
   }
 
   /**

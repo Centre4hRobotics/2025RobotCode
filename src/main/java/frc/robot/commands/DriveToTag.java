@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -68,18 +69,28 @@ public class DriveToTag extends Command {
       
        double velocityX, velocityY, velocityTheta;
 
-       velocityY = _tagDriveYPIDController.calculate(_cameraDistanceToTagY);
+       velocityY = _tagDriveYPIDController.calculate(_cameraDistanceToTagY + _cameraDistanceToTagX * -Math.sin(Math.PI + _cameraRotationToTag));
 
        if(_laserDistanceToTagX > 0) {
-        velocityX = _tagDriveXPIDController.calculate(_laserDistanceToTagX);
+        velocityX = _tagDriveXPIDController.calculate(_laserDistanceToTagX + .5);
        } else  {
-        velocityX = _tagDriveXPIDController.calculate(_cameraDistanceToTagX);
+        velocityX = _tagDriveXPIDController.calculate(_cameraDistanceToTagX + .5);
        }
         velocityTheta = _tagHeadingPIDController.calculate(_cameraRotationToTag);
 
+        if (Math.abs(_cameraRotationToTag) > 3.05)
+        {
+          velocityTheta = 0.0;
+        }
+
        _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, -velocityY, velocityTheta)); 
        _isFinished = false;
-    } else {
+    } else if(_laserDistanceToTagX > 0) {
+      double velocityX = _tagDriveXPIDController.calculate(_laserDistanceToTagX + .5);
+      _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, 0, 0)); 
+    } else
+    
+    {
       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
     }
   }
