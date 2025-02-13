@@ -40,7 +40,7 @@ public class OperateElevatorWithJoystick extends Command {
       if(input > 0.5) {
         height += 0.2;
         _elevator.setHeight(height);
-      } else if(input < 0.5) {
+      } else if(input < -0.5) {
         height -= 0.2;
         _elevator.setHeight(height);
       }
