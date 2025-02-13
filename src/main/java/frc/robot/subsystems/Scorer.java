@@ -93,7 +93,6 @@ public class Scorer extends SubsystemBase {
         config.smartCurrentLimit(ScorerConstants.scoringCurrentThreshold);
 
         config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-        config.closedLoop.pid(ScorerConstants.scoringP, ScorerConstants.scoringI, ScorerConstants.scoringD);
 
         _scoringMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }

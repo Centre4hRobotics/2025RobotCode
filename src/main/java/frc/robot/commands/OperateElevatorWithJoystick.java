@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Elevator;
@@ -7,7 +9,7 @@ import frc.robot.subsystems.Elevator;
 public class OperateElevatorWithJoystick extends Command {
 
   private Elevator _elevator;
-  private CommandXboxController _controller;
+  private Joystick _joystick;
 
   /**
    * This command is responsible for teleop drive.
@@ -17,9 +19,9 @@ public class OperateElevatorWithJoystick extends Command {
    * 
    * Comment By: EternalSyntaxError
    */
-  public OperateElevatorWithJoystick(Elevator elevator, CommandXboxController controller) {
+  public OperateElevatorWithJoystick(Elevator elevator, Joystick joystick) {
     _elevator = elevator;
-    _controller = controller;
+    _joystick = joystick;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_elevator);
@@ -33,11 +35,15 @@ public class OperateElevatorWithJoystick extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(_controller.getLeftY()) > 0.2) {
-      _elevator.setVoltage(_controller.getLeftY() * 0.3);
-    } else {
-      _elevator.setVoltage(0);
-    }
+    double input = _joystick.getY();
+    double height = _elevator.getSetpoint();
+      if(input > 0.5) {
+        height += 0.2;
+        _elevator.setHeight(height);
+      } else if(input < 0.5) {
+        height -= 0.2;
+        _elevator.setHeight(height);
+      }
   }
 
   // Returns true when the command should end.

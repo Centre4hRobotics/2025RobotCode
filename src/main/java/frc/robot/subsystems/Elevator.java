@@ -18,12 +18,16 @@ public class Elevator extends SubsystemBase {
     private final TalonFX _leadMotor;
     private final TalonFX _followMotor;
 
+    private double _setpoint;
+
     private final PositionVoltage _positionVoltage;
 
 
     public Elevator() {
         _leadMotor = new TalonFX(21);
         _followMotor = new TalonFX(22);
+
+        _setpoint = 0;
 
         configLeadMotor();
         configFollowMotor();
@@ -32,6 +36,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public void setHeight(double position) {
+        _setpoint = position;
         _leadMotor.setControl(_positionVoltage.withPosition(position));
     }
 
@@ -41,6 +46,10 @@ public class Elevator extends SubsystemBase {
 
     public double getHeight() {
         return _leadMotor.getPosition().getValueAsDouble();
+    }
+
+    public double getSetpoint() {
+        return _setpoint;
     }
 
     public boolean isOnTarget(double target) {

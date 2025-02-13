@@ -29,15 +29,15 @@ public class ManipulateGamePiece extends Command {
   public void execute() {
     if(_scoringModeSwitch.getAsBoolean()) {
       if(_forwards) {
-        _scorer.setScoringVelocity(ScorerConstants.intakingCoralVelocity);
+        _scorer.setScoringVoltage(8);
       } else {
-        _scorer.setScoringVelocity(ScorerConstants.scoringCoralVelocity);
+        _scorer.setScoringVoltage(-8);
       }
     } else {
       if(_forwards) {
-        _scorer.setScoringVelocity(ScorerConstants.intakingAlgaeVelocity);
+        _scorer.setScoringVoltage(8);
       } else {
-        _scorer.setScoringVelocity(ScorerConstants.scoringAlgaeVelocity);
+        _scorer.setScoringVoltage(-8);
       }
     }
   }
@@ -45,6 +45,7 @@ public class ManipulateGamePiece extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    _scorer.setScoringVoltage(0);
   }
 
   // Returns true when the command should end.

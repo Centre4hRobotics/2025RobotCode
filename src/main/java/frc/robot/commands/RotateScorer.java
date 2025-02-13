@@ -10,15 +10,12 @@ import frc.robot.subsystems.Scorer;
 public class RotateScorer extends Command {
     private Scorer _scorer;
     private double _rotation;
-    private int _level;
-    private BooleanSupplier _mode;
 
     private boolean _isFinished;
     
-    public RotateScorer(Scorer scorer, int level, BooleanSupplier mode) {
+    public RotateScorer(Scorer scorer, double rotation) {
         _scorer = scorer;
-        _mode = mode;
-        _level = level;
+        _rotation = rotation;
 
         _isFinished = false;
 
@@ -26,16 +23,12 @@ public class RotateScorer extends Command {
     }
     @Override
     public void initialize() {
+      _scorer.setRotation(_rotation);
     }
   
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-      boolean coral = _mode.getAsBoolean();
-      if(coral) { _rotation = ScorerConstants.rotationsCoral[_level - 1]; } 
-      else { _rotation = ScorerConstants.rotationsAlgae[_level - 1]; }
-      
-      _scorer.setRotation(_rotation);
       _isFinished = _scorer.isOnTarget(_rotation);
     }
 

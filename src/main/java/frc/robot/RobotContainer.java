@@ -18,7 +18,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ScorerConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
@@ -26,6 +28,7 @@ import frc.robot.commands.ResetGyro;
 import frc.robot.commands.RotateFunnel;
 import frc.robot.commands.RotateScorer;
 import frc.robot.commands.ManipulateGamePiece;
+import frc.robot.commands.OperateElevatorWithJoystick;
 import frc.robot.commands.ElevatorToHeight;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drive;
@@ -53,11 +56,9 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  private final CommandXboxController m_functionController = 
-      new CommandXboxController(OperatorConstants.kFunctionControllerPort);
 
-      private final Joystick _functionJoystick1 = new Joystick(2);
-      private final Joystick _functionJoystick2 = new Joystick(3);
+      private final Joystick _functionJoystick1 = new Joystick(1);
+      private final Joystick _functionJoystick2 = new Joystick(2);
 
   //private final Joystick _functionJoystick = new Joystick(1);
   //private final Joystick _functionJoystick2 = new Joystick(2);
@@ -71,11 +72,11 @@ public class RobotContainer {
     BooleanSupplier station = () -> true;
     NamedCommands.registerCommand("lower funnel", new RotateFunnel(_funnel, station));
     NamedCommands.registerCommand("intake coral from station", new ManipulateGamePiece(_scorer, coral, true).withTimeout(1));
-    NamedCommands.registerCommand("score coral L2", new ElevatorToHeight(_elevator, 2, coral)
-      .alongWith(new RotateScorer(_scorer, 2, coral))
-      .andThen(new ManipulateGamePiece(_scorer, coral, true))
-      .andThen(new ElevatorToHeight(_elevator, 1, coral))
-    );
+    // NamedCommands.registerCommand("score coral L2", new ElevatorToHeight(_elevator, 2, coral)
+    //   .alongWith(new RotateScorer(_scorer, 2, coral))
+    //   .andThen(new ManipulateGamePiece(_scorer, coral, true))
+    //   .andThen(new ElevatorToHeight(_elevator, 1, coral))
+    // );
 
     // Button board configuration 
     configureBindings();
@@ -134,31 +135,67 @@ public class RobotContainer {
 
     // prep to score buttons
     buttonBoard1[6].whileTrue(
-      new RotateScorer(_scorer, 4, mode).alongWith(new ElevatorToHeight(_elevator, 4, mode)).repeatedly()
+      Commands.either(
+        // coral mode
+        new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4)
+            .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)),
+        // algae mode
+        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeBarge)
+            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeBarge)), 
+        mode
+      )
     );
     buttonBoard1[5].whileTrue(
-      new RotateScorer(_scorer, 3, mode).alongWith(new ElevatorToHeight(_elevator, 3, mode)).repeatedly()
+      Commands.either(
+        // coral mode
+        new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL3)
+            .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL3)),
+        // algae mode
+        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeTop)
+            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeTop)), 
+        mode)
     );
     buttonBoard1[8].whileTrue(
-      new RotateScorer(_scorer, 2, mode).alongWith(new ElevatorToHeight(_elevator, 2, mode)).repeatedly()
+      Commands.either(
+        // coral mode
+        new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2)
+            .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL2)),
+        // algae mode
+        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeBottom)
+            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeBottom)), 
+        mode)
     );
-    // later make into default: left it like this for testing :P
-    buttonBoard1[4].whileTrue(
-      new RotateScorer(_scorer, 1, mode).alongWith(new ElevatorToHeight(_elevator, 1, mode)).repeatedly()
-    );
+  
+    buttonBoard2[7].onTrue(new RotateScorer(_scorer, ScorerConstants.rotationL1).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
+    buttonBoard2[7].onFalse(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)));
+
+    buttonBoard1[6].onFalse(
+      Commands.either(
+        new RotateScorer(_scorer, ScorerConstants.rotationL1).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
+        new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
+        mode));
+    buttonBoard1[5].onFalse(
+      Commands.either(
+        new RotateScorer(_scorer, ScorerConstants.rotationL1).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
+        new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
+        mode));
+    buttonBoard1[8].onFalse(
+      Commands.either(
+        new RotateScorer(_scorer, ScorerConstants.rotationL1).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
+        new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
+        mode));
 
     // zero elevator encoder
     buttonBoard2[2].onTrue(
       Commands.runOnce(() -> _elevator.syncEncoders(), _elevator) 
     );
 
+    _elevator.setDefaultCommand(new OperateElevatorWithJoystick(_elevator, _functionJoystick1));
+
     // runs wheels on scorer
-    buttonBoard1[10].onTrue(
-      new ManipulateGamePiece(_scorer, mode, false)
-    );
-    buttonBoard2[4].onTrue(
-      new ManipulateGamePiece(_scorer, mode, true)
-    );
+    buttonBoard1[10].whileTrue(new ManipulateGamePiece(_scorer, mode, false));
+    buttonBoard2[4].whileTrue(new ManipulateGamePiece(_scorer, mode, true));
+  
 
     // Syncs encoders   
     m_driverController.b().onTrue(
