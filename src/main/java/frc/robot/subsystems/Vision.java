@@ -6,23 +6,35 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.IntegerSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
 
-    private double _posX; // "Pose X"
-    private double _posY; // "Pose Y"
-    private double _rotation; // "Tag Rotation"
-    private int _tagID; // "Widest Tag ID"
-    private boolean _tagPresent; // "AprilTag Presence"
-    private String _side;
+    private double _posToTagX; 
+    private double _posToTagY; 
+    private double _rotationToTag; 
+    
+    private double _posFieldX; 
+    private double _posFieldY; 
+    private double _rotationField; 
 
-    private BooleanSubscriber _tagPresenceSub;
-    private DoubleSubscriber _rotationSub;
-    private DoubleSubscriber _posXSub;
-    private DoubleSubscriber _posYSub;
+    private boolean _tagPresent; 
+    private String _side;
+    private int _tagID;
+
+    private DoubleSubscriber _posToTagXSub; // “Tag Relative Pose X”
+    private DoubleSubscriber _posToTagYSub; // “Tag Relative Pose Y”
+    private DoubleSubscriber _rotationToTagSub; // Tag Relative Rotation”
+
+    private DoubleSubscriber _posFieldXSub; // “Field Relative Pose X”
+    private DoubleSubscriber _posFieldYSub; // “Field Relative Pose Y”
+    private DoubleSubscriber _rotationFieldSub; // “Field Relative Rotation X”
+
+    private BooleanSubscriber _tagPresenceSub; // "AprilTag Presence"
+    private IntegerSubscriber _tagIDSub;
     
     private LaserCan _laser;
 
@@ -30,11 +42,18 @@ public class Vision extends SubsystemBase {
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         NetworkTable table = inst.getTable("AprilTag Vision");
         table.getEntry("Using Camera").setValue(side);
-        _tagPresenceSub = table.getBooleanTopic("AprilTag Presence").subscribe(false);
-        _rotationSub = table.getDoubleTopic("Tag Rotation").subscribe(0);
-        _posXSub = table.getDoubleTopic("Pose X").subscribe(0);
-        _posYSub = table.getDoubleTopic("Pose Y").subscribe(0);
         _side = side;
+
+        _tagPresenceSub = table.getBooleanTopic("AprilTag Presence").subscribe(false);
+        _tagIDSub = table.getIntegerTopic("Widest Tag ID").subscribe(0);
+
+        _rotationToTagSub = table.getDoubleTopic("Tag Rotation").subscribe(0);
+        _posToTagXSub = table.getDoubleTopic("Pose X").subscribe(0);
+        _posToTagYSub = table.getDoubleTopic("Pose Y").subscribe(0);
+
+        _rotationFieldSub = table.getDoubleTopic("Tag Rotation").subscribe(0);
+        _posFieldXSub = table.getDoubleTopic("Pose X").subscribe(0);
+        _posFieldYSub = table.getDoubleTopic("Pose Y").subscribe(0);
         
 
         _laser = new LaserCan(12);
@@ -52,13 +71,25 @@ public class Vision extends SubsystemBase {
         NetworkTable table = inst.getTable("AprilTag Vision");
         table.getEntry("Using Camera").setValue(_side);
         _tagPresent = _tagPresenceSub.get();
-        System.out.println(_tagPresent);
         if(_tagPresent == true) {
-            _rotation = _rotationSub.get();
-            _posX = _posXSub.get();
-            _posY = _posYSub.get();
-            System.out.println("rotation: " + _rotation + "pos x:" + _posX + "pos y:" + _posY);
-            return new Transform2d(_posX, _posY, new Rotation2d(_rotation));
+            _rotationToTag = _rotationToTagSub.get();
+            _posToTagX = _posToTagXSub.get();
+            _posToTagY = _posToTagYSub.get();
+            return new Transform2d(_posToTagX, _posToTagY, new Rotation2d(_rotationToTag));
+        }
+        return null;
+    }
+
+    public Transform2d getPositionFromTag() {
+        NetworkTableInstance inst = NetworkTableInstance.getDefault();
+        NetworkTable table = inst.getTable("AprilTag Vision");
+        table.getEntry("Using Camera").setValue(_side);
+        _tagPresent = _tagPresenceSub.get();
+        if(_tagPresent == true) {
+            _rotationField = _rotationFieldSub.get();
+            _posFieldX = _posFieldXSub.get();
+            _posFieldY = _posFieldYSub.get();
+            return new Transform2d(_posFieldX, _posFieldY, new Rotation2d(_rotationField));
         }
         return null;
     }
