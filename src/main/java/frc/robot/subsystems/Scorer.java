@@ -25,6 +25,8 @@ public class Scorer extends SubsystemBase {
     private SparkFlex _scoringMotor;
     private SparkClosedLoopController _scoringPID;
 
+    private double _setpoint;
+
     public Scorer() {
         _rotationMotor = new SparkFlex(31, MotorType.kBrushless);
         _scoringMotor = new SparkFlex(32, MotorType.kBrushless);
@@ -36,6 +38,8 @@ public class Scorer extends SubsystemBase {
         _scoringPID = _scoringMotor.getClosedLoopController();
 
         _rotationEncoder = _rotationMotor.getEncoder();
+
+        _setpoint = 0;
     }
 
     public void setScoringVelocity(double velocity) {
@@ -43,6 +47,7 @@ public class Scorer extends SubsystemBase {
     }
 
     public void setRotation(double position) {
+        _setpoint = position;
         _rotationPID.setReference(position, ControlType.kPosition);
     }
 
@@ -71,6 +76,11 @@ public class Scorer extends SubsystemBase {
 
     public double getRotation() {
         return _rotationEncoder.getPosition();
+    }
+
+    public double getSetpoint()
+    {
+        return _setpoint;
     }
 
     public boolean isOnTarget(double target) {

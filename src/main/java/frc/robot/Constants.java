@@ -339,8 +339,8 @@ public final class Constants {
   public static class ElevatorConstants {
     // coral
     public static double heightCoralL1 = 0; 
-    public static double heightCoralL2 = 11;
-    public static double heightCoralL3 = 25;
+    public static double heightCoralL2 = 11.9;
+    public static double heightCoralL3 = 26.7;
     public static double heightCoralL4 = 46; 
 
     public static double heightAlgaeProcessor = 18; 
@@ -352,9 +352,9 @@ public final class Constants {
     public static final double heightBelowCrossbeam = 0; //add
     public static final double heightAboveCrossbeam = 0; //add
 
-    public static final double maxHeight = 40; //add
+    public static final double maxHeight = 46; //add
 
-    public static final double elevatorP = 5;
+    public static final double elevatorP = 1.5;
     public static final double elevatorI = 0;
     public static final double elevatorD = 0;
 
@@ -369,7 +369,7 @@ public final class Constants {
     public static double rotationL1 = 0; 
     public static double rotationL2 = 0; 
     public static double rotationL3 = 0;
-    public static double rotationL4 = 9.33; 
+    public static double rotationL4 = 4.199; 
 
     // algae
     public static double rotationAlgaeTop = 40; 
