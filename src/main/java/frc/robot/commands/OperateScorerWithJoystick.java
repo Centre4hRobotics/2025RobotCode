@@ -1,5 +1,8 @@
 package frc.robot.commands;
 
+import javax.lang.model.util.ElementScanner14;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Scorer;
@@ -7,7 +10,7 @@ import frc.robot.subsystems.Scorer;
 public class OperateScorerWithJoystick extends Command {
 
   private Scorer _scorer;
-  private CommandXboxController _controller;
+  private Joystick _joystick;
 
   /**
    * This command is responsible for teleop drive.
@@ -17,9 +20,9 @@ public class OperateScorerWithJoystick extends Command {
    * 
    * Comment By: EternalSyntaxError
    */
-  public OperateScorerWithJoystick(Scorer scorer, CommandXboxController controller) {
+  public OperateScorerWithJoystick(Scorer scorer, Joystick joystick) {
     _scorer = scorer;
-    _controller = controller;
+    _joystick = joystick;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_scorer);
@@ -33,16 +36,21 @@ public class OperateScorerWithJoystick extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Math.abs(_controller.getRightX()) > 0.2) {
-      _scorer.setRotationVoltage(_controller.getRightX() * 9);
+    double rotation = _scorer.getSetpoint();
+    double input = _joystick.getY();
+
+    if (input > 0.2) {
+      _scorer.setRotation(rotation + 0.1);
+    } else if (input < -0.2 && rotation >= 0.0) {
+      _scorer.setRotation(rotation - 0.1);
     } else {
-      _scorer.setRotationVoltage(0);
+      _scorer.setRotation(rotation);
     }
 
-    if(_controller.getLeftTriggerAxis() > 0)
-        _scorer.setScoringVoltage(_controller.getLeftTriggerAxis() * 12);
-    else
-        _scorer.setScoringVoltage(_controller.getRightTriggerAxis() * -12);
+    // if(_controller.getLeftTriggerAxis() > 0)
+    //     _scorer.setRotation(rotation + 0.4 * _controller.getLeftTriggerAxis());
+    // else
+    //     _scorer.setRotation(rotation + -0.4 * _controller.getRightTriggerAxis());
   }
 
   // Returns true when the command should end.

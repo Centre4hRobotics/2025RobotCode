@@ -29,6 +29,7 @@ import frc.robot.commands.RotateFunnel;
 import frc.robot.commands.RotateScorer;
 import frc.robot.commands.ManipulateGamePiece;
 import frc.robot.commands.OperateElevatorWithJoystick;
+import frc.robot.commands.OperateScorerWithJoystick;
 import frc.robot.commands.ElevatorToHeight;
 import frc.robot.commands.IntakeCoralUntilIn;
 import frc.robot.subsystems.Climb;
@@ -197,6 +198,7 @@ public class RobotContainer {
     );
 
     _elevator.setDefaultCommand(new OperateElevatorWithJoystick(_elevator, _functionJoystick1));
+    _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, _functionJoystick1));
 
     // runs wheels on scorer
     buttonBoard1[10].whileTrue(new ManipulateGamePiece(_scorer, mode, false));

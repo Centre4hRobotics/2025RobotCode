@@ -64,15 +64,15 @@ public class OperateElevatorWithJoystick extends Command {
   // }
 
   public void execute() {
-    double input = _joystick.getX();
+    double input = -_joystick.getX();
     double height = _elevator.getSetpoint();
-      if(input > 0.5) {
+      if(input > 0.5 && height <= 46.0) {
         height += 0.2;
         if(height > ElevatorConstants.maxHeight) {
           height = ElevatorConstants.maxHeight;
         }
         _elevator.setHeight(height);
-      } else if(input < -0.5) {
+      } else if(input < -0.5 && height >= 0.0) {
         height -= 0.2;
         if(height < 0) {
           height = 0;
