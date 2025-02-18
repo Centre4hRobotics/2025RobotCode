@@ -339,29 +339,29 @@ public final class Constants {
   public static class ElevatorConstants {
     // coral
     public static double heightCoralL1 = 0; 
-    public static double heightCoralL2 = 11;
-    public static double heightCoralL3 = 25;
-    public static double heightCoralL4 = 46; 
+    public static double heightCoralL2 = 6.536;
+    public static double heightCoralL3 = 12.339;
+    public static double heightCoralL4 = 19; 
 
-    public static double heightAlgaeProcessor = 18; 
-    public static double heightAlgaeDefault = 20;
-    public static double heightAlgaeBottom = 18; 
-    public static double heightAlgaeTop = 29; 
-    public static double heightAlgaeBarge = 29; 
+    public static double heightAlgaeProcessor = 0; 
+    public static double heightAlgaeDefault = 0;
+    public static double heightAlgaeBottom = 0; 
+    public static double heightAlgaeTop = 0; 
+    public static double heightAlgaeBarge = 0;
 
     public static final double heightBelowCrossbeam = 0; //add
     public static final double heightAboveCrossbeam = 0; //add
 
-    public static final double maxHeight = 40; //add
+    public static final double maxHeight = 19; //add
 
-    public static final double elevatorP = 5;
+    public static final double elevatorP = 8;
     public static final double elevatorI = 0;
     public static final double elevatorD = 0;
 
-    public static final double leadCurrentThreshold = 30;
-    public static final double followCurrentThreshold = 30;
+    public static final double leadCurrentThreshold = 40;
+    public static final double followCurrentThreshold = 40;
 
-    public static final double heightTolerance = 1; //add
+    public static final double heightTolerance = 0.2;
   }
 
   public static class ScorerConstants {
@@ -369,7 +369,7 @@ public final class Constants {
     public static double rotationL1 = 0; 
     public static double rotationL2 = 0; 
     public static double rotationL3 = 0;
-    public static double rotationL4 = 9.33; 
+    public static double rotationL4 = 4.096; 
 
     // algae
     public static double rotationAlgaeTop = 40; 
@@ -389,6 +389,7 @@ public final class Constants {
 
     public static final int rotationCurrentThreshold = 30;
     public static final int scoringCurrentThreshold = 40;
+    public static final double scoringCurrentWithCoral = 20;
 
     public static final double rotationTolerance = 1; //add
 

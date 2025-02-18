@@ -27,6 +27,9 @@ public class Elevator extends SubsystemBase {
         _leadMotor = new TalonFX(21);
         _followMotor = new TalonFX(22);
 
+        _leadMotor.setPosition(0);
+        _followMotor.setPosition(0);
+
         _setpoint = 0;
 
         configLeadMotor();
@@ -71,13 +74,14 @@ public class Elevator extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
-        nt.getTable("Elevator").getEntry("encoder value").setValue(getHeight());
+        nt.getTable("Elevator").getEntry("encoder value").setValue(getHeight()); 
+        nt.getTable("Elevator").getEntry("setpoint").setValue(_setpoint); 
     }
 
     private void configLeadMotor() {
         TalonFXConfiguration _leadConfiguration = new TalonFXConfiguration();
         _leadConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        _leadConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        _leadConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         _leadConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
         _leadConfiguration.CurrentLimits.StatorCurrentLimit = ElevatorConstants.leadCurrentThreshold; 
 

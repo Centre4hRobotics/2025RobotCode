@@ -30,6 +30,7 @@ import frc.robot.commands.RotateScorer;
 import frc.robot.commands.ManipulateGamePiece;
 import frc.robot.commands.OperateElevatorWithJoystick;
 import frc.robot.commands.ElevatorToHeight;
+import frc.robot.commands.IntakeCoralUntilIn;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
@@ -54,8 +55,8 @@ public class RobotContainer {
   private final Climb _climb = new Climb();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  // private final CommandXboxController m_driverController =
+      // new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
       private final Joystick _functionJoystick1 = new Joystick(1);
       private final Joystick _functionJoystick2 = new Joystick(2);
@@ -112,9 +113,9 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Configuring teleoperated control
-    _drive.setDefaultCommand(
-      new DriveWithJoystick(_drive, m_driverController)
-    );
+    // _drive.setDefaultCommand(
+    //   new DriveWithJoystick(_drive, m_driverController)
+    // );
 
      // size is up to max id, not number of buttons
      JoystickButton[] buttonBoard1 = new JoystickButton[13];
@@ -190,25 +191,31 @@ public class RobotContainer {
       Commands.runOnce(() -> _elevator.syncEncoders(), _elevator) 
     );
 
+    // zero scorer rotation encoder
+    buttonBoard2[1].onTrue(
+      Commands.runOnce(() -> _scorer.syncRotationEncoder(), _scorer) 
+    );
+
     _elevator.setDefaultCommand(new OperateElevatorWithJoystick(_elevator, _functionJoystick1));
 
     // runs wheels on scorer
     buttonBoard1[10].whileTrue(new ManipulateGamePiece(_scorer, mode, false));
     buttonBoard2[4].whileTrue(new ManipulateGamePiece(_scorer, mode, true));
+    buttonBoard1[11].whileTrue(new IntakeCoralUntilIn(_scorer));
   
 
     // Syncs encoders   
-    m_driverController.b().onTrue(
-      Commands.runOnce(() -> _drive.syncEncoders(), _drive) 
-    );
+    // m_driverController.b().onTrue(
+    //   Commands.runOnce(() -> _drive.syncEncoders(), _drive) 
+    // );
 
-    m_driverController.y().onTrue(new ResetGyro(_drive));
+    // m_driverController.y().onTrue(new ResetGyro(_drive));
 
-    Command driveToRightTag = new DriveToTag(_drive, _rightCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
-    m_driverController.rightBumper().whileTrue(driveToRightTag);
+    // Command driveToRightTag = new DriveToTag(_drive, _rightCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
+    // m_driverController.rightBumper().whileTrue(driveToRightTag);
 
-    Command driveToLeftTag = new DriveToTag(_drive, _leftCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
-    m_driverController.leftBumper().whileTrue(driveToLeftTag);
+    // Command driveToLeftTag = new DriveToTag(_drive, _leftCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
+    // m_driverController.leftBumper().whileTrue(driveToLeftTag);
 
     // _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, m_functionController));
     // _elevator.setDefaultCommand(new OperateElevatorWithJoystick(_elevator, m_functionController));

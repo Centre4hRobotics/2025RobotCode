@@ -6,41 +6,41 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ScorerConstants;
 import frc.robot.subsystems.Scorer;
 
-public class ManipulateGamePiece extends Command {
+public class IntakeCoralUntilIn extends Command {
 
-    Scorer _scorer;
-    BooleanSupplier _scoringModeSwitch;
-    boolean _forwards;
+    private Scorer _scorer;
 
-    public ManipulateGamePiece(Scorer scorer, BooleanSupplier scoringModeSwitch, boolean forwards) {
+    private boolean _coralIn;
+    private boolean _isFinished;
+    private double _startingPos;
+
+    public IntakeCoralUntilIn(Scorer scorer) {
         _scorer = scorer;
-        _scoringModeSwitch = scoringModeSwitch;
-        _forwards = forwards;
+        _coralIn = false;
+        _isFinished = false;
+        _startingPos = 0;
     }
 
     // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(_scoringModeSwitch.getAsBoolean()) {
-      if(_forwards) {
-        _scorer.setScoringVoltage(8);
+    boolean temp = _coralIn;
+    _coralIn = _scorer.getScoringCurrent() > ScorerConstants.scoringCurrentWithCoral;
+    if(_coralIn && !temp) {
+      _startingPos = _scorer.getScoringPosition();
+    } else if(_coralIn) {
+      if(_scorer.getScoringPosition() > _startingPos + 1) {
+        _isFinished = true;
       } else {
-        _scorer.setScoringVoltage(-8);
+        _scorer.setScoringVoltage(8);
       }
     } else {
-      if(_forwards) {
-        _scorer.setScoringVoltage(8);
-      } else {
-        _scorer.setScoringVoltage(-8);
-      }
+      _scorer.setScoringVoltage(8);
     }
-    
   }
 
   // Called once the command ends or is interrupted.
@@ -52,6 +52,6 @@ public class ManipulateGamePiece extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return _isFinished;
   }
 }

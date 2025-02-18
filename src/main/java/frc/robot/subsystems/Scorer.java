@@ -20,6 +20,7 @@ public class Scorer extends SubsystemBase {
     private SparkFlex _rotationMotor;
     private SparkClosedLoopController _rotationPID;
     private final RelativeEncoder _rotationEncoder;
+    private final RelativeEncoder _scoringEncoder;
 
 
     private SparkFlex _scoringMotor;
@@ -36,6 +37,10 @@ public class Scorer extends SubsystemBase {
         _scoringPID = _scoringMotor.getClosedLoopController();
 
         _rotationEncoder = _rotationMotor.getEncoder();
+        _scoringEncoder = _scoringMotor.getEncoder();
+
+        _rotationEncoder.setPosition(0);
+        _scoringEncoder.setPosition(0);
     }
 
     public void setScoringVelocity(double velocity) {
@@ -54,23 +59,21 @@ public class Scorer extends SubsystemBase {
         _scoringMotor.setVoltage(voltage);
     }
 
-    public boolean safeToElevateCoral() {
-        return _rotationEncoder.getPosition() > ScorerConstants.lowestElevatingRotationCoral 
-        && _rotationEncoder.getPosition() < ScorerConstants.highestElevatingRotationCoral;
-    }
-
-    public boolean safeToElevateAlgae() {
-        return _rotationEncoder.getPosition() > ScorerConstants.lowestElevatingRotationAlgae 
-        && _rotationEncoder.getPosition() < ScorerConstants.highestElevatingRotationAlgae;
-    }
-
-    // rotation of scorer is clear of crossbeam
-    public boolean safeToElevate() {
-        return safeToElevateAlgae() || safeToElevateCoral();
+    
+    public void syncRotationEncoder() {
+        _rotationEncoder.setPosition(0);
     }
 
     public double getRotation() {
         return _rotationEncoder.getPosition();
+    }
+
+    public double getScoringCurrent() {
+        return _scoringMotor.getOutputCurrent();
+    }
+
+    public double getScoringPosition() {
+        return _scoringEncoder.getPosition();
     }
 
     public boolean isOnTarget(double target) {
@@ -82,6 +85,7 @@ public class Scorer extends SubsystemBase {
         // This method will be called once per scheduler run
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
         nt.getTable("Scorer").getEntry("rotation encoder value").setValue(getRotation());
+        nt.getTable("Scorer").getEntry("scoring current").setValue(getScoringCurrent());
     }
 
     private void configScoringMotor() {
