@@ -56,8 +56,8 @@ public class RobotContainer {
   private final Climb _climb = new Climb();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  // private final CommandXboxController m_driverController =
-      // new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_driverController =
+      new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
       private final Joystick _functionJoystick1 = new Joystick(1);
       private final Joystick _functionJoystick2 = new Joystick(2);
@@ -114,9 +114,9 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Configuring teleoperated control
-    // _drive.setDefaultCommand(
-    //   new DriveWithJoystick(_drive, m_driverController)
-    // );
+    _drive.setDefaultCommand(
+      new DriveWithJoystick(_drive, m_driverController)
+    );
 
      // size is up to max id, not number of buttons
      JoystickButton[] buttonBoard1 = new JoystickButton[13];
@@ -183,7 +183,7 @@ public class RobotContainer {
         mode));
     buttonBoard1[8].onFalse(
       Commands.either(
-        new RotateScorer(_scorer, ScorerConstants.rotationL1).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
+        new RotateScorer(_scorer, ScorerConstants.rotationL1).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)).withTimeout(2), 
         new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
         mode));
 
@@ -211,7 +211,7 @@ public class RobotContainer {
     //   Commands.runOnce(() -> _drive.syncEncoders(), _drive) 
     // );
 
-    // m_driverController.y().onTrue(new ResetGyro(_drive));
+    m_driverController.y().onTrue(new ResetGyro(_drive));
 
     // Command driveToRightTag = new DriveToTag(_drive, _rightCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
     // m_driverController.rightBumper().whileTrue(driveToRightTag);

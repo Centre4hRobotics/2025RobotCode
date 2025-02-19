@@ -78,6 +78,11 @@ public class Scorer extends SubsystemBase {
         return _scoringMotor.getOutputCurrent();
     }
 
+    public double getScoringVelocity()
+    {
+        return _scoringMotor.getEncoder().getVelocity();
+    }
+
     public double getScoringPosition() {
         return _scoringEncoder.getPosition();
     }
@@ -96,7 +101,7 @@ public class Scorer extends SubsystemBase {
         // This method will be called once per scheduler run
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
         nt.getTable("Scorer").getEntry("rotation encoder value").setValue(getRotation());
-        nt.getTable("Scorer").getEntry("scoring current").setValue(getScoringCurrent());
+        nt.getTable("Scorer").getEntry("scoring velocity").setValue(getScoringVelocity());
     }
 
     private void configScoringMotor() {

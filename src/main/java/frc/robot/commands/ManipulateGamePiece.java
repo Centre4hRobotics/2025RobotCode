@@ -29,15 +29,15 @@ public class ManipulateGamePiece extends Command {
   public void execute() {
     if(_scoringModeSwitch.getAsBoolean()) {
       if(_forwards) {
-        _scorer.setScoringVoltage(8);
+        _scorer.setScoringVoltage(4);
       } else {
-        _scorer.setScoringVoltage(-8);
+        _scorer.setScoringVoltage(-4);
       }
     } else {
       if(_forwards) {
-        _scorer.setScoringVoltage(8);
+        _scorer.setScoringVoltage(4);
       } else {
-        _scorer.setScoringVoltage(-8);
+        _scorer.setScoringVoltage(-4);
       }
     }
     

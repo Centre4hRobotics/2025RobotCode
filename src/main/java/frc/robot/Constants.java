@@ -339,7 +339,7 @@ public final class Constants {
   public static class ElevatorConstants {
     // coral
     public static double heightCoralL1 = 0; 
-    public static double heightCoralL2 = 6.536;
+    public static double heightCoralL2 = 21.4;
     public static double heightCoralL3 = 12.339;
     public static double heightCoralL4 = 19; 
 
@@ -354,7 +354,7 @@ public final class Constants {
 
     public static final double maxHeight = 19; //add
 
-    public static final double elevatorP = 8;
+    public static final double elevatorP = 2;
 
     public static final double elevatorI = 0;
     public static final double elevatorD = 0;
@@ -391,6 +391,10 @@ public final class Constants {
     public static final int rotationCurrentThreshold = 30;
     public static final int scoringCurrentThreshold = 40;
     public static final double scoringCurrentWithCoral = 20;
+
+    public static final double numRotationsToIntake = 0.85;
+    public static final double waitingForCoralVoltage = 3.0;
+    public static final double intakingCoralVoltage = 3.0;
 
     public static final double rotationTolerance = 1; //add
 

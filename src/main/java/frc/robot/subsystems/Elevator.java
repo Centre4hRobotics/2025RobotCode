@@ -68,6 +68,7 @@ public class Elevator extends SubsystemBase {
 
     public void syncEncoders() {
         _leadMotor.setPosition(0);
+        setHeight(0.0);
     }
 
     @Override

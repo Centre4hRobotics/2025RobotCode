@@ -6,6 +6,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator;
 
@@ -66,17 +67,17 @@ public class OperateElevatorWithJoystick extends Command {
   public void execute() {
     double input = -_joystick.getX();
     double height = _elevator.getSetpoint();
-      if(input > 0.5 && height <= 46.0) {
-        height += 0.2;
-        if(height > ElevatorConstants.maxHeight) {
-          height = ElevatorConstants.maxHeight;
-        }
+      if(input > 0.5) {
+        height += 0.5;
+        // if(height > ElevatorConstants.maxHeight) {
+        //   height = ElevatorConstants.maxHeight;
+        // }
         _elevator.setHeight(height);
-      } else if(input < -0.5 && height >= 0.0) {
-        height -= 0.2;
-        if(height < 0) {
-          height = 0;
-        }
+      } else if(input < -0.5) {
+        height -= 0.5;
+        // if(height < 0) {
+        //   height = 0;
+        // }
         _elevator.setHeight(height);
       }
   }
