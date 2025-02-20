@@ -59,48 +59,40 @@ public class DriveToTag extends Command {
   public void execute() {
     Transform2d position = _vision.getCameraToAprilTag();
     _laserDistanceToTagX = _vision.getLaserDistance();
-    if(position != null) {
+    if(_laserDistanceToTagX > 0) {
+      double velocityX = _tagDriveXPIDController.calculate(_laserDistanceToTagX + .5);
+      double velocityY = 0;
+
+      if(position != null)
+        velocityY = _tagDriveYPIDController.calculate(_cameraDistanceToTagY + _cameraDistanceToTagX * Math.sin(_cameraRotationToTag));
+
+      _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, -velocityY * 0.3, 0)); 
+
+    } else if(position != null) {
       _cameraRotationToTag = position.getRotation().getRadians();
       _cameraDistanceToTagX = position.getX();
       _cameraDistanceToTagY = position.getY();
 
-      
-       double velocityX, velocityY, velocityTheta;
+      double velocityX, velocityY, velocityTheta;
 
-       velocityY = _tagDriveYPIDController.calculate(_cameraDistanceToTagY + _cameraDistanceToTagX * -Math.sin(Math.PI + _cameraRotationToTag));
+      velocityY = _tagDriveYPIDController.calculate(_cameraDistanceToTagY + _cameraDistanceToTagX * -Math.sin(Math.PI + _cameraRotationToTag));
+      velocityX = _tagDriveXPIDController.calculate(_cameraDistanceToTagX + .5);
+      velocityTheta = _tagHeadingPIDController.calculate(_cameraRotationToTag);
 
-       if(_laserDistanceToTagX > 0) {
-        velocityX = _tagDriveXPIDController.calculate(_laserDistanceToTagX + .5);
-       } else  {
-        velocityX = _tagDriveXPIDController.calculate(_cameraDistanceToTagX + .5);
-       }
-        velocityTheta = _tagHeadingPIDController.calculate(_cameraRotationToTag);
+      if (Math.abs(_cameraRotationToTag) > 3.10)
+        velocityTheta = 0.0; 
 
-        if (Math.abs(_cameraRotationToTag) > 3.10)
-        {
-          velocityTheta = 0.0;
-        }
-
-       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX * 0.85, -velocityY, velocityTheta)); 
-       _isFinished = false;
-      }else if(_laserDistanceToTagX > 0) {
-      double velocityX = _tagDriveXPIDController.calculate(_laserDistanceToTagX + .5);
-      double velocityY = _tagDriveYPIDController.calculate(_cameraDistanceToTagY + _cameraDistanceToTagX * Math.sin(_cameraRotationToTag));
-
-      _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, -velocityY * 0.3, 0)); 
-    } else
-    
-    {
+      _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX * 0.85, -velocityY, velocityTheta)); 
+    } else {
       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
     }
 
     if(_laserDistanceToTagX < VisionConstants.laserDistanceToReef && _laserDistanceToTagX > 0)
     {
-      _isFinished = false;
+      _isFinished = true;
       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
     } 
   }
-  
 
   // Called once the command ends or is interrupted.
   @Override
