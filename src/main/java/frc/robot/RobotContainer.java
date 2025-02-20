@@ -213,11 +213,11 @@ public class RobotContainer {
 
     m_driverController.y().onTrue(new ResetGyro(_drive));
 
-    // Command driveToRightTag = new DriveToTag(_drive, _rightCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
-    // m_driverController.rightBumper().whileTrue(driveToRightTag);
+    Command driveToRightTag = new DriveToTag(_drive, _rightCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
+    m_driverController.rightBumper().whileTrue(driveToRightTag);
 
-    // Command driveToLeftTag = new DriveToTag(_drive, _leftCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
-    // m_driverController.leftBumper().whileTrue(driveToLeftTag);
+    Command driveToLeftTag = new DriveToTag(_drive, _leftCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
+    m_driverController.leftBumper().whileTrue(driveToLeftTag);
 
     // _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, m_functionController));
     // _elevator.setDefaultCommand(new OperateElevatorWithJoystick(_elevator, m_functionController));
@@ -242,12 +242,13 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     String selection = SmartDashboard.getString("Auto Selector", "None");
+    BooleanSupplier coral = () -> true;
     
-    Command autoCommand = Commands.runOnce(
-      () -> _drive.freezeWheels(), _drive
-    );  //The default command will be to freeze if nothing is selected
+    Command autoCommand = new DriveToTag(_drive, _rightCamera, VisionConstants.centeredDeltaX - 0.1, 0).withTimeout(2.5)
+    .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2))
+    .andThen(new ManipulateGamePiece(_scorer, coral, true)).withTimeout(2)
+    .andThen(new ElevatorToHeight(_elevator, 0));
 
-    autoCommand = new PathPlannerAuto(selection);
     return autoCommand;
   }
 }

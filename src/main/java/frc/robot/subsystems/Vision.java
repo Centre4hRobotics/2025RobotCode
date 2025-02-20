@@ -102,11 +102,16 @@ public class Vision extends SubsystemBase {
 
     public double getLaserDistance()
     {
+        NetworkTableInstance inst = NetworkTableInstance.getDefault();
+        NetworkTable table = inst.getTable("AprilTag Vision");
         LaserCan.Measurement measurement = _laser.getMeasurement();
         if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+            table.getEntry("laser reading").setValue(measurement.distance_mm / 1000.0);
             return measurement.distance_mm / 1000.0;
+            
         } else {
             System.out.println("Oh no! The target is out of range or we can't get a reliable measurement!");
+            table.getEntry("laser reading").setValue(-42);
             return -42;
         }
     }

@@ -212,7 +212,7 @@ public class Drive extends SubsystemBase {
     }
 
     if (Math.abs(xVelocity) < .02 && Math.abs(yVelocity) < .02 && Math.abs(angularVelocity) < .5) { 
-      setWheelsX();
+      setWheelsO();
     } else {
       setDesiredStates(_slewRateLimiterX.calculate(xVelocity), _slewRateLimiterY.calculate(yVelocity), angularVelocity);
     } 
@@ -334,11 +334,11 @@ public class Drive extends SubsystemBase {
   /**
    * Point wheels in an X so robot doesn't move
    */
-  public void setWheelsX() {
-    _swerveModules[0].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-    _swerveModules[1].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
-    _swerveModules[2].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
-    _swerveModules[3].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+  public void setWheelsO() {
+    _swerveModules[0].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    _swerveModules[1].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+    _swerveModules[2].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+    _swerveModules[3].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
   }
 
   /**

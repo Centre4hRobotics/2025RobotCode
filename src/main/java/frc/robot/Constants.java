@@ -290,6 +290,7 @@ public final class Constants {
     public static final double centeredDeltaX = RobotConstants.trackWidth/2.0;
     // Positive offset is to the right
     public static final double centeredDeltaY = 0;
+    public static final double laserDistanceToReef = 0.3;
 
     // Tag refers to the april tag positioning system
     public static final double tagDriveXP;
@@ -306,15 +307,18 @@ public final class Constants {
       switch (robotType)
       {
         case COMPETITION:
-          tagDriveXP = 0;
-          tagDriveXI = 0;
+          // Forwards
+          tagDriveXP = 0.7; //.55
+          tagDriveXI = 0; 
           tagDriveXD = 0;
-          tagDriveYP = 0;
-          tagDriveYI = 0;
-          tagDriveYD = 0;
-          tagTurningP = 0;
-          tagTurningI = 0; 
-          tagTurningD = 0;
+          // Side
+          tagDriveYP = 1.5; 
+          tagDriveYI = 0; 
+          tagDriveYD = 0.1;  
+          // Turning
+          tagTurningP = 0.20; //.1
+          tagTurningI = 0.03; 
+          tagTurningD = 0.03;
           break;
         case PRACTICE:
         default:
@@ -348,9 +352,6 @@ public final class Constants {
     public static double heightAlgaeBottom = 0; 
     public static double heightAlgaeTop = 0; 
     public static double heightAlgaeBarge = 0;
-
-    public static final double heightBelowCrossbeam = 0; //add
-    public static final double heightAboveCrossbeam = 0; //add
 
     public static final double maxHeight = 19; //add
 

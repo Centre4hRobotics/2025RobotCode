@@ -58,13 +58,11 @@ public class DriveToTag extends Command {
   @Override
   public void execute() {
     Transform2d position = _vision.getCameraToAprilTag();
+    _laserDistanceToTagX = _vision.getLaserDistance();
     if(position != null) {
       _cameraRotationToTag = position.getRotation().getRadians();
       _cameraDistanceToTagX = position.getX();
       _cameraDistanceToTagY = position.getY();
-      _laserDistanceToTagX = _vision.getLaserDistance();
-      NetworkTableInstance nt = NetworkTableInstance.getDefault();
-      nt.getTable("AprilTag Vision").getEntry("laser reading").setValue(_laserDistanceToTagX);
 
       
        double velocityX, velocityY, velocityTheta;
@@ -78,21 +76,29 @@ public class DriveToTag extends Command {
        }
         velocityTheta = _tagHeadingPIDController.calculate(_cameraRotationToTag);
 
-        if (Math.abs(_cameraRotationToTag) > 3.05)
+        if (Math.abs(_cameraRotationToTag) > 3.10)
         {
           velocityTheta = 0.0;
         }
 
-       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, -velocityY, velocityTheta)); 
+       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX * 0.85, -velocityY, velocityTheta)); 
        _isFinished = false;
-    } else if(_laserDistanceToTagX > 0) {
+      }else if(_laserDistanceToTagX > 0) {
       double velocityX = _tagDriveXPIDController.calculate(_laserDistanceToTagX + .5);
-      _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, 0, 0)); 
+      double velocityY = _tagDriveYPIDController.calculate(_cameraDistanceToTagY + _cameraDistanceToTagX * Math.sin(_cameraRotationToTag));
+
+      _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, -velocityY * 0.3, 0)); 
     } else
     
     {
       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
     }
+
+    if(_laserDistanceToTagX < VisionConstants.laserDistanceToReef && _laserDistanceToTagX > 0)
+    {
+      _isFinished = false;
+      _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
+    } 
   }
   
 
