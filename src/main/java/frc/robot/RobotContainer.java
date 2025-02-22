@@ -28,6 +28,7 @@ import frc.robot.commands.ResetGyro;
 import frc.robot.commands.RotateFunnel;
 import frc.robot.commands.RotateScorer;
 import frc.robot.commands.ManipulateGamePiece;
+import frc.robot.commands.OperateClimberWithButtons;
 import frc.robot.commands.OperateElevatorWithJoystick;
 import frc.robot.commands.OperateScorerWithJoystick;
 import frc.robot.commands.ElevatorToHeight;
@@ -203,6 +204,9 @@ public class RobotContainer {
     buttonBoard1[10].whileTrue(new ManipulateGamePiece(_scorer, mode, false));
     buttonBoard2[4].whileTrue(new ManipulateGamePiece(_scorer, mode, true));
     buttonBoard1[11].whileTrue(new IntakeCoralUntilIn(_scorer));
+
+    buttonBoard1[1].whileTrue(new OperateClimberWithButtons(_climb, false));
+    buttonBoard1[2].whileTrue(new OperateClimberWithButtons(_climb, true));
   
 
     // Syncs encoders   

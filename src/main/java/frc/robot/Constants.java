@@ -427,7 +427,13 @@ public final class Constants {
   }
 
   public static class ClimbConstants {
+    public static final int climbingCurrentThreshold = 30;
 
+    public static final double climbingP = 1.0;
+    public static final double climbingI = 0.0;
+    public static final double climbingD = 0.0;
+
+    public static final double climbRotationTolerance = 5.0;
   }
 
   public static enum FieldSide {
