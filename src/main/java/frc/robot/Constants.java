@@ -81,8 +81,8 @@ public final class Constants {
         case PRACTICE:
         default:
           maxAttainableSpeed = 4.2;
-          maxSlowDriveSpeed = 2;
-          maxFastDriveSpeed = .7;
+          maxSlowDriveSpeed = 1.5;
+          maxFastDriveSpeed = 0.7;
           maxDriveAcceleration = 1;
           maxRotationSpeed = 1.5 * Math.PI;
           maxRotationAcceleration = 3 * Math.PI;

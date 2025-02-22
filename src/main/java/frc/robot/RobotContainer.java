@@ -224,11 +224,7 @@ public class RobotContainer {
 
   public void autoChooserInit() {
     String[] autoselector = {
-      "drive 3m",
-      "c4,b4,a4",
-      "d4,c4,b4",
-      "e4,d4,c4",
-      "f4,e4,d4"
+      "Test"
     };
     SmartDashboard.putStringArray("Auto List", autoselector);
     System.out.print("Loading selections");
@@ -241,13 +237,17 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     String selection = SmartDashboard.getString("Auto Selector", "None");
-    BooleanSupplier coral = () -> true;
+    // // BooleanSupplier coral = () -> true;
     
-    Command autoCommand = new DriveToTag(_drive, _vision, VisionConstants.centeredDeltaX - 0.1, 0, "RIGHT").withTimeout(2.5)
-    .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2))
-    .andThen(new ManipulateGamePiece(_scorer, coral, true)).withTimeout(2)
-    .andThen(new ElevatorToHeight(_elevator, 0));
+    // // Command autoCommand = new DriveToTag(_drive, _vision, VisionConstants.centeredDeltaX - 0.1, 0, "RIGHT").withTimeout(2.5)
+    // // .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2))
+    // // .andThen(new ManipulateGamePiece(_scorer, coral, true)).withTimeout(2)
+    // // .andThen(new ElevatorToHeight(_elevator, 0));
+
+    Command autoCommand = _drive.followPathCommand("start to e");
 
     return autoCommand;
+
+   
   }
 }

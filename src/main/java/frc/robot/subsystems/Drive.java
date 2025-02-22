@@ -7,13 +7,17 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.SignalLogger;
 import com.studica.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.config.PIDConstants;
 // import com.pathplanner.lib.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.controllers.PPLTVController;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -37,6 +41,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
@@ -62,7 +67,7 @@ public class Drive extends SubsystemBase {
 
   private double _desiredHeading;
   private PIDController _headingPIDController;
-  private boolean _inYawLock = true;
+  private boolean _inYawLock = false;
 
   private SlewRateLimiter _slewRateLimiterX = new SlewRateLimiter(RobotConstants.maxSlewRate);
   private SlewRateLimiter _slewRateLimiterY = new SlewRateLimiter(RobotConstants.maxSlewRate);
@@ -196,7 +201,7 @@ public class Drive extends SubsystemBase {
       // if not already locked (stick just released)
       if (!_inYawLock) {
         if(Math.abs(getGyroAngularVelocity()) < .5) {
-          _inYawLock = true;
+          _inYawLock = false;
           _desiredHeading = getGyroAngle();
         }
       } else { 
@@ -261,6 +266,16 @@ public class Drive extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(
       targetStates, 
       RobotConstants.maxAttainableSpeed
+    );
+    setDesiredStates(targetStates);
+  }
+
+  public void setDesiredRobotRelativeSpeedsWithFF(ChassisSpeeds robotRelativeSpeeds, DriveFeedforwards feedforwards) {
+
+    SwerveModuleState[] targetStates = _kinematics.toSwerveModuleStates(robotRelativeSpeeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+      targetStates, 
+      1
     );
     setDesiredStates(targetStates);
   }
@@ -364,12 +379,12 @@ public class Drive extends SubsystemBase {
    * @return
    */
   public Pose2d getPose() {
-    return _odometry.getPoseMeters();
-    // return _poseEstimator.getEstimatedPosition();
+    //return _odometry.getPoseMeters();
+    return _poseEstimator.getEstimatedPosition();
   }
 
   public Pose2d getPosePathPlanner() {
-    return getPose().plus(new Transform2d(new Translation2d(0, 0), new Rotation2d(0.5 * Math.PI)));
+    return getPose().plus(new Transform2d(new Translation2d(0, 0), new Rotation2d(Math.PI*0.5)));
   }
 
   public void resetOdometry(Pose2d pose) {
@@ -379,6 +394,7 @@ public class Drive extends SubsystemBase {
       getModulePositions(),
       pose
     );
+    _poseEstimator.resetPose(pose);
   }
 
   public void syncEncoders()
@@ -392,7 +408,7 @@ public class Drive extends SubsystemBase {
    * @return
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(getGyroAngle()).getDegrees();
+    return Rotation2d.fromDegrees(getGyroAngle()).getDegrees() % 360;
   }
   
   /**
@@ -400,7 +416,7 @@ public class Drive extends SubsystemBase {
    * @return gyro angle
    */
   public double getGyroAngle() {
-    return _gyro.getYaw().getValueAsDouble();
+    return (_gyro.getYaw().getValueAsDouble() % 360 + 360) % 360;
   }
 
   public double getGyroAngularVelocity() {
@@ -459,7 +475,6 @@ public class Drive extends SubsystemBase {
 
     // pose estimator 
     nt.getTable("DriveSubsystem").getEntry("Pose Estimator").setValue(_poseEstimator.getEstimatedPosition().toString());
-
   }
 
   public void flipGyro() {
@@ -474,4 +489,37 @@ public class Drive extends SubsystemBase {
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return _sysIdRoutine.dynamic(direction);
   }
+
+  public Command followPathCommand(String pathName) {
+    try{
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+        return new FollowPathCommand(
+          path,
+          this::getPose, // Robot pose supplier
+          this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+          this::setDesiredRobotRelativeSpeedsWithFF, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds, AND feedforwards
+          new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+          new PIDConstants(MotorConstants.autoDriveP, MotorConstants.autoDriveI, MotorConstants.autoDriveD), // Translation PID constants
+          new PIDConstants(MotorConstants.autoTurningP, MotorConstants.autoTurningI, MotorConstants.autoTurningD) // Rotation PID constants
+          ),
+
+          _config, // The robot configuration
+          () -> {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+          },
+          this // Reference to this subsystem to set requirements
+        );
+    } catch (Exception e) {
+        DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+        return Commands.none();
+    }
+}
 }

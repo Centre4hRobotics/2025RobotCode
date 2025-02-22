@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.158885633680556,
-        "y": 1.9097204137731478
+        "x": 1.8287887008101842,
+        "y": 5.373305121527778
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.132603804976851,
-        "y": 1.9982331452546294
+        "x": 0.8025068721064792,
+        "y": 5.46181785300926
       },
       "isLocked": false,
       "linkedName": "start"
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -48,7 +48,7 @@
   "folder": "f",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -179.81971179857365
+    "rotation": 0.1849500560043949
   },
   "useDefaultConstraints": true
 }
