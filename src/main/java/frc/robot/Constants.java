@@ -36,7 +36,7 @@ public final class Constants {
     COMPETITION
   }
 
-  public static RobotType robotType = RobotType.COMPETITION;
+  public static RobotType robotType = RobotType.PRACTICE;
 
   public static class RobotConstants {
     public static final double wheelDiameter;
@@ -247,6 +247,7 @@ public final class Constants {
           autoDriveP = 0.7;
           autoDriveI = 0; 
           autoDriveD = 0;
+
           autoTurningP = 0.4;
           autoTurningI = 0; 
           autoTurningD = 0;
@@ -302,6 +303,9 @@ public final class Constants {
     public static final double tagTurningP;
     public static final double tagTurningI; 
     public static final double tagTurningD;
+    public static final double laserTurningP;
+    public static final double laserTurningI;
+    public static final double laserTurningD;
 
     static {
       switch (robotType)
@@ -319,21 +323,29 @@ public final class Constants {
           tagTurningP = 0.20; //.1
           tagTurningI = 0.03; 
           tagTurningD = 0.03;
+          // Laser Turning
+          laserTurningP = 0.1;
+          laserTurningI = 0.01;
+          laserTurningD = 0.01;
           break;
         case PRACTICE:
         default:
           // Forwards
-          tagDriveXP = .7; //.55
-          tagDriveXI = 0; 
+          tagDriveXP = 0.6; //.55
+          tagDriveXI = 0.03; 
           tagDriveXD = 0;
           // Side
-          tagDriveYP = 1.2; 
-          tagDriveYI = 0; 
-          tagDriveYD = 0;  
+          tagDriveYP = 1.0; 
+          tagDriveYI = 0.0; 
+          tagDriveYD = 0.0; 
           // Turning
-          tagTurningP = 0.13; //.1
-          tagTurningI = 0.03; 
-          tagTurningD = 0.03;
+          tagTurningP = 1.3; //.1
+          tagTurningI = 0.0; 
+          tagTurningD = 0.0;
+          // Laser Turning
+          laserTurningP = 0.05;
+          laserTurningI = 0.025;
+          laserTurningD = 0.005;
           break;
       }
     }
@@ -353,7 +365,7 @@ public final class Constants {
     public static double heightAlgaeTop = 0; 
     public static double heightAlgaeBarge = 0;
 
-    public static final double maxHeight = 19; //add
+    public static final double maxHeight = 84; //add
 
     public static final double elevatorP = 2;
 

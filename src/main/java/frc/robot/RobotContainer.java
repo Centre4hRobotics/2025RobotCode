@@ -48,8 +48,7 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drive _drive = new Drive();
-  private final Vision _rightCamera = new Vision("RIGHT");
-  private final Vision _leftCamera = new Vision("LEFT");
+  private final Vision _vision = new Vision("RIGHT");
   private final Funnel _funnel = new Funnel();
   private final Elevator _elevator = new Elevator();
   private final Scorer _scorer = new Scorer();
@@ -213,10 +212,10 @@ public class RobotContainer {
 
     m_driverController.y().onTrue(new ResetGyro(_drive));
 
-    Command driveToRightTag = new DriveToTag(_drive, _rightCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
+    Command driveToRightTag = new DriveToTag(_drive, _vision, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY, "RIGHT");
     m_driverController.rightBumper().whileTrue(driveToRightTag);
 
-    Command driveToLeftTag = new DriveToTag(_drive, _leftCamera, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY);
+    Command driveToLeftTag = new DriveToTag(_drive, _vision, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY, "LEFT");
     m_driverController.leftBumper().whileTrue(driveToLeftTag);
 
     // _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, m_functionController));
@@ -244,7 +243,7 @@ public class RobotContainer {
     String selection = SmartDashboard.getString("Auto Selector", "None");
     BooleanSupplier coral = () -> true;
     
-    Command autoCommand = new DriveToTag(_drive, _rightCamera, VisionConstants.centeredDeltaX - 0.1, 0).withTimeout(2.5)
+    Command autoCommand = new DriveToTag(_drive, _vision, VisionConstants.centeredDeltaX - 0.1, 0, "RIGHT").withTimeout(2.5)
     .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2))
     .andThen(new ManipulateGamePiece(_scorer, coral, true)).withTimeout(2)
     .andThen(new ElevatorToHeight(_elevator, 0));

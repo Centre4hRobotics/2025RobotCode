@@ -36,7 +36,8 @@ public class Vision extends SubsystemBase {
     private BooleanSubscriber _tagPresenceSub; // "AprilTag Presence"
     private IntegerSubscriber _tagIDSub;
     
-    private LaserCan _laser;
+    private LaserCan _rightLaser;
+    private LaserCan _leftLaser;
 
     public Vision(String side) {
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -47,20 +48,25 @@ public class Vision extends SubsystemBase {
         _tagPresenceSub = table.getBooleanTopic("AprilTag Presence").subscribe(false);
         _tagIDSub = table.getIntegerTopic("Widest Tag ID").subscribe(0);
 
-        _rotationToTagSub = table.getDoubleTopic("Tag Rotation").subscribe(0);
-        _posToTagXSub = table.getDoubleTopic("Pose X").subscribe(0);
-        _posToTagYSub = table.getDoubleTopic("Pose Y").subscribe(0);
+        _rotationToTagSub = table.getDoubleTopic("TagToCamera Theta").subscribe(0);
+        _posToTagXSub = table.getDoubleTopic("TagToCamera X").subscribe(0);
+        _posToTagYSub = table.getDoubleTopic("TagToCamera Y").subscribe(0);
 
-        _rotationFieldSub = table.getDoubleTopic("Tag Rotation").subscribe(0);
-        _posFieldXSub = table.getDoubleTopic("Pose X").subscribe(0);
-        _posFieldYSub = table.getDoubleTopic("Pose Y").subscribe(0);
+        _rotationFieldSub = table.getDoubleTopic("TagToCamera Theta").subscribe(0);
+        _posFieldXSub = table.getDoubleTopic("TagToCamera X").subscribe(0);
+        _posFieldYSub = table.getDoubleTopic("TagToCamera Y").subscribe(0);
         
 
-        _laser = new LaserCan(12);
+        _rightLaser = new LaserCan(12);
+        _leftLaser = new LaserCan(13);
         try {
-            _laser.setRangingMode(LaserCan.RangingMode.SHORT);
-            _laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-            _laser.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+            _rightLaser.setRangingMode(LaserCan.RangingMode.SHORT);
+            _rightLaser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+            _rightLaser.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+
+            _leftLaser.setRangingMode(LaserCan.RangingMode.SHORT);
+            _leftLaser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+            _leftLaser.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
         } catch (ConfigurationFailedException e) {
             System.out.println("Configuration failed! " + e);
         }
@@ -94,28 +100,68 @@ public class Vision extends SubsystemBase {
         return null;
     }
 
+    public String getCurrentSide()
+    {
+        return _side;
+    }
+
+    public void setCurrentSide(String side)
+    {
+        _side = side;
+    }
+
     public int getBestAprilTagID () {
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
         nt.getTable("AprilTag Vision").getEntry("Widest Tag ID").getInteger(_tagID);
         return _tagID;
     }
 
-    public double getLaserDistance()
+    public double getLeftLaserDistance()
     {
-        LaserCan.Measurement measurement = _laser.getMeasurement();
-        if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+        LaserCan.Measurement measurement = _leftLaser.getMeasurement();
+        if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT){
+
             return measurement.distance_mm / 1000.0;
             
         } else {
-            System.out.println("Oh no! The target is out of range or we can't get a reliable measurement!");
-            return -42;
+            System.out.println("RIP left laser, bro tried and failed...");
+            return -4027;
         }
+    }
+
+    public double getRightLaserDistance()
+    {
+        LaserCan.Measurement measurement = _rightLaser.getMeasurement();
+        if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT){
+
+            return measurement.distance_mm / 1000.0;
+            
+        } else {
+            System.out.println("Right laser dun goofed D:");
+            return -7204;
+        }
+    }
+
+    public double getLaserDistance()
+    {
+        return (getRightLaserDistance() + getLeftLaserDistance()) / 2.0;
+    }
+
+    public double getLaserDifference()
+    {
+        double diff = getRightLaserDistance() - getLeftLaserDistance();
+        // if (diff >= 0.0) {
+        //     diff = Math.PI - diff;
+        // } else {
+        //     diff = -Math.PI - diff;
+        // }
+        return diff;
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
-        nt.getTable("AprilTag Vision").getEntry("laser").setValue(getLaserDistance()); 
+        nt.getTable("AprilTag Vision").getEntry("laser diff").setValue(getLaserDifference()); 
     }
 }
