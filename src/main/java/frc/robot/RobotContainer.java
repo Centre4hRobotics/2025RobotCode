@@ -171,6 +171,14 @@ public class RobotContainer {
     buttonBoard2[7].onTrue(new RotateScorer(_scorer, ScorerConstants.rotationL1).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
     buttonBoard2[7].onFalse(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)));
 
+    BooleanSupplier notOnDefault = () -> { return (
+        buttonBoard1[6].getAsBoolean() && buttonBoard1[5].getAsBoolean()
+      ) || (
+        buttonBoard1[6].getAsBoolean() && buttonBoard1[8].getAsBoolean()
+      ) || (
+        buttonBoard1[5].getAsBoolean() && buttonBoard1[8].getAsBoolean()
+      );  };
+
     buttonBoard1[6].onFalse(
       Commands.either(
         new RotateScorer(_scorer, ScorerConstants.rotationL1).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
