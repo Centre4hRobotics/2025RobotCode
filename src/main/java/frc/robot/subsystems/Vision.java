@@ -124,7 +124,7 @@ public class Vision extends SubsystemBase {
             return measurement.distance_mm / 1000.0;
             
         } else {
-            System.out.println("RIP left laser, bro tried and failed...");
+            // System.out.println("RIP left laser, bro tried and failed...");
             return -4027;
         }
     }
@@ -137,7 +137,7 @@ public class Vision extends SubsystemBase {
             return measurement.distance_mm / 1000.0;
             
         } else {
-            System.out.println("Right laser dun goofed D:");
+            // System.out.println("Right laser dun goofed D:");
             return -7204;
         }
     }

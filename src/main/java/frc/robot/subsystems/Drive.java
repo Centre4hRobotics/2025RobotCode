@@ -384,7 +384,7 @@ public class Drive extends SubsystemBase {
   }
 
   public Pose2d getPosePathPlanner() {
-    return getPose().plus(new Transform2d(new Translation2d(0, 0), new Rotation2d(Math.PI*0.5)));
+    return getPose();//.plus(new Transform2d(new Translation2d(0, 0), new Rotation2d(Math.PI*0.5)));
   }
 
   public void resetOdometry(Pose2d pose) {
@@ -429,11 +429,15 @@ public class Drive extends SubsystemBase {
 
   public void resetGyroAngle() {
     _gyro.reset();
+    _odometry.resetPose(new Pose2d());
+    _odometry.resetRotation(new Rotation2d());
   }
 
   public void resetGyroAngle(double angle) {
     _gyro.reset();
-    _gyro.setYaw(-angle);
+    _gyro.setYaw(angle);
+    _odometry.resetPose(new Pose2d());
+    _odometry.resetRotation(new Rotation2d());
   }
 
   public void log() {

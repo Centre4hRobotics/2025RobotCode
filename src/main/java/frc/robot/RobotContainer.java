@@ -24,15 +24,15 @@ import frc.robot.Constants.ScorerConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
-import frc.robot.commands.ResetGyro;
-import frc.robot.commands.RotateFunnel;
-import frc.robot.commands.RotateScorer;
+import frc.robot.commands.ElevatorToHeight;
+import frc.robot.commands.IntakeCoralUntilIn;
 import frc.robot.commands.ManipulateGamePiece;
 import frc.robot.commands.OperateClimberWithButtons;
 import frc.robot.commands.OperateElevatorWithJoystick;
 import frc.robot.commands.OperateScorerWithJoystick;
-import frc.robot.commands.ElevatorToHeight;
-import frc.robot.commands.IntakeCoralUntilIn;
+import frc.robot.commands.ResetGyro;
+import frc.robot.commands.RotateFunnel;
+import frc.robot.commands.RotateScorer;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
@@ -72,13 +72,11 @@ public class RobotContainer {
 
     BooleanSupplier coral = () -> true;
     BooleanSupplier station = () -> true;
+    NamedCommands.registerCommand("drive to tag", new DriveToTag(_drive, _vision, 0, VisionConstants.centeredDeltaX, "RIGHT"));
+
     NamedCommands.registerCommand("lower funnel", new RotateFunnel(_funnel, station));
     NamedCommands.registerCommand("intake coral from station", new ManipulateGamePiece(_scorer, coral, true).withTimeout(1));
-    // NamedCommands.registerCommand("score coral L2", new ElevatorToHeight(_elevator, 2, coral)
-    //   .alongWith(new RotateScorer(_scorer, 2, coral))
-    //   .andThen(new ManipulateGamePiece(_scorer, coral, true))
-    //   .andThen(new ElevatorToHeight(_elevator, 1, coral))
-    // );
+    
 
     // Button board configuration 
     configureBindings();
@@ -249,17 +247,12 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     String selection = SmartDashboard.getString("Auto Selector", "None");
-    // // BooleanSupplier coral = () -> true;
     
-    // // Command autoCommand = new DriveToTag(_drive, _vision, VisionConstants.centeredDeltaX - 0.1, 0, "RIGHT").withTimeout(2.5)
-    // // .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2))
-    // // .andThen(new ManipulateGamePiece(_scorer, coral, true)).withTimeout(2)
-    // // .andThen(new ElevatorToHeight(_elevator, 0));
-
-    Command autoCommand = _drive.followPathCommand("start to e");
-
-    return autoCommand;
-
-   
+    Command autoCommand = Commands.runOnce(
+      () -> _drive.freezeWheels(), _drive
+    );  //The default command will be to freeze if nothing is selected
+    
+    autoCommand = new PathPlannerAuto(selection);
+    return autoCommand;  
   }
 }

@@ -23,7 +23,7 @@ public class Climb extends SubsystemBase{
     private double _setpoint;
 
     public Climb() {
-        _climber = new SparkMax(42, MotorType.kBrushless);
+        _climber = new SparkMax(50, MotorType.kBrushless);
 
         configureClimber();
 

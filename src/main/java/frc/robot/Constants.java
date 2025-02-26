@@ -36,7 +36,7 @@ public final class Constants {
     COMPETITION
   }
 
-  public static RobotType robotType = RobotType.PRACTICE;
+  public static RobotType robotType = RobotType.COMPETITION;
 
   public static class RobotConstants {
     public static final double wheelDiameter;
@@ -355,9 +355,9 @@ public final class Constants {
   public static class ElevatorConstants {
     // coral
     public static double heightCoralL1 = 0; 
-    public static double heightCoralL2 = 21.4;
-    public static double heightCoralL3 = 12.339;
-    public static double heightCoralL4 = 19; 
+    public static double heightCoralL2 = 22.423;
+    public static double heightCoralL3 = 45.914;
+    public static double heightCoralL4 = 85; 
 
     public static double heightAlgaeProcessor = 0; 
     public static double heightAlgaeDefault = 0;
@@ -365,15 +365,15 @@ public final class Constants {
     public static double heightAlgaeTop = 0; 
     public static double heightAlgaeBarge = 0;
 
-    public static final double maxHeight = 84; //add
+    public static final double maxHeight = 85; //add
 
     public static final double elevatorP = 2;
 
     public static final double elevatorI = 0;
     public static final double elevatorD = 0;
 
-    public static final double leadCurrentThreshold = 40;
-    public static final double followCurrentThreshold = 40;
+    public static final double leadCurrentThreshold = 10;
+    public static final double followCurrentThreshold = 10;
 
     public static final double heightTolerance = 0.2;
   }
@@ -383,7 +383,7 @@ public final class Constants {
     public static double rotationL1 = 0; 
     public static double rotationL2 = 0; 
     public static double rotationL3 = 0;
-    public static double rotationL4 = 4.096; 
+    public static double rotationL4 = 5.9005; 
 
     // algae
     public static double rotationAlgaeTop = 40; 
