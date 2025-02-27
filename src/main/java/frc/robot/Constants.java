@@ -36,7 +36,7 @@ public final class Constants {
     COMPETITION
   }
 
-  public static RobotType robotType = RobotType.COMPETITION;
+  public static RobotType robotType = RobotType.PRACTICE;
 
   public static class RobotConstants {
     public static final double wheelDiameter;
@@ -303,9 +303,6 @@ public final class Constants {
     public static final double tagTurningP;
     public static final double tagTurningI; 
     public static final double tagTurningD;
-    public static final double laserTurningP;
-    public static final double laserTurningI;
-    public static final double laserTurningD;
 
     static {
       switch (robotType)
@@ -323,29 +320,21 @@ public final class Constants {
           tagTurningP = 0.20; //.1
           tagTurningI = 0.03; 
           tagTurningD = 0.03;
-          // Laser Turning
-          laserTurningP = 0.1;
-          laserTurningI = 0.01;
-          laserTurningD = 0.01;
           break;
         case PRACTICE:
         default:
           // Forwards
-          tagDriveXP = 0.6; //.55
+          tagDriveXP = 1; //.55
           tagDriveXI = 0.03; 
           tagDriveXD = 0;
           // Side
-          tagDriveYP = 1.0; 
+          tagDriveYP = 2; 
           tagDriveYI = 0.0; 
-          tagDriveYD = 0.0; 
+          tagDriveYD = 0.02; 
           // Turning
-          tagTurningP = 1.3; //.1
+          tagTurningP = 2; //.1
           tagTurningI = 0.0; 
           tagTurningD = 0.0;
-          // Laser Turning
-          laserTurningP = 0.05;
-          laserTurningI = 0.025;
-          laserTurningD = 0.005;
           break;
       }
     }
@@ -380,6 +369,7 @@ public final class Constants {
 
   public static class ScorerConstants {
     //coral
+    public static double rotationCoralDefault = 0; 
     public static double rotationL1 = 0; 
     public static double rotationL2 = 0; 
     public static double rotationL3 = 0;
@@ -395,19 +385,20 @@ public final class Constants {
     public static final double rotationI = 0;
     public static final double rotationD = 0;
 
-    // not sure if these should be velocity or voltage or something else
-    public static final double intakingCoralVelocity = 0; //add
-    public static final double scoringCoralVelocity = 0; //add
-    public static final double intakingAlgaeVelocity = 0; //add
-    public static final double scoringAlgaeVelocity = 0; //add 
-
     public static final int rotationCurrentThreshold = 30;
     public static final int scoringCurrentThreshold = 40;
     public static final double scoringCurrentWithCoral = 20;
 
     public static final double numRotationsToIntake = 0.85;
-    public static final double waitingForCoralVoltage = 3.0;
+    public static final double numRotationsToEject = 3;
+
     public static final double intakingCoralVoltage = 3.0;
+    public static final double ejectingCoralVoltage = 3.0;
+    public static final double backdrivingCoralVoltage = -3.0;
+
+    public static final double intakingAlgaeVoltage = -3.0;
+    public static final double ejectingAlgaeVoltage = 3.0;
+    public static final double holdingAlageVoltage = -1.0;
 
     public static final double rotationTolerance = 1; //add
 

@@ -37,24 +37,11 @@ public class IntakeCoralUntilIn extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // boolean temp = _coralIn;
-    // _coralIn = _scorer.getScoringCurrent() > ScorerConstants.scoringCurrentWithCoral;
-    // if(_coralIn && !temp) {
-    //   _startingPos = _scorer.getScoringPosition();
-    // } else if(_coralIn) {
-    //   if(_scorer.getScoringPosition() > _startingPos + 1) {
-    //     _isFinished = true;
-    //   } else {
-    //     _scorer.setScoringVoltage(8);
-    //   }
-    // } else {
-    //   _scorer.setScoringVoltage(8);
-    // }
 
     switch (_state)
     {
       case spiningUp:
-      _scorer.setScoringVoltage(ScorerConstants.waitingForCoralVoltage);
+      _scorer.setScoringVoltage(ScorerConstants.intakingCoralVoltage);
         if(_scorer.getScoringVelocity() > 1200)
           _state = CoralStatus.waitingForCoral;
         break;

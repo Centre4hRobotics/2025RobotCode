@@ -7,7 +7,43 @@
         {
           "type": "path",
           "data": {
+            "pathName": "start to c"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "drive to tag"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "d to ps"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "ps to b"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "drive to tag"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "b to ps"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ps to a"
           }
         },
         {

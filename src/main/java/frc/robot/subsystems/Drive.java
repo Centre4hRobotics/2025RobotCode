@@ -108,7 +108,7 @@ public class Drive extends SubsystemBase {
     );
 
     _headingPIDController.enableContinuousInput(0, 360);
-    _desiredHeading = getGyroAngle();
+    _desiredHeading = getHeading();
 
     AutoBuilder.configure(
       this::getPose, 
@@ -164,12 +164,12 @@ public class Drive extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     _odometry.update(
-      Rotation2d.fromDegrees(getGyroAngle()),
+      _gyro.getRotation2d(),
       getModulePositions()
     );
 
     _poseEstimator.update(
-      Rotation2d.fromDegrees(getGyroAngle()),
+      _gyro.getRotation2d(),
       getModulePositions()
     );
     
@@ -202,11 +202,11 @@ public class Drive extends SubsystemBase {
       if (!_inYawLock) {
         if(Math.abs(getGyroAngularVelocity()) < .5) {
           _inYawLock = false;
-          _desiredHeading = getGyroAngle();
+          _desiredHeading = getHeading();
         }
       } else { 
         // yaw is locked
-        angularVelocity = _headingPIDController.calculate(getGyroAngle(), _desiredHeading);
+        angularVelocity = _headingPIDController.calculate(getHeading(), _desiredHeading);
         // limit angular velocity to maxRotationSpeed
         // afterward scales with trigger input because it needs to be stronger at higher speeds
         // this is because of several things to do with max speed
@@ -287,7 +287,7 @@ public class Drive extends SubsystemBase {
    * @param angularVelocity angular velocity in rad/s
    */
   public void setDesiredStates(double xSpeed, double ySpeed, double angularVelocity) {
-    ChassisSpeeds currentSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, angularVelocity, Rotation2d.fromDegrees(getGyroAngle()));
+    ChassisSpeeds currentSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, angularVelocity, getPose().getRotation());
 
     SwerveModuleState[] swerveModuleStates = _kinematics.toSwerveModuleStates(
       // field relative
@@ -379,8 +379,8 @@ public class Drive extends SubsystemBase {
    * @return
    */
   public Pose2d getPose() {
-    //return _odometry.getPoseMeters();
-    return _poseEstimator.getEstimatedPosition();
+    return _odometry.getPoseMeters();
+    //return _poseEstimator.getEstimatedPosition();
   }
 
   public Pose2d getPosePathPlanner() {
@@ -388,13 +388,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d pose) {
-    resetGyroAngle(pose.getRotation().getDegrees());
-    _odometry.resetPosition(
-      Rotation2d.fromDegrees(getGyroAngle()),
-      getModulePositions(),
-      pose
-    );
-    _poseEstimator.resetPose(pose);
+    _odometry.resetPosition(_gyro.getRotation2d(), getModulePositions(), pose);
   }
 
   public void syncEncoders()
@@ -408,19 +402,20 @@ public class Drive extends SubsystemBase {
    * @return
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(getGyroAngle()).getDegrees() % 360;
+    return _odometry.getPoseMeters().getRotation().getDegrees();
   }
   
   /**
    * Get gyro yaw (in degrees)
+   * DOES NOT RETURN THE ROBOT HEADING
    * @return gyro angle
    */
-  public double getGyroAngle() {
-    return (_gyro.getYaw().getValueAsDouble() % 360 + 360) % 360;
+  private double getGyroAngle() {
+    return _gyro.getYaw().getValueAsDouble();
   }
 
   public double getGyroAngularVelocity() {
-    return -_gyro.getAngularVelocityZWorld().getValueAsDouble();
+    return _gyro.getAngularVelocityZWorld().getValueAsDouble();
   }
 
   public double getGyroRoll() {
@@ -428,13 +423,12 @@ public class Drive extends SubsystemBase {
   }
 
   public void resetGyroAngle() {
-    _gyro.reset();
-    _odometry.resetPose(new Pose2d());
-    _odometry.resetRotation(new Rotation2d());
+    _gyro.setYaw(0);
+    _odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
   }
 
   public void resetGyroAngle(double angle) {
-    _gyro.reset();
+    //_gyro.reset();
     _gyro.setYaw(angle);
     _odometry.resetPose(new Pose2d());
     _odometry.resetRotation(new Rotation2d());
@@ -474,7 +468,7 @@ public class Drive extends SubsystemBase {
     double[] robotPoseList = new double[3];
     robotPoseList[0] = robotPose.getX();
     robotPoseList[1] = robotPose.getY();
-    robotPoseList[2] = robotPose.getRotation().getRadians();
+    robotPoseList[2] = robotPose.getRotation().getDegrees();
     nt.getTable("DriveSubsystem").getEntry("Robot Pose").setValue(robotPoseList);
 
     // pose estimator 

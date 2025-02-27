@@ -30,7 +30,6 @@ public class DriveToTag extends Command {
   private PIDController _tagHeadingPIDController; 
   private PIDController _tagDriveXPIDController;
   private PIDController _tagDriveYPIDController;
-  private PIDController _tagDriveLaserPIDController;
 
   private Boolean _isFinished;
   
@@ -46,7 +45,6 @@ public class DriveToTag extends Command {
     _tagHeadingPIDController = new PIDController(VisionConstants.tagTurningP, VisionConstants.tagTurningI, VisionConstants.tagTurningD);
     _tagDriveXPIDController = new PIDController(VisionConstants.tagDriveXP, VisionConstants.tagDriveXI, VisionConstants.tagDriveXD);
     _tagDriveYPIDController = new PIDController(VisionConstants.tagDriveYP, VisionConstants.tagDriveYI, VisionConstants.tagDriveYD);
-    _tagDriveLaserPIDController = new PIDController(VisionConstants.laserTurningP, VisionConstants.laserTurningI, VisionConstants.laserTurningD);
     
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
@@ -68,21 +66,21 @@ public class DriveToTag extends Command {
     
     double velocityX, velocityY, velocityTheta;
 
-    if (_laserDistanceToTagX > 0 && _laserDistanceToTagX < -1.0)
+    if (_laserDistanceToTagX > 0)
     {
-      _cameraRotationToTag = _vision.getLaserDifference();
-      if (Math.abs(_cameraRotationToTag) < 5.0 && position != null)
+      _cameraRotationToTag = _vision.getLaserAngle();
+      _cameraDistanceToTagY = 0;
+      if (position != null)
       {
-        _cameraRotationToTag = position.getRotation().getRadians();
-      } else if (Math.abs(_cameraRotationToTag) < 0.1)
-      {
-        _cameraRotationToTag = 0.0;
+        _cameraRotationToTag = -position.getRotation().getRadians();
+        _cameraDistanceToTagY = position.getY();
       }
 
       _cameraDistanceToTagX = _vision.getLaserDistance();
 
       velocityX = _tagDriveXPIDController.calculate(_cameraDistanceToTagX + 0.1);
-      velocityTheta = _tagDriveLaserPIDController.calculate(_cameraRotationToTag);
+      velocityY = _tagDriveYPIDController.calculate(_cameraDistanceToTagY);
+      velocityTheta = _tagHeadingPIDController.calculate(_cameraRotationToTag);
 
       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, 0, -velocityTheta));
     }
@@ -95,22 +93,22 @@ public class DriveToTag extends Command {
       velocityX = _tagDriveXPIDController.calculate(_cameraDistanceToTagX - 0.9);
       velocityTheta = _tagHeadingPIDController.calculate(_cameraRotationToTag);
 
-      if (Math.abs(_cameraRotationToTag) < 0.05)
+      if (Math.abs(_cameraRotationToTag) < 0.03)
         velocityTheta = 0.0; 
 
-      if (Math.abs(_cameraDistanceToTagY) < 0.15)
+      if (Math.abs(_cameraDistanceToTagY) < 0.01)
         velocityY = 0.0;
 
-      _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0 * -velocityX, -velocityY, velocityTheta)); 
+      _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, -velocityY, velocityTheta)); 
     } else {
       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
     }
 
-    // if(_laserDistanceToTagX < VisionConstants.laserDistanceToReef && _laserDistanceToTagX > 0)
-    // {
-    //   _isFinished = true;
-    //   _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
-    // } 
+    if(Math.abs(_laserDistanceToTagX) < VisionConstants.laserDistanceToReef)
+    {
+      _isFinished = true;
+      _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(0, 0, 0));
+    } 
   }
 
   // Called once the command ends or is interrupted.

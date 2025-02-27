@@ -147,7 +147,7 @@ public class Vision extends SubsystemBase {
         return (getRightLaserDistance() + getLeftLaserDistance()) / 2.0;
     }
 
-    public double getLaserDifference()
+    public double getLaserAngle()
     {
         double diff = getRightLaserDistance() - getLeftLaserDistance();
         // if (diff >= 0.0) {
@@ -155,13 +155,13 @@ public class Vision extends SubsystemBase {
         // } else {
         //     diff = -Math.PI - diff;
         // }
-        return diff;
+        return Math.atan2(diff, 0.34);
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
-        nt.getTable("AprilTag Vision").getEntry("laser diff").setValue(getLaserDifference()); 
+        nt.getTable("AprilTag Vision").getEntry("laser angle").setValue(getLaserAngle()*180/Math.PI); 
     }
 }

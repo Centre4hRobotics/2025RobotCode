@@ -24,6 +24,7 @@ import frc.robot.Constants.ScorerConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
+import frc.robot.commands.EjectCoralUntilOut;
 import frc.robot.commands.ElevatorToHeight;
 import frc.robot.commands.IntakeCoralUntilIn;
 import frc.robot.commands.ManipulateGamePiece;
@@ -72,10 +73,19 @@ public class RobotContainer {
 
     BooleanSupplier coral = () -> true;
     BooleanSupplier station = () -> true;
-    NamedCommands.registerCommand("drive to tag", new DriveToTag(_drive, _vision, 0, VisionConstants.centeredDeltaX, "RIGHT"));
+    NamedCommands.registerCommand("drive to tag", new DriveToTag(_drive, _vision, 0, VisionConstants.centeredDeltaX, "LEFT"));
 
-    NamedCommands.registerCommand("lower funnel", new RotateFunnel(_funnel, station));
-    NamedCommands.registerCommand("intake coral from station", new ManipulateGamePiece(_scorer, coral, true).withTimeout(1));
+    NamedCommands.registerCommand("default coral position", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)
+    .andThen(new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault)));
+    NamedCommands.registerCommand("prep to score L2", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2)
+    .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL2)));
+    NamedCommands.registerCommand("prep to score L3", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL3)
+    .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL3)));
+    NamedCommands.registerCommand("prep to score L4", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4)
+    .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)));
+
+    NamedCommands.registerCommand("intake coral", new IntakeCoralUntilIn(_scorer));
+    NamedCommands.registerCommand("eject coral", new EjectCoralUntilOut(_scorer));
     
 
     // Button board configuration 
@@ -166,7 +176,7 @@ public class RobotContainer {
         mode)
     );
   
-    buttonBoard2[7].onTrue(new RotateScorer(_scorer, ScorerConstants.rotationL1).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
+    buttonBoard2[7].onTrue(new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
     buttonBoard2[7].onFalse(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)));
 
     BooleanSupplier notOnDefault = () -> { return (
@@ -175,21 +185,21 @@ public class RobotContainer {
         buttonBoard1[6].getAsBoolean() && buttonBoard1[8].getAsBoolean()
       ) || (
         buttonBoard1[5].getAsBoolean() && buttonBoard1[8].getAsBoolean()
-      );  };
+      ); };
 
     buttonBoard1[6].onFalse(
       Commands.either(
-        new RotateScorer(_scorer, ScorerConstants.rotationL1).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
+        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
         new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
         mode));
     buttonBoard1[5].onFalse(
       Commands.either(
-        new RotateScorer(_scorer, ScorerConstants.rotationL1).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
+        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
         new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
         mode));
     buttonBoard1[8].onFalse(
       Commands.either(
-        new RotateScorer(_scorer, ScorerConstants.rotationL1).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)).withTimeout(2), 
+        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)).withTimeout(2), 
         new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
         mode));
 
