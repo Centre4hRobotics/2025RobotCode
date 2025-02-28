@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "default coral position"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "prep to score L2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "default coral position"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "prep to score L3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "default coral position"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "prep to score L4"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

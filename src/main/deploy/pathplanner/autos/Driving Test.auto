@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "start to c"
+            "pathName": "start to d"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "drive to tag"
+            "name": "drive to left tag"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -25,31 +31,37 @@
         {
           "type": "path",
           "data": {
+            "pathName": "ps to c"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "drive to right tag"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "c to ps"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "ps to b"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "drive to tag"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "b to ps"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ps to a"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "drive to tag"
+            "name": "drive to left tag"
           }
         }
       ]

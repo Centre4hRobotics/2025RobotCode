@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "start to d"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "drive to left camera"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "prep to score L3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "eject coral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "default coral position"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "d to ps"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ps to c"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "drive to right camera"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "prep to score L3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "eject coral"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

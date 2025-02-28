@@ -36,7 +36,7 @@ public final class Constants {
     COMPETITION
   }
 
-  public static RobotType robotType = RobotType.PRACTICE;
+  public static RobotType robotType = RobotType.COMPETITION;
 
   public static class RobotConstants {
     public static final double wheelDiameter;
@@ -328,7 +328,7 @@ public final class Constants {
           tagDriveXI = 0.03; 
           tagDriveXD = 0;
           // Side
-          tagDriveYP = 2; 
+          tagDriveYP = 3; 
           tagDriveYI = 0.0; 
           tagDriveYD = 0.02; 
           // Turning
@@ -392,9 +392,9 @@ public final class Constants {
     public static final double numRotationsToIntake = 0.85;
     public static final double numRotationsToEject = 3;
 
-    public static final double intakingCoralVoltage = 3.0;
-    public static final double ejectingCoralVoltage = 3.0;
-    public static final double backdrivingCoralVoltage = -3.0;
+    public static final double intakingCoralVoltage = -3.0;
+    public static final double ejectingCoralVoltage = -3.0;
+    public static final double backdrivingCoralVoltage = 3.0;
 
     public static final double intakingAlgaeVoltage = -3.0;
     public static final double ejectingAlgaeVoltage = 3.0;

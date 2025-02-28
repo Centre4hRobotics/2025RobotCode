@@ -3,7 +3,6 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "l",
     "a",
     "b",
     "c",
@@ -11,10 +10,6 @@
     "e",
     "f",
     "g",
-    "h",
-    "i",
-    "j",
-    "k",
     "z"
   ],
   "autoFolders": [

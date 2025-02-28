@@ -32,7 +32,6 @@ import frc.robot.commands.OperateClimberWithButtons;
 import frc.robot.commands.OperateElevatorWithJoystick;
 import frc.robot.commands.OperateScorerWithJoystick;
 import frc.robot.commands.ResetGyro;
-import frc.robot.commands.RotateFunnel;
 import frc.robot.commands.RotateScorer;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drive;
@@ -73,7 +72,8 @@ public class RobotContainer {
 
     BooleanSupplier coral = () -> true;
     BooleanSupplier station = () -> true;
-    NamedCommands.registerCommand("drive to tag", new DriveToTag(_drive, _vision, 0, VisionConstants.centeredDeltaX, "LEFT"));
+    NamedCommands.registerCommand("drive to left tag", new DriveToTag(_drive, _vision, 0, VisionConstants.centeredDeltaX, "LEFT"));
+    NamedCommands.registerCommand("drive to right tag", new DriveToTag(_drive, _vision, 0, VisionConstants.centeredDeltaX, "RIGHT"));
 
     NamedCommands.registerCommand("default coral position", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)
     .andThen(new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault)));
@@ -244,7 +244,10 @@ public class RobotContainer {
 
   public void autoChooserInit() {
     String[] autoselector = {
-      "Test"
+      "Driving Test",
+      "Test Scorer NamedCommands",
+      "Test Elevator NamedCommands",
+      "Unoptomized Test"
     };
     SmartDashboard.putStringArray("Auto List", autoselector);
     System.out.print("Loading selections");
