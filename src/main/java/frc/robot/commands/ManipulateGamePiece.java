@@ -10,13 +10,20 @@ public class ManipulateGamePiece extends Command {
 
     Scorer _scorer;
     BooleanSupplier _scoringModeSwitch;
-    boolean _forwards;
+    boolean _forwards, _stuck = false;;
 
     public ManipulateGamePiece(Scorer scorer, BooleanSupplier scoringModeSwitch, boolean forwards) {
         _scorer = scorer;
         _scoringModeSwitch = scoringModeSwitch;
         _forwards = forwards;
     }
+
+    public ManipulateGamePiece(Scorer scorer, BooleanSupplier scoringModeSwitch, boolean forwards, boolean stuck) {
+      _scorer = scorer;
+      _scoringModeSwitch = scoringModeSwitch;
+      _forwards = forwards;
+      _stuck = stuck;
+  }
 
     // Called when the command is initially scheduled.
   @Override
@@ -29,7 +36,12 @@ public class ManipulateGamePiece extends Command {
   public void execute() {
     if(_scoringModeSwitch.getAsBoolean()) {
       if(_forwards) {
+        if (_stuck) {
+          _scorer.setScoringVoltage(ScorerConstants.stuckCoralVoltage);
+        }
+        else {
         _scorer.setScoringVoltage(ScorerConstants.intakingCoralVoltage);
+        }
       } else {
         _scorer.setScoringVoltage(ScorerConstants.backdrivingCoralVoltage);
       }

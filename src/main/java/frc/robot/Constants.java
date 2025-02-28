@@ -391,10 +391,11 @@ public final class Constants {
 
     public static final double numRotationsToIntake = 0.85;
     public static final double numRotationsToEject = 3;
-
-    public static final double intakingCoralVoltage = -3.0;
-    public static final double ejectingCoralVoltage = -3.0;
-    public static final double backdrivingCoralVoltage = 3.0;
+    
+    public static final double intakingCoralVoltage = 3.0;
+    public static final double ejectingCoralVoltage = 3.0;
+    public static final double backdrivingCoralVoltage = -3.0;
+    public static final double stuckCoralVoltage = 8.0;
 
     public static final double intakingAlgaeVoltage = -3.0;
     public static final double ejectingAlgaeVoltage = 3.0;

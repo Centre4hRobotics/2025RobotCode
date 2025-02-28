@@ -220,6 +220,7 @@ public class RobotContainer {
     buttonBoard1[10].whileTrue(new ManipulateGamePiece(_scorer, mode, false));
     buttonBoard2[4].whileTrue(new ManipulateGamePiece(_scorer, mode, true));
     buttonBoard1[11].whileTrue(new IntakeCoralUntilIn(_scorer));
+    buttonBoard1[12].whileTrue(new ManipulateGamePiece(_scorer, mode, true, true));
 
     buttonBoard1[1].whileTrue(new OperateClimberWithButtons(_climb, false));
     buttonBoard1[2].whileTrue(new OperateClimberWithButtons(_climb, true));
