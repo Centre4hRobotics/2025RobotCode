@@ -42,11 +42,11 @@ public class IntakeCoralUntilIn extends Command {
     {
       case spiningUp:
       _scorer.setScoringVoltage(ScorerConstants.intakingCoralVoltage);
-        if(_scorer.getScoringVelocity() > 1200)
+        if(_scorer.getScoringVelocity() > 1300)
           _state = CoralStatus.waitingForCoral;
         break;
       case waitingForCoral:
-        if (_scorer.getScoringVelocity() < 800)
+        if (_scorer.getScoringVelocity() < 1100)
         {
           _state = CoralStatus.hasCoral;
           _startingPos = _scorer.getScoringPosition();

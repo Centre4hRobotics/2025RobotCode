@@ -47,11 +47,11 @@ import frc.robot.subsystems.Vision;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final Drive _drive = new Drive();
+  // The robot's subsystems and commands are defined here..-
   private final Vision _vision = new Vision("RIGHT");
   private final Funnel _funnel = new Funnel();
   private final Elevator _elevator = new Elevator();
+  private final Drive _drive = new Drive(_elevator);
   private final Scorer _scorer = new Scorer();
   private final Climb _climb = new Climb();
 
@@ -150,8 +150,8 @@ public class RobotContainer {
         new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4)
             .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)),
         // algae mode
-        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeBarge)
-            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeBarge)), 
+        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeTop)
+            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeTop)), 
         mode
       )
     );
@@ -161,8 +161,8 @@ public class RobotContainer {
         new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL3)
             .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL3)),
         // algae mode
-        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeTop)
-            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeTop)), 
+        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeBottom)
+            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeBottom)), 
         mode)
     );
     buttonBoard1[8].whileTrue(
@@ -171,8 +171,18 @@ public class RobotContainer {
         new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2)
             .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL2)),
         // algae mode
-        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeBottom)
-            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeBottom)), 
+        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeOnCoral)
+            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeOnCoral)), 
+        mode)
+    );
+    buttonBoard1[4].whileTrue(
+      Commands.either(
+        // coral mode
+        new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)
+            .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL1)),
+        // algae mode
+        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeProcessor)
+            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeProcessor)), 
         mode)
     );
   
@@ -220,6 +230,7 @@ public class RobotContainer {
     buttonBoard1[10].whileTrue(new ManipulateGamePiece(_scorer, mode, false));
     buttonBoard2[4].whileTrue(new ManipulateGamePiece(_scorer, mode, true));
     buttonBoard1[11].whileTrue(new IntakeCoralUntilIn(_scorer));
+    buttonBoard1[9].whileTrue(new EjectCoralUntilOut(_scorer));
     buttonBoard1[12].whileTrue(new ManipulateGamePiece(_scorer, mode, true, true));
 
     buttonBoard1[1].whileTrue(new OperateClimberWithButtons(_climb, false));

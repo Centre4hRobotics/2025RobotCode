@@ -25,6 +25,8 @@ public class DriveToTag extends Command {
   
   private double _laserDistanceToTagX, _laserRotationToTag;
 
+  private double _offsetY;
+
   private PIDController _visionHeadingPID; 
   private PIDController _visionDriveXPID;
   private PIDController _visionDriveYPID;
@@ -41,6 +43,8 @@ public class DriveToTag extends Command {
     _visionHeadingPID = new PIDController(VisionConstants.tagTurningP, VisionConstants.tagTurningI, VisionConstants.tagTurningD);
     _visionDriveXPID = new PIDController(VisionConstants.tagDriveXP, VisionConstants.tagDriveXI, VisionConstants.tagDriveXD);
     _visionDriveYPID = new PIDController(VisionConstants.tagDriveYP, VisionConstants.tagDriveYI, VisionConstants.tagDriveYD);
+
+    _offsetY = 0;
     
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
@@ -52,6 +56,12 @@ public class DriveToTag extends Command {
     _isFinished = false;
 
     _vision.setCurrentSide(_side);
+
+    if(_side.equals("LEFT")) {
+      _offsetY = 0.05;
+    } else {
+      _offsetY = -0.05;
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -70,7 +80,7 @@ public class DriveToTag extends Command {
         _cameraDistanceToTagY = position.getY();
 
         velocityTheta = _visionHeadingPID.calculate(_cameraRotationToTag);
-        velocityY = -_visionDriveYPID.calculate(_cameraDistanceToTagY);
+        velocityY = -_visionDriveYPID.calculate(_cameraDistanceToTagY + _offsetY);
 
       } else {
         _laserRotationToTag = _vision.getLaserAngle();
@@ -80,7 +90,7 @@ public class DriveToTag extends Command {
         velocityY = 0;
       }
 
-      velocityX = _visionDriveXPID.calculate(_laserDistanceToTagX + 0.1);
+      velocityX = _visionDriveXPID.calculate(_laserDistanceToTagX);
 
       _drive.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(-velocityX, velocityY, -velocityTheta));
     }
@@ -89,8 +99,8 @@ public class DriveToTag extends Command {
       _cameraDistanceToTagX = position.getX();
       _cameraDistanceToTagY = position.getY();
 
-      velocityY = _visionDriveYPID.calculate(_cameraDistanceToTagY);
-      velocityX = _visionDriveXPID.calculate(_cameraDistanceToTagX - 0.9);
+      velocityY = _visionDriveYPID.calculate(_cameraDistanceToTagY + _offsetY);
+      velocityX = _visionDriveXPID.calculate(_cameraDistanceToTagX);
       velocityTheta = _visionHeadingPID.calculate(_cameraRotationToTag);
 
       if (Math.abs(_cameraRotationToTag) < 0.03)

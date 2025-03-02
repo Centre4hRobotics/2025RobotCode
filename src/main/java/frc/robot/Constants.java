@@ -70,8 +70,8 @@ public final class Constants {
       {
         case COMPETITION:
           maxAttainableSpeed = 4.2;
-          maxSlowDriveSpeed = 2;
-          maxFastDriveSpeed = .7;
+          maxSlowDriveSpeed = 1.5;
+          maxFastDriveSpeed = 4;
           maxDriveAcceleration = 1;
           maxRotationSpeed = 1.5 * Math.PI;
           maxRotationAcceleration = 3 * Math.PI;
@@ -297,9 +297,11 @@ public final class Constants {
     public static final double tagDriveXP;
     public static final double tagDriveXI; 
     public static final double tagDriveXD;
+
     public static final double tagDriveYP;
     public static final double tagDriveYI; 
     public static final double tagDriveYD;
+
     public static final double tagTurningP;
     public static final double tagTurningI; 
     public static final double tagTurningD;
@@ -310,16 +312,16 @@ public final class Constants {
         case COMPETITION:
           // Forwards
           tagDriveXP = 0.7; //.55
-          tagDriveXI = 0; 
+          tagDriveXI = 0.03; 
           tagDriveXD = 0;
           // Side
-          tagDriveYP = 1.5; 
-          tagDriveYI = 0; 
-          tagDriveYD = 0.1;  
+          tagDriveYP = 2; 
+          tagDriveYI = 0.0; 
+          tagDriveYD = 0.02; 
           // Turning
-          tagTurningP = 0.20; //.1
-          tagTurningI = 0.03; 
-          tagTurningD = 0.03;
+          tagTurningP = 2; //.1
+          tagTurningI = 0.0; 
+          tagTurningD = 0.0;
           break;
         case PRACTICE:
         default:
@@ -344,25 +346,28 @@ public final class Constants {
   public static class ElevatorConstants {
     // coral
     public static double heightCoralL1 = 0; 
-    public static double heightCoralL2 = 22.423;
-    public static double heightCoralL3 = 45.914;
-    public static double heightCoralL4 = 85; 
+    public static double heightCoralL2 = 18.3;
+    public static double heightCoralL3 = 43.4;
+    public static double heightCoralL4 = 83; 
 
-    public static double heightAlgaeProcessor = 0; 
-    public static double heightAlgaeDefault = 0;
-    public static double heightAlgaeBottom = 0; 
-    public static double heightAlgaeTop = 0; 
-    public static double heightAlgaeBarge = 0;
+    public static double heightAlgaeProcessor = 20; 
+    public static double heightAlgaeOnCoral = 18.4; 
+    public static double heightAlgaeDefault = 47;
+    public static double heightAlgaeBottom = 47; 
+    public static double heightAlgaeTop = 71; 
+    public static double heightAlgaeBarge = 40;
 
-    public static final double maxHeight = 85; //add
+    public static final double maxHeight = 85;
+    public static final double maxFullSpeedHeight = 20;
+    public static final double maxHeightVelocityPercent = 0.1;
 
-    public static final double elevatorP = 2;
+    public static final double elevatorP = 3.5;
 
     public static final double elevatorI = 0;
     public static final double elevatorD = 0;
 
-    public static final double leadCurrentThreshold = 10;
-    public static final double followCurrentThreshold = 10;
+    public static final double leadCurrentThreshold = 25;
+    public static final double followCurrentThreshold = 25;
 
     public static final double heightTolerance = 0.2;
   }
@@ -371,17 +376,19 @@ public final class Constants {
     //coral
     public static double rotationCoralDefault = 0; 
     public static double rotationL1 = 0; 
-    public static double rotationL2 = 0; 
+    public static double rotationL2 = 2; 
     public static double rotationL3 = 0;
-    public static double rotationL4 = 5.9005; 
+    public static double rotationL4 = 5.9; 
 
     // algae
-    public static double rotationAlgaeTop = 40; 
-    public static double rotationAlgaeBottom = 40;
-    public static double rotationAlgaeDefault = 40; 
+    public static double rotationAlgaeTop = 36.5; 
+    public static double rotationAlgaeOnCoral = 34; 
+    public static double rotationAlgaeBottom = 36.5;
+    public static double rotationAlgaeDefault = 36.5; 
+    public static double rotationAlgaeProcessor = 40;
     public static double rotationAlgaeBarge = 40; //this is a meme
 
-    public static final double rotationP = 3;
+    public static final double rotationP = 2;
     public static final double rotationI = 0;
     public static final double rotationD = 0;
 
@@ -389,16 +396,16 @@ public final class Constants {
     public static final int scoringCurrentThreshold = 40;
     public static final double scoringCurrentWithCoral = 20;
 
-    public static final double numRotationsToIntake = 0.85;
-    public static final double numRotationsToEject = 3;
+    public static final double numRotationsToIntake = 0.1;
+    public static final double numRotationsToEject = 2;
     
-    public static final double intakingCoralVoltage = 3.0;
-    public static final double ejectingCoralVoltage = 3.0;
-    public static final double backdrivingCoralVoltage = -3.0;
+    public static final double intakingCoralVoltage = -3.0;
+    public static final double ejectingCoralVoltage = -3.0;
+    public static final double backdrivingCoralVoltage = 3.0;
     public static final double stuckCoralVoltage = 8.0;
 
-    public static final double intakingAlgaeVoltage = -3.0;
-    public static final double ejectingAlgaeVoltage = 3.0;
+    public static final double intakingAlgaeVoltage = -6.0;
+    public static final double ejectingAlgaeVoltage = 6.0;
     public static final double holdingAlageVoltage = -1.0;
 
     public static final double rotationTolerance = 1; //add

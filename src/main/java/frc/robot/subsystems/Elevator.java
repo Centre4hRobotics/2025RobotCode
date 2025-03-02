@@ -59,11 +59,13 @@ public class Elevator extends SubsystemBase {
         return Math.abs(getHeight() - target) < ElevatorConstants.heightTolerance;
     }
 
-    public double heightFraction() {
-        double fraction = getHeight()/ElevatorConstants.maxHeight;
-        if(fraction > 0 && fraction <= 1) {return fraction; }
-        else if(fraction <= 0) {return 0; }
-        else {return 1; }
+    public double getHeightFraction() {    
+        double heightDiff = getHeight() - ElevatorConstants.maxFullSpeedHeight;
+        if(heightDiff > 0) {
+            return 1 - heightDiff/(ElevatorConstants.maxHeight - ElevatorConstants.maxFullSpeedHeight) * (1-ElevatorConstants.maxHeightVelocityPercent);
+        } else {
+            return 1;
+        }
     }
 
     public void syncEncoders() {
@@ -90,7 +92,7 @@ public class Elevator extends SubsystemBase {
         _leadConfiguration.Slot0.kI = ElevatorConstants.elevatorI;
         _leadConfiguration.Slot0.kD = ElevatorConstants.elevatorD;
 
-        _leadConfiguration.Voltage.withPeakForwardVoltage(6).withPeakReverseVoltage(-3);
+        _leadConfiguration.Voltage.withPeakForwardVoltage(9).withPeakReverseVoltage(-6);
 
         _leadMotor.getConfigurator().apply(_leadConfiguration);
     }

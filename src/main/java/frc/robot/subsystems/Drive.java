@@ -79,11 +79,13 @@ public class Drive extends SubsystemBase {
   // private HolonomicPathFollowerConfig _pathFollowerConfig;
   private RobotConfig _config;
   private SwerveDriveKinematics _kinematics;
+  private Elevator _elevator;
 
   /** Creates a new DriveSubsystem. */
-  public Drive() {
+  public Drive(Elevator elevator) {
 
     _kinematics = RobotConstants.driveKinematics;
+    _elevator = elevator;
     
     try{
       _config = RobotConfig.fromGUISettings();
@@ -195,6 +197,8 @@ public class Drive extends SubsystemBase {
       double triggerSpeedupValue = (RobotConstants.maxFastDriveSpeed - RobotConstants.maxSlowDriveSpeed) * triggerSpeedupInput;
       xVelocity *= RobotConstants.maxSlowDriveSpeed + triggerSpeedupValue;
       yVelocity *= RobotConstants.maxSlowDriveSpeed + triggerSpeedupValue;
+      xVelocity *= _elevator.getHeightFraction();
+      yVelocity *= _elevator.getHeightFraction();
 
     // in deadzone
     if (angularVelocity == 0) {
