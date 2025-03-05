@@ -401,7 +401,7 @@ public final class Constants {
     
     public static final double intakingCoralVoltage = -3.0;
     public static final double ejectingCoralVoltage = -3.0;
-    public static final double backdrivingCoralVoltage = 3.0;
+    public static final double backdrivingCoralVoltage = 1.0;
     public static final double stuckCoralVoltage = 8.0;
 
     public static final double intakingAlgaeVoltage = -6.0;
