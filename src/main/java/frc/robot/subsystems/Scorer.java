@@ -120,7 +120,7 @@ public class Scorer extends SubsystemBase {
     private void configRotationMotor() {
         SparkFlexConfig config = new SparkFlexConfig();
 
-        config.inverted(false);
+        config.inverted(true);
         config.idleMode(IdleMode.kBrake);
 
         config.smartCurrentLimit(ScorerConstants.rotationCurrentThreshold);
