@@ -7,25 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "drive 3m"
+            "pathName": "ps to c"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "intake coral"
+            "name": "drive to right tag"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 0.5
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "eject coral"
+            "pathName": "c to ps"
           }
         }
       ]

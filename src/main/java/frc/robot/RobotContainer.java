@@ -24,6 +24,7 @@ import frc.robot.Constants.ScorerConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
+import frc.robot.commands.DriveWithSpeed;
 import frc.robot.commands.EjectCoralUntilOut;
 import frc.robot.commands.ElevatorToHeight;
 import frc.robot.commands.IntakeCoralUntilIn;
@@ -75,8 +76,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("drive to left tag", new DriveToTag(_drive, _vision, 0, VisionConstants.centeredDeltaX, "LEFT"));
     NamedCommands.registerCommand("drive to right tag", new DriveToTag(_drive, _vision, 0, VisionConstants.centeredDeltaX, "RIGHT"));
 
-    NamedCommands.registerCommand("default coral position", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)
-    .andThen(new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault)));
+    NamedCommands.registerCommand("default coral position", new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault)
+    .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
     NamedCommands.registerCommand("prep to score L2", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2)
     .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL2)));
     NamedCommands.registerCommand("prep to score L3", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL3)
@@ -84,7 +85,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("prep to score L4", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4)
     .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)));
 
-    NamedCommands.registerCommand("intake coral", new IntakeCoralUntilIn(_scorer));
+    NamedCommands.registerCommand("slow drive forwards", new DriveWithSpeed(_drive, 0.2));
+    NamedCommands.registerCommand("slow drive backwards", new DriveWithSpeed(_drive, -0.2));
+
+    NamedCommands.registerCommand("intake coral", new IntakeCoralUntilIn(_scorer).withTimeout(2));
     NamedCommands.registerCommand("eject coral", new EjectCoralUntilOut(_scorer));
     
 
@@ -218,6 +222,8 @@ public class RobotContainer {
       Commands.runOnce(() -> _elevator.syncEncoders(), _elevator) 
     );
 
+    buttonBoard1[3].whileTrue(new DriveWithSpeed(_drive, 1));
+
     // zero scorer rotation encoder
     buttonBoard2[1].onTrue(
       Commands.runOnce(() -> _scorer.syncRotationEncoder(), _scorer) 
@@ -233,8 +239,8 @@ public class RobotContainer {
     buttonBoard1[9].whileTrue(new EjectCoralUntilOut(_scorer));
     buttonBoard1[12].whileTrue(new ManipulateGamePiece(_scorer, mode, true, true));
 
-    buttonBoard1[1].whileTrue(new OperateClimberWithButtons(_climb, false));
-    buttonBoard1[2].whileTrue(new OperateClimberWithButtons(_climb, true));
+    // buttonBoard1[1].whileTrue(new OperateClimberWithButtons(_climb, false));
+    // buttonBoard1[2].whileTrue(new OperateClimberWithButtons(_climb, true));
   
 
     // Syncs encoders   
@@ -257,6 +263,9 @@ public class RobotContainer {
   public void autoChooserInit() {
     String[] autoselector = {
       "Driving Test",
+      "New Auto",
+      "Copy of Driving Test",
+      "drive 3m",
       "Test Scorer NamedCommands",
       "Test Elevator NamedCommands",
       "Unoptomized Test"

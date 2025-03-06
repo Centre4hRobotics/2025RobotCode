@@ -26,7 +26,7 @@ public class EjectCoralUntilOut extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _scorer.setScoringVoltage(ScorerConstants.ejectingCoralVoltage);
+    _scorer.setScoringVoltage(4);
     _isFinished = _scorer.getScoringPosition() > _startingPos + ScorerConstants.numRotationsToEject;
   }
 

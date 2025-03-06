@@ -163,5 +163,6 @@ public class Vision extends SubsystemBase {
         // This method will be called once per scheduler run
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
         nt.getTable("AprilTag Vision").getEntry("laser angle").setValue(getLaserAngle()*180/Math.PI); 
+        nt.getTable("AprilTag Vision").getEntry("laser distance").setValue(getLaserDistance()); 
     }
 }

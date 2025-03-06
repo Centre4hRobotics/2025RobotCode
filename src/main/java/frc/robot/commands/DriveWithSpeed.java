@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.subsystems.Drive;
@@ -40,7 +41,7 @@ public class DriveWithSpeed extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _driveSubsystem.drive(_speed, 0, 0, 0);
+    _driveSubsystem.setDesiredRobotRelativeSpeeds(new ChassisSpeeds(_speed, 0, 0));
   }
 
   // Called once the command ends or is interrupted.

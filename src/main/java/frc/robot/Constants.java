@@ -45,7 +45,7 @@ public final class Constants {
       switch(robotType)
       {
         case COMPETITION:
-          wheelDiameter = 3.83;
+          wheelDiameter = 3.89;
           break;
         case PRACTICE:
         default:
@@ -213,7 +213,7 @@ public final class Constants {
           drivingI = 0; 
           drivingD = 0;
           drivingS = 0.9;
-          drivingFF = 0.76;
+          drivingFF = 0.73;
 
           autoDriveP = 0.7;
           autoDriveI = 0; 
@@ -311,7 +311,7 @@ public final class Constants {
       {
         case COMPETITION:
           // Forwards
-          tagDriveXP = 0.7; //.55
+          tagDriveXP = 0.6; //.55
           tagDriveXI = 0.03; 
           tagDriveXD = 0;
           // Side
@@ -388,7 +388,7 @@ public final class Constants {
     public static double rotationAlgaeProcessor = 40;
     public static double rotationAlgaeBarge = 40; //this is a meme
 
-    public static final double rotationP = 2;
+    public static final double rotationP = 0.16;
     public static final double rotationI = 0;
     public static final double rotationD = 0;
 
@@ -396,12 +396,12 @@ public final class Constants {
     public static final int scoringCurrentThreshold = 40;
     public static final double scoringCurrentWithCoral = 20;
 
-    public static final double numRotationsToIntake = 0.1;
-    public static final double numRotationsToEject = 2;
+    public static final double numRotationsToIntake = 0.22;
+    public static final double numRotationsToEject = 15;
     
-    public static final double intakingCoralVoltage = -3.0;
-    public static final double ejectingCoralVoltage = -3.0;
-    public static final double backdrivingCoralVoltage = 1.0;
+    public static final double intakingCoralVoltage = -1.0;
+    public static final double ejectingCoralVoltage = -1.0;
+    public static final double backdrivingCoralVoltage = 3.0;
     public static final double stuckCoralVoltage = 8.0;
 
     public static final double intakingAlgaeVoltage = -6.0;

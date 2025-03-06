@@ -10,12 +10,11 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator;
 
-public class OperateElevatorWithJoystick extends Command {
+public class MoveElevatorZeroWithJoystick extends Command {
 
   private Elevator _elevator;
   private Joystick _joystick;
 
-  private boolean _temp;
 
   /**
    * This command is responsible for teleop drive.
@@ -25,11 +24,10 @@ public class OperateElevatorWithJoystick extends Command {
    * 
    * Comment By: EternalSyntaxError
    */
-  public OperateElevatorWithJoystick(Elevator elevator, Joystick joystick) {
+  public MoveElevatorZeroWithJoystick(Elevator elevator, Joystick joystick) {
     _elevator = elevator;
     _joystick = joystick;
 
-    _temp = false;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_elevator);
