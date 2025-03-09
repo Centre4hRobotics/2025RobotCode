@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -182,8 +183,8 @@ public class RobotContainer {
     buttonBoard1[4].whileTrue(
       Commands.either(
         // coral mode
-        new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)
-            .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL1)),
+        new RotateScorer(_scorer, ScorerConstants.rotationL1)
+        .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)),
         // algae mode
         new RotateScorer(_scorer, ScorerConstants.rotationAlgaeProcessor)
             .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeProcessor)), 
@@ -193,29 +194,23 @@ public class RobotContainer {
     buttonBoard2[7].onTrue(new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
     buttonBoard2[7].onFalse(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)));
 
-    BooleanSupplier notOnDefault = () -> { return (
-        buttonBoard1[6].getAsBoolean() && buttonBoard1[5].getAsBoolean()
-      ) || (
-        buttonBoard1[6].getAsBoolean() && buttonBoard1[8].getAsBoolean()
-      ) || (
-        buttonBoard1[5].getAsBoolean() && buttonBoard1[8].getAsBoolean()
-      ); };
+    BooleanSupplier heightButtonPressed = () -> buttonBoard1[6].getAsBoolean() || buttonBoard1[5].getAsBoolean() || buttonBoard1[8].getAsBoolean();
 
     buttonBoard1[6].onFalse(
-      Commands.either(
+      Commands.either(new InstantCommand(), Commands.either(
         new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
         new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
-        mode));
+        mode), heightButtonPressed));
     buttonBoard1[5].onFalse(
-      Commands.either(
+      Commands.either(new InstantCommand(), Commands.either(
         new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
         new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
-        mode));
+        mode), heightButtonPressed));
     buttonBoard1[8].onFalse(
-      Commands.either(
+      Commands.either(new InstantCommand(), Commands.either(
         new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)).withTimeout(2), 
         new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
-        mode));
+        mode), heightButtonPressed));
 
     // zero elevator encoder
     buttonBoard2[2].onTrue(
@@ -233,8 +228,8 @@ public class RobotContainer {
     _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, _functionJoystick1));
 
     // runs wheels on scorer
-    buttonBoard1[10].whileTrue(new ManipulateGamePiece(_scorer, mode, false));
-    buttonBoard2[4].whileTrue(new ManipulateGamePiece(_scorer, mode, true));
+    buttonBoard1[10].whileTrue(new ManipulateGamePiece(_scorer, mode, true));
+    buttonBoard2[4].whileTrue(new ManipulateGamePiece(_scorer, mode, false));
     buttonBoard1[11].whileTrue(new IntakeCoralUntilIn(_scorer));
     buttonBoard1[9].whileTrue(new EjectCoralUntilOut(_scorer));
     buttonBoard1[12].whileTrue(new ManipulateGamePiece(_scorer, mode, true, true));

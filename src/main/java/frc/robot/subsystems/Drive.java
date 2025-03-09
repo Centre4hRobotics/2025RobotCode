@@ -205,7 +205,7 @@ public class Drive extends SubsystemBase {
       // if not already locked (stick just released)
       if (!_inYawLock) {
         if(Math.abs(getGyroAngularVelocity()) < .5) {
-          _inYawLock = true;
+          _inYawLock = false;
           _desiredHeading = getHeading();
         }
       } else { 
@@ -240,7 +240,7 @@ public class Drive extends SubsystemBase {
    */
   public void setDesiredHeading(double heading) {
     _desiredHeading = heading; // + compensationAngle;
-    _inYawLock = true;
+    _inYawLock = false;
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {

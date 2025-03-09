@@ -37,7 +37,7 @@ public class OperateScorerWithJoystick extends Command {
   @Override
   public void execute() {
     double rotation = _scorer.getSetpoint();
-    double input = _joystick.getY();
+    double input = -_joystick.getY();
 
     if (input > 0.2) {
       _scorer.setRotation(rotation + 0.1);

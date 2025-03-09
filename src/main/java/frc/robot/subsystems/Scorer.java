@@ -6,8 +6,10 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
@@ -25,6 +27,7 @@ public class Scorer extends SubsystemBase {
 
     private SparkFlex _scoringMotor;
     private SparkClosedLoopController _scoringPID;
+    private SparkLimitSwitch _coralLimitSwitch;
 
     private double _setpoint;
 
@@ -43,6 +46,8 @@ public class Scorer extends SubsystemBase {
 
         _rotationEncoder.setPosition(0);
         _scoringEncoder.setPosition(0);
+
+        _coralLimitSwitch = _scoringMotor.getForwardLimitSwitch();
 
 
         _setpoint = 0;
@@ -92,6 +97,11 @@ public class Scorer extends SubsystemBase {
         return _setpoint;
     }
 
+    public boolean getCoralIn()
+    {
+        return _coralLimitSwitch.isPressed();
+    }
+
     public boolean isOnTarget(double target) {
         return Math.abs(getRotation() - target) < ScorerConstants.rotationTolerance;
     }
@@ -101,7 +111,9 @@ public class Scorer extends SubsystemBase {
         // This method will be called once per scheduler run
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
         nt.getTable("Scorer").getEntry("rotation encoder value").setValue(getRotation());
+        nt.getTable("Scorer").getEntry("rotation setpoint").setValue(getSetpoint());
         nt.getTable("Scorer").getEntry("scoring velocity").setValue(getScoringVelocity());
+        nt.getTable("Scorer").getEntry("limit switch value").setValue(_coralLimitSwitch.isPressed());
     }
 
     private void configScoringMotor() {
@@ -112,6 +124,9 @@ public class Scorer extends SubsystemBase {
 
         config.smartCurrentLimit(ScorerConstants.scoringCurrentThreshold);
 
+        config.limitSwitch.forwardLimitSwitchEnabled(false);
+        config.limitSwitch.forwardLimitSwitchType(Type.kNormallyClosed); 
+
         config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
         _scoringMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -120,7 +135,7 @@ public class Scorer extends SubsystemBase {
     private void configRotationMotor() {
         SparkFlexConfig config = new SparkFlexConfig();
 
-        config.inverted(true);
+        config.inverted(false);
         config.idleMode(IdleMode.kBrake);
 
         config.smartCurrentLimit(ScorerConstants.rotationCurrentThreshold);

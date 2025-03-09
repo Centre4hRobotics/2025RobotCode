@@ -8,18 +8,15 @@ import frc.robot.subsystems.Scorer;
 public class IntakeCoralUntilIn extends Command {
 
     private Scorer _scorer;
+    private boolean _isFinished;
 
-    private boolean _coralIn;
     private static enum CoralStatus
     {
       spiningUp,
-      waitingForCoral,
-      hasCoral,
-      coralReady
+      backdriving
     }
 
     private CoralStatus _state;
-    private boolean _isFinished;
     private double _startingPos;
 
     public IntakeCoralUntilIn(Scorer scorer) {
@@ -29,40 +26,25 @@ public class IntakeCoralUntilIn extends Command {
     // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    _state = CoralStatus.spiningUp;
     _isFinished = false;
-    _startingPos = 0;
+    _state = CoralStatus.spiningUp;
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    switch (_state)
-    {
+    switch(_state) {
       case spiningUp:
-      _scorer.setScoringVoltage(3);
-        if(_scorer.getScoringVelocity() > 1300)
-          _state = CoralStatus.waitingForCoral;
-        break;
-      case waitingForCoral:
-        if (_scorer.getScoringVelocity() < 1100)
-        {
-          _state = CoralStatus.hasCoral;
+        _scorer.setScoringVoltage(ScorerConstants.autoIntakingCoralVoltage);
+        if(_scorer.getCoralIn()) {
           _startingPos = _scorer.getScoringPosition();
+          _state = CoralStatus.backdriving;
         }
         break;
-      case hasCoral:
-        if(_scorer.getScoringPosition() < _startingPos + ScorerConstants.numRotationsToIntake)
-          _scorer.setScoringVoltage(3);
-        else
-        {
-          _state = CoralStatus.coralReady;
-          _scorer.setScoringVoltage(0.0);
-        }
-        break;
-      case coralReady:
-        _isFinished = true;
+      case backdriving:
+        _scorer.setScoringVoltage(ScorerConstants.autoBackdrivingCoralVoltage);
+        _isFinished = _startingPos - _scorer.getScoringPosition() > ScorerConstants.numRotationsAutoBackdrive;
         break;
     }
   }
