@@ -7,13 +7,14 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.subsystems.Elevator;
+import frc.robot.Constants.ClimbConstants;
+import frc.robot.subsystems.Climb;
 
-public class OperateElevatorWithJoystick extends Command {
+public class OperateClimberWithJoystick extends Command {
 
-  private Elevator _elevator;
+  private Climb _climb;
   private Joystick _joystick;
+  private BooleanSupplier _mode;
 
   /**
    * This command is responsible for teleop drive.
@@ -23,12 +24,13 @@ public class OperateElevatorWithJoystick extends Command {
    * 
    * Comment By: EternalSyntaxError
    */
-  public OperateElevatorWithJoystick(Elevator elevator, Joystick joystick) {
-    _elevator = elevator;
+  public OperateClimberWithJoystick(Climb climb, Joystick joystick, BooleanSupplier mode) {
+    _climb = climb;
     _joystick = joystick;
+    _mode = mode;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(_elevator);
+    addRequirements(_climb);
   }
 
   // Called when the command is initially scheduled.
@@ -40,21 +42,11 @@ public class OperateElevatorWithJoystick extends Command {
   @Override
 
   public void execute() {
-    double input = -_joystick.getX();
-    double height = _elevator.getSetpoint();
-      if(input > 0.5) {
-        height += 0.5;
-        // if(height > ElevatorConstants.maxHeight) {
-        //   height = ElevatorConstants.maxHeight;
-        // }
-        _elevator.setHeight(height);
-      } else if(input < -0.5) {
-        height -= 0.5;
-        // if(height < 0) {
-        //   height = 0;
-        // }
-        _elevator.setHeight(height);
-      }
+    if(_mode.getAsBoolean()) {
+      double input = _joystick.getY();
+      input *= ClimbConstants.climbingVoltage;
+      _climb.setVoltage(input);
+    }
   }
 
   // Returns true when the command should end.

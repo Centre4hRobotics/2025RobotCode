@@ -291,7 +291,7 @@ public final class Constants {
     public static final double centeredDeltaX = RobotConstants.trackWidth/2.0;
     // Positive offset is to the right
     public static final double centeredDeltaY = 0;
-    public static final double laserDistanceToReef = 0.3;
+    public static final double laserDistanceToReef = 0.28;
 
     // Tag refers to the april tag positioning system
     public static final double tagDriveXP;
@@ -311,9 +311,9 @@ public final class Constants {
       {
         case COMPETITION:
           // Forwards
-          tagDriveXP = 0.6; //.55
-          tagDriveXI = 0.03; 
-          tagDriveXD = 0;
+          tagDriveXP = 1; //.55
+          tagDriveXI = 0; 
+          tagDriveXD = 0.1;
           // Side
           tagDriveYP = 2; 
           tagDriveYI = 0.0; 
@@ -410,7 +410,7 @@ public final class Constants {
     public static final double ejectingAlgaeVoltage = 6.0;
     public static final double holdingAlageVoltage = -1.0;
 
-    public static final double rotationTolerance = 1; //add
+    public static final double rotationTolerance = .2; //add
 
     public static final double lowestElevatingRotationCoral = 0; //add
     public static final double highestElevatingRotationCoral = 0; //add
@@ -429,12 +429,7 @@ public final class Constants {
 
   public static class ClimbConstants {
     public static final int climbingCurrentThreshold = 30;
-
-    public static final double climbingP = 1.0;
-    public static final double climbingI = 0.0;
-    public static final double climbingD = 0.0;
-
-    public static final double climbRotationTolerance = 5.0;
+    public static final int climbingVoltage = 10;
   }
 
   public static enum FieldSide {

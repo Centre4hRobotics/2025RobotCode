@@ -58,9 +58,9 @@ public class DriveToTag extends Command {
     _vision.setCurrentSide(_side);
 
     if(_side.equals("LEFT")) {
-      _offsetY = 0.03;
+      _offsetY = -0.02;
     } else {
-      _offsetY = -0.03;
+      _offsetY = 0.02;
     }
   }
 

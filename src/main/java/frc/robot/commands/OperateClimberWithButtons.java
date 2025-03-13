@@ -37,20 +37,16 @@ public class OperateClimberWithButtons extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rotation = _climb.getSetpoint();
-
     if (_forwards) {
-        // _climb.setRotation(rotation + 0.1);
-        _climb.setRotationVoltage(10.0);
+        _climb.setVoltage(10.0);
     } else {
-        // _climb.setRotation(rotation - 0.1);
-        _climb.setRotationVoltage(-10.0);
+        _climb.setVoltage(-10.0);
     }
   }
 
   @Override
   public void end(boolean interrupted) {
-    _climb.setRotationVoltage(0);
+    _climb.setVoltage(0);
   }
 
   // Returns true when the command should end.

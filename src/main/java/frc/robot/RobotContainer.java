@@ -31,6 +31,7 @@ import frc.robot.commands.ElevatorToHeight;
 import frc.robot.commands.IntakeCoralUntilIn;
 import frc.robot.commands.ManipulateGamePiece;
 import frc.robot.commands.OperateClimberWithButtons;
+import frc.robot.commands.OperateClimberWithJoystick;
 import frc.robot.commands.OperateElevatorWithJoystick;
 import frc.robot.commands.OperateScorerWithJoystick;
 import frc.robot.commands.ResetGyro;
@@ -85,6 +86,10 @@ public class RobotContainer {
     .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL3)));
     NamedCommands.registerCommand("prep to score L4", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4)
     .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)));
+
+    NamedCommands.registerCommand("elevate to L2", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2));
+    NamedCommands.registerCommand("elevate to L3", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL3));
+    NamedCommands.registerCommand("elevate to L4", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4));
 
     NamedCommands.registerCommand("slow drive forwards", new DriveWithSpeed(_drive, 0.2));
     NamedCommands.registerCommand("slow drive backwards", new DriveWithSpeed(_drive, -0.2));
@@ -146,7 +151,8 @@ public class RobotContainer {
       buttonBoard2[i] = new JoystickButton(_functionJoystick2, i);
     }
 
-    BooleanSupplier mode = buttonBoard2[7];
+    BooleanSupplier gamepieceMode = buttonBoard2[7];
+   BooleanSupplier climbMode = buttonBoard2[6];
 
     // prep to score buttons
     buttonBoard1[6].whileTrue(
@@ -157,7 +163,7 @@ public class RobotContainer {
         // algae mode
         new RotateScorer(_scorer, ScorerConstants.rotationAlgaeTop)
             .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeTop)), 
-        mode
+        gamepieceMode
       )
     );
     buttonBoard1[5].whileTrue(
@@ -168,7 +174,7 @@ public class RobotContainer {
         // algae mode
         new RotateScorer(_scorer, ScorerConstants.rotationAlgaeBottom)
             .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeBottom)), 
-        mode)
+        gamepieceMode)
     );
     buttonBoard1[8].whileTrue(
       Commands.either(
@@ -178,7 +184,7 @@ public class RobotContainer {
         // algae mode
         new RotateScorer(_scorer, ScorerConstants.rotationAlgaeOnCoral)
             .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeOnCoral)), 
-        mode)
+        gamepieceMode)
     );
     buttonBoard1[4].whileTrue(
       Commands.either(
@@ -188,29 +194,29 @@ public class RobotContainer {
         // algae mode
         new RotateScorer(_scorer, ScorerConstants.rotationAlgaeProcessor)
             .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeProcessor)), 
-        mode)
+        gamepieceMode)
     );
   
     buttonBoard2[7].onTrue(new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
     buttonBoard2[7].onFalse(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)));
-
+    
     BooleanSupplier heightButtonPressed = () -> buttonBoard1[6].getAsBoolean() || buttonBoard1[5].getAsBoolean() || buttonBoard1[8].getAsBoolean();
 
     buttonBoard1[6].onFalse(
       Commands.either(new InstantCommand(), Commands.either(
         new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
         new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
-        mode), heightButtonPressed));
+        gamepieceMode), heightButtonPressed));
     buttonBoard1[5].onFalse(
       Commands.either(new InstantCommand(), Commands.either(
         new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
         new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
-        mode), heightButtonPressed));
+        gamepieceMode), heightButtonPressed));
     buttonBoard1[8].onFalse(
       Commands.either(new InstantCommand(), Commands.either(
         new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)).withTimeout(2), 
         new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
-        mode), heightButtonPressed));
+        gamepieceMode), heightButtonPressed));
 
     // zero elevator encoder
     buttonBoard2[2].onTrue(
@@ -223,19 +229,19 @@ public class RobotContainer {
     buttonBoard2[1].onTrue(
       Commands.runOnce(() -> _scorer.syncRotationEncoder(), _scorer) 
     );
-
     _elevator.setDefaultCommand(new OperateElevatorWithJoystick(_elevator, _functionJoystick1));
-    _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, _functionJoystick1));
+    _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, _functionJoystick1, climbMode));
+    _climb.setDefaultCommand(new OperateClimberWithJoystick(_climb, _functionJoystick1, climbMode));
 
     // runs wheels on scorer
-    buttonBoard1[10].whileTrue(new ManipulateGamePiece(_scorer, mode, true));
-    buttonBoard2[4].whileTrue(new ManipulateGamePiece(_scorer, mode, false));
+    buttonBoard1[10].whileTrue(new ManipulateGamePiece(_scorer, gamepieceMode, true));
+    buttonBoard2[4].whileTrue(new ManipulateGamePiece(_scorer, gamepieceMode, false));
     buttonBoard1[11].whileTrue(new IntakeCoralUntilIn(_scorer));
     buttonBoard1[9].whileTrue(new EjectCoralUntilOut(_scorer));
-    buttonBoard1[12].whileTrue(new ManipulateGamePiece(_scorer, mode, true, true));
+    buttonBoard1[12].whileTrue(new ManipulateGamePiece(_scorer, gamepieceMode, true, true));
 
-    // buttonBoard1[1].whileTrue(new OperateClimberWithButtons(_climb, false));
-    // buttonBoard1[2].whileTrue(new OperateClimberWithButtons(_climb, true));
+    buttonBoard1[1].whileTrue(new OperateClimberWithButtons(_climb, false));
+    buttonBoard1[2].whileTrue(new OperateClimberWithButtons(_climb, true));
   
 
     // Syncs encoders   
@@ -257,13 +263,10 @@ public class RobotContainer {
 
   public void autoChooserInit() {
     String[] autoselector = {
-      "Driving Test",
-      "New Auto",
-      "Copy of Driving Test",
-      "drive 3m",
-      "Test Scorer NamedCommands",
-      "Test Elevator NamedCommands",
-      "Unoptomized Test"
+      "drive 1m",
+      "e4, c4",
+      "f4, e4",
+      "g4"
     };
     SmartDashboard.putStringArray("Auto List", autoselector);
     System.out.print("Loading selections");

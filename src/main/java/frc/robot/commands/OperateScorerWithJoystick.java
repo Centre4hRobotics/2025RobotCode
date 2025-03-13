@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import javax.lang.model.util.ElementScanner14;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -11,6 +13,7 @@ public class OperateScorerWithJoystick extends Command {
 
   private Scorer _scorer;
   private Joystick _joystick;
+  private BooleanSupplier _mode;
 
   /**
    * This command is responsible for teleop drive.
@@ -20,9 +23,10 @@ public class OperateScorerWithJoystick extends Command {
    * 
    * Comment By: EternalSyntaxError
    */
-  public OperateScorerWithJoystick(Scorer scorer, Joystick joystick) {
+  public OperateScorerWithJoystick(Scorer scorer, Joystick joystick, BooleanSupplier mode) {
     _scorer = scorer;
     _joystick = joystick;
+    _mode = mode;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_scorer);
@@ -36,7 +40,8 @@ public class OperateScorerWithJoystick extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rotation = _scorer.getSetpoint();
+    if(!_mode.getAsBoolean()) {
+      double rotation = _scorer.getSetpoint();
     double input = -_joystick.getY();
 
     if (input > 0.2) {
@@ -45,6 +50,7 @@ public class OperateScorerWithJoystick extends Command {
       _scorer.setRotation(rotation - 0.1);
     } else {
       _scorer.setRotation(rotation);
+    }
     }
 
     // if(_controller.getLeftTriggerAxis() > 0)

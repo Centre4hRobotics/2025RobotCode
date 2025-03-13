@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "start to e"
+            "pathName": "start to f"
           }
         },
         {
@@ -57,7 +57,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "e to ps"
+            "pathName": "f to ps"
           }
         },
         {
@@ -82,7 +82,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ps to c"
+            "pathName": "ps to e"
           }
         },
         {
@@ -133,6 +133,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "processor side coral",
   "choreoAuto": false
 }

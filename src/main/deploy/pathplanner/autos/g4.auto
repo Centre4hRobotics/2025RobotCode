@@ -1,0 +1,63 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "start to g"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "drive to left tag"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "slow drive forwards"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "prep to score L4"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "eject coral"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "default coral position"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "processor side coral",
+  "choreoAuto": false
+}
