@@ -10,7 +10,7 @@ import frc.robot.subsystems.Drive;
 
 public class DriveWithJoystick extends Command {
 
-  private Drive _driveSubsystem;
+  private Drive _drive;
   private CommandXboxController _controller;
 
   /**
@@ -21,18 +21,18 @@ public class DriveWithJoystick extends Command {
    * 
    * Comment By: EternalSyntaxError
    */
-  public DriveWithJoystick(Drive driveSubsystem, CommandXboxController controller) {
-    _driveSubsystem = driveSubsystem;
+  public DriveWithJoystick(Drive drive, CommandXboxController controller) {
+    _drive = drive;
     _controller = controller;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(driveSubsystem);
+    addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // _driveSubsystem.syncEncoders();
+    _drive.setDesiredHeading(_drive.getHeading());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -51,6 +51,11 @@ public class DriveWithJoystick extends Command {
     double joystickXSpeedInput = -_controller.getRightY();
     double joystickYSpeedInput = -_controller.getRightX();
 
+    if(_drive.getSide()) {
+      joystickXSpeedInput *= -1;
+      joystickYSpeedInput *= -1;
+    }
+
     // finds the magnitude
     double totalThrottle = Math.hypot(joystickXSpeedInput, joystickYSpeedInput);
     
@@ -64,13 +69,13 @@ public class DriveWithJoystick extends Command {
       joystickYSpeedInput = totalThrottle * Math.sin(joystickAngle);
     }
 
-    _driveSubsystem.drive(joystickXSpeedInput, joystickYSpeedInput, joystickAngularVelocityInput, _controller.getRightTriggerAxis());
+    _drive.drive(joystickXSpeedInput, joystickYSpeedInput, joystickAngularVelocityInput, _controller.getRightTriggerAxis());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    _driveSubsystem.setDesiredStates(0, 0, 0);
+    _drive.setDesiredStates(0, 0, 0);
   }
 
   // Returns true when the command should end.

@@ -15,6 +15,7 @@ public class OperateClimberWithJoystick extends Command {
   private Climb _climb;
   private Joystick _joystick;
   private BooleanSupplier _mode;
+  private BooleanSupplier _zeroOverride;
 
   /**
    * This command is responsible for teleop drive.

@@ -32,6 +32,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.VoltageUnit;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -67,7 +68,7 @@ public class Drive extends SubsystemBase {
 
   private double _desiredHeading;
   private PIDController _headingPIDController;
-  private boolean _inYawLock = false;
+  private boolean _inYawLock = true;
 
   private SlewRateLimiter _slewRateLimiterX = new SlewRateLimiter(RobotConstants.maxSlewRate);
   private SlewRateLimiter _slewRateLimiterY = new SlewRateLimiter(RobotConstants.maxSlewRate);
@@ -205,7 +206,7 @@ public class Drive extends SubsystemBase {
       // if not already locked (stick just released)
       if (!_inYawLock) {
         if(Math.abs(getGyroAngularVelocity()) < .5) {
-          _inYawLock = false;
+          _inYawLock = true;
           _desiredHeading = getHeading();
         }
       } else { 
@@ -240,7 +241,7 @@ public class Drive extends SubsystemBase {
    */
   public void setDesiredHeading(double heading) {
     _desiredHeading = heading; // + compensationAngle;
-    _inYawLock = false;
+    _inYawLock = true;
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {
@@ -432,10 +433,17 @@ public class Drive extends SubsystemBase {
   }
 
   public void resetGyroAngle(double angle) {
-    //_gyro.reset();
     _gyro.setYaw(angle);
     _odometry.resetPose(new Pose2d());
     _odometry.resetRotation(new Rotation2d());
+  }
+
+  public boolean getSide() {
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      return alliance.get() == DriverStation.Alliance.Red;
+    }
+    return false;
   }
 
   public void log() {
@@ -480,8 +488,10 @@ public class Drive extends SubsystemBase {
   }
 
   public void flipGyro() {
-    resetGyroAngle(getGyroAngle() + 180);
-    setDesiredHeading(getGyroAngle());
+    double gyro = getGyroAngle();
+
+    resetGyroAngle(gyro + 180);
+    //setDesiredHeading(gyro + 180);
   }
 
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {

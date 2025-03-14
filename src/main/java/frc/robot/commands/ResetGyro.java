@@ -11,7 +11,7 @@ import frc.robot.subsystems.Drive;
 
 public class ResetGyro extends Command {
 
-  private Drive _driveSubsystem;
+  private Drive _drive;
   /**
    * Resets current gyro angle to 0.
    * 
@@ -20,7 +20,7 @@ public class ResetGyro extends Command {
    * Comment By: EternalSyntaxError
    */
   public ResetGyro(Drive drive) {
-    _driveSubsystem = drive;
+    _drive = drive;
     addRequirements(drive);
   }
 
@@ -28,11 +28,11 @@ public class ResetGyro extends Command {
   @Override
   public void initialize() 
   {
-    _driveSubsystem.resetGyroAngle();
-    _driveSubsystem.setDesiredHeading(0);
-    // if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-    //   _driveSubsystem.flipGyro();
-    // }
+    if(_drive.getSide()) {
+      _drive.resetGyroAngle(180);
+    } else {
+      _drive.resetGyroAngle();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

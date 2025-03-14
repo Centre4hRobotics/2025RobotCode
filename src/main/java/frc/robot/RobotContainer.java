@@ -116,9 +116,9 @@ public class RobotContainer {
   }
 
   public void startTeleop() {
-    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-      _drive.flipGyro();
-    }
+    // if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+    //   _drive.flipGyro();
+    // }
   }
 
   /**
@@ -267,7 +267,8 @@ public class RobotContainer {
       "drive 1m",
       "e4, c4",
       "f4, e4",
-      "g4"
+      "g4",
+      "visionless drive test"
     };
     SmartDashboard.putStringArray("Auto List", autoselector);
     System.out.print("Loading selections");

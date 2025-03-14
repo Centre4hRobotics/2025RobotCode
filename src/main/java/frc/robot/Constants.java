@@ -36,7 +36,7 @@ public final class Constants {
     COMPETITION
   }
 
-  public static RobotType robotType = RobotType.COMPETITION;
+  public static RobotType robotType = RobotType.PRACTICE;
 
   public static class RobotConstants {
     public static final double wheelDiameter;
@@ -82,7 +82,7 @@ public final class Constants {
         default:
           maxAttainableSpeed = 4.2;
           maxSlowDriveSpeed = 1.5;
-          maxFastDriveSpeed = 0.7;
+          maxFastDriveSpeed = 4;
           maxDriveAcceleration = 1;
           maxRotationSpeed = 1.5 * Math.PI;
           maxRotationAcceleration = 3 * Math.PI;
