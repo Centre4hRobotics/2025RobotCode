@@ -13,7 +13,7 @@ public class OperateScorerWithJoystick extends Command {
 
   private Scorer _scorer;
   private Joystick _joystick;
-  private BooleanSupplier _mode;
+  private BooleanSupplier _mode, _override;
 
   /**
    * This command is responsible for teleop drive.
@@ -23,10 +23,11 @@ public class OperateScorerWithJoystick extends Command {
    * 
    * Comment By: EternalSyntaxError
    */
-  public OperateScorerWithJoystick(Scorer scorer, Joystick joystick, BooleanSupplier mode) {
+  public OperateScorerWithJoystick(Scorer scorer, Joystick joystick, BooleanSupplier mode, BooleanSupplier override) {
     _scorer = scorer;
     _joystick = joystick;
     _mode = mode;
+    _override = override;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_scorer);
@@ -46,7 +47,7 @@ public class OperateScorerWithJoystick extends Command {
 
     if (input > 0.2) {
       _scorer.setRotation(rotation + 0.1);
-    } else if (input < -0.2 && rotation >= 0.0) {
+    } else if (input < -0.2 && (rotation >= 0.0 || _override.getAsBoolean())) {
       _scorer.setRotation(rotation - 0.1);
     } else {
       _scorer.setRotation(rotation);

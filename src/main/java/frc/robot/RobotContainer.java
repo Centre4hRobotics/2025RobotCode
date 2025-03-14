@@ -152,7 +152,8 @@ public class RobotContainer {
     }
 
     BooleanSupplier gamepieceMode = buttonBoard2[7];
-   BooleanSupplier climbMode = buttonBoard2[6];
+    BooleanSupplier climbMode = buttonBoard2[6];
+    BooleanSupplier overrideStops = () -> buttonBoard1[1].getAsBoolean();
 
     // prep to score buttons
     buttonBoard1[6].whileTrue(
