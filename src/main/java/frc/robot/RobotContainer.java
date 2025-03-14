@@ -230,8 +230,8 @@ public class RobotContainer {
     buttonBoard2[1].onTrue(
       Commands.runOnce(() -> _scorer.syncRotationEncoder(), _scorer) 
     );
-    _elevator.setDefaultCommand(new OperateElevatorWithJoystick(_elevator, _functionJoystick1));
-    _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, _functionJoystick1, climbMode));
+    _elevator.setDefaultCommand(new OperateElevatorWithJoystick(_elevator, _functionJoystick1, overrideStops));
+    _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, _functionJoystick1, climbMode, overrideStops));
     _climb.setDefaultCommand(new OperateClimberWithJoystick(_climb, _functionJoystick1, climbMode));
 
     // runs wheels on scorer
