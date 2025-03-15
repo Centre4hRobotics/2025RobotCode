@@ -11,12 +11,14 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.ScorerConstants;
 
 public class Climb extends SubsystemBase{
     private SparkMax _climber;
+    private SparkClosedLoopController _climbPID;
     private final RelativeEncoder _climbEncoder;
 
 
@@ -24,6 +26,8 @@ public class Climb extends SubsystemBase{
         _climber = new SparkMax(50, MotorType.kBrushless);
 
         configureClimber();
+
+        _climbPID = _climber.getClosedLoopController();
 
         _climbEncoder = _climber.getEncoder();
         _climbEncoder.setPosition(0.0);
@@ -41,9 +45,26 @@ public class Climb extends SubsystemBase{
         return _climbEncoder.getPosition();
     }
 
+    public void setPosition(double position) {
+        _climbPID.setReference(position, ControlType.kPosition);
+    }
+
+    public boolean isOnTarget(double target) {
+        return Math.abs(getPosition() - target) < ClimbConstants.rotationTolerance;
+    }
+
     public double getCurrent() {
         return _climber.getOutputCurrent();
     }
+
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        NetworkTableInstance nt = NetworkTableInstance.getDefault();
+        nt.getTable("Climb").getEntry("encoder value").setValue(getPosition());
+    }
+
 
     private void configureClimber() {
         SparkMaxConfig config = new SparkMaxConfig();
@@ -54,6 +75,7 @@ public class Climb extends SubsystemBase{
         config.smartCurrentLimit(ClimbConstants.climbingCurrentThreshold);
 
         config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+        config.closedLoop.pid(ClimbConstants.climbingP, ClimbConstants.climbingI, ClimbConstants.climbingD);
 
         _climber.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }

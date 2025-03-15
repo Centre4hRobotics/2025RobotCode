@@ -36,7 +36,7 @@ public final class Constants {
     COMPETITION
   }
 
-  public static RobotType robotType = RobotType.PRACTICE;
+  public static RobotType robotType = RobotType.COMPETITION;
 
   public static class RobotConstants {
     public static final double wheelDiameter;
@@ -353,8 +353,8 @@ public final class Constants {
     public static double heightAlgaeProcessor = 20; 
     public static double heightAlgaeOnCoral = 18.4; 
     public static double heightAlgaeDefault = 47;
-    public static double heightAlgaeBottom = 21; 
-    public static double heightAlgaeTop = 45; 
+    public static double heightAlgaeBottom = 47; 
+    public static double heightAlgaeTop = 71; 
     public static double heightAlgaeBarge = 40;
 
     public static final double maxHeight = 85;
@@ -381,9 +381,9 @@ public final class Constants {
     public static double rotationL4 = 5.9; 
 
     // algae
-    public static double rotationAlgaeTop = 21; 
+    public static double rotationAlgaeTop = 36.5; 
     public static double rotationAlgaeOnCoral = 34; 
-    public static double rotationAlgaeBottom = 21;
+    public static double rotationAlgaeBottom = 36.5;
     public static double rotationAlgaeDefault = 36.5; 
     public static double rotationAlgaeProcessor = 40;
     public static double rotationAlgaeBarge = 40; //this is a meme
@@ -399,9 +399,9 @@ public final class Constants {
     public static final double numRotationsAutoBackdrive = 0.2;
     public static final double numRotationsToEject = 15;
     
-    public static final double intakingCoralVoltage = -1.0;
-    public static final double ejectingCoralVoltage = -1.0;
-    public static final double backdrivingCoralVoltage = 3.0;
+    public static final double intakingCoralVoltage = 2.0;
+    public static final double ejectingCoralVoltage = 2.0;
+    public static final double backdrivingCoralVoltage = -1.0;
     public static final double autoIntakingCoralVoltage = 1.4;
     public static final double autoBackdrivingCoralVoltage = -0.8;
     public static final double stuckCoralVoltage = 8.0;
@@ -430,6 +430,17 @@ public final class Constants {
   public static class ClimbConstants {
     public static final int climbingCurrentThreshold = 30;
     public static final int climbingVoltage = 10;
+
+    public static final double climbingP = 1.0;
+    public static final double climbingI = 0.0;
+    public static final double climbingD = 0.0;
+    public static final double rotationTolerance = 0.1;
+
+    public static final double dropFunnel = 115;
+    public static final double prepClimb = 85;
+    public static final double climbed = -25;
+
+
   }
 
   public static enum FieldSide {

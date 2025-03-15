@@ -73,6 +73,7 @@ public class Scorer extends SubsystemBase {
     
     public void syncRotationEncoder() {
         _rotationEncoder.setPosition(0);
+        setRotation(0);
     }
 
     public double getRotation() {
