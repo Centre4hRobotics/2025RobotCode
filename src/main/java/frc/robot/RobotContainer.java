@@ -153,7 +153,7 @@ public class RobotContainer {
 
     BooleanSupplier gamepieceMode = buttonBoard2[7];
     BooleanSupplier climbMode = buttonBoard2[6];
-    BooleanSupplier overrideStops = () -> buttonBoard1[1].getAsBoolean();
+    BooleanSupplier overrideStops = () -> buttonBoard2[3].getAsBoolean();
 
     // prep to score buttons
     buttonBoard1[6].whileTrue(
@@ -264,11 +264,10 @@ public class RobotContainer {
 
   public void autoChooserInit() {
     String[] autoselector = {
-      "drive 1m",
       "e4, c4",
       "f4, e4",
       "g4",
-      "visionless drive test"
+      "j4, l4"
     };
     SmartDashboard.putStringArray("Auto List", autoselector);
     System.out.print("Loading selections");
