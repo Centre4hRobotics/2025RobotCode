@@ -29,9 +29,9 @@ public class ResetGyro extends Command {
   public void initialize() 
   {
     if(_drive.getSide()) {
-      _drive.resetGyroAngle(180);
+      _drive.setHeading(180);
     } else {
-      _drive.resetGyroAngle();
+      _drive.setHeading(0);
     }
   }
 

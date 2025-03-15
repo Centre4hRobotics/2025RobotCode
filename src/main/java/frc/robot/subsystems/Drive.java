@@ -244,6 +244,12 @@ public class Drive extends SubsystemBase {
     _inYawLock = true;
   }
 
+  public void setHeading(double angle) {
+    Pose2d pose = new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(angle));
+    this.resetOdometry(pose);
+    this.setDesiredHeading(angle);
+  }
+
   public ChassisSpeeds getRobotRelativeSpeeds() {
     return _kinematics.toChassisSpeeds(getModuleStates());
   }
@@ -428,14 +434,14 @@ public class Drive extends SubsystemBase {
   }
 
   public void resetGyroAngle() {
-    _gyro.setYaw(0);
-    _odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
+    setHeading(0);
+    // _odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
   }
 
   public void resetGyroAngle(double angle) {
-    _gyro.setYaw(angle);
-    _odometry.resetPose(new Pose2d());
-    _odometry.resetRotation(new Rotation2d());
+    setHeading(angle);
+    // _odometry.resetPose(new Pose2d());
+    // _odometry.resetRotation(new Rotation2d());
   }
 
   public boolean getSide() {
@@ -488,9 +494,8 @@ public class Drive extends SubsystemBase {
   }
 
   public void flipGyro() {
-    double gyro = getGyroAngle();
-
-    resetGyroAngle(gyro + 180);
+    double heading = getHeading();
+    resetGyroAngle(heading + 180);
     //setDesiredHeading(gyro + 180);
   }
 
