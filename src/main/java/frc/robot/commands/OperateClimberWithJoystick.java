@@ -44,10 +44,18 @@ public class OperateClimberWithJoystick extends Command {
 
   public void execute() {
     if(_mode.getAsBoolean()) {
-      double input = _joystick.getY();
-      input *= ClimbConstants.climbingVoltage;
-      _climb.setVoltage(input);
+      double rotation = _climb.getSetpoint();
+    double input = -_joystick.getY();
+
+    if (input > 0.2) {
+      _climb.setPosition(rotation + 3);
+    } else if (input < -0.2) {
+      _climb.setPosition(rotation - 3);
+    } else {
+      _climb.setPosition(rotation);
     }
+    }
+  
   }
 
   // Returns true when the command should end.

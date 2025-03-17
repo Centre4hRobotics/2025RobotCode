@@ -21,6 +21,8 @@ public class Climb extends SubsystemBase{
     private SparkClosedLoopController _climbPID;
     private final RelativeEncoder _climbEncoder;
 
+    private double _setpoint;
+
 
     public Climb() {
         _climber = new SparkMax(50, MotorType.kBrushless);
@@ -31,6 +33,8 @@ public class Climb extends SubsystemBase{
 
         _climbEncoder = _climber.getEncoder();
         _climbEncoder.setPosition(0.0);
+
+        _setpoint = 0;
     }
 
     public void setVoltage(double voltage) {
@@ -47,6 +51,12 @@ public class Climb extends SubsystemBase{
 
     public void setPosition(double position) {
         _climbPID.setReference(position, ControlType.kPosition);
+        _setpoint = position;
+    }
+
+    public double getSetpoint()
+    {
+        return _setpoint;
     }
 
     public boolean isOnTarget(double target) {
@@ -63,6 +73,7 @@ public class Climb extends SubsystemBase{
         // This method will be called once per scheduler run
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
         nt.getTable("Climb").getEntry("encoder value").setValue(getPosition());
+        nt.getTable("Climb").getEntry("setpoint").setValue(getSetpoint());
     }
 
 

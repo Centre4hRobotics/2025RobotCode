@@ -375,11 +375,11 @@ public final class Constants {
 
   public static class ScorerConstants {
     //coral
-    public static final double rotationCoralDefault = 0; 
-    public static final double rotationL1 = 0; 
-    public static final double rotationL2 = 3; 
-    public static final double rotationL3 = 0;
-    public static final double rotationL4 = 5.9; 
+    public static double rotationCoralDefault = 0; 
+    public static double rotationL1 = 0; 
+    public static double rotationL2 = 4; 
+    public static double rotationL3 = 0;
+    public static double rotationL4 = 5.9; 
 
     // algae
     public static final double rotationAlgaeProcessor = 40;
@@ -398,7 +398,7 @@ public final class Constants {
     public static final double scoringCurrentWithCoral = 20;
 
     public static final double numRotationsAutoBackdrive = 0.2;
-    public static final double numRotationsToEject = 15;
+    public static final double numRotationsToEject = 5;
     
     public static final double intakingCoralVoltage = 2.0;
     public static final double ejectingCoralVoltage = 2.0;
@@ -419,15 +419,6 @@ public final class Constants {
     public static final double highestElevatingRotationAlgae = 0; //add
   }
 
-  public static class FunnelConstants {
-    public static final double heightStation = 0;
-    public static final double heightClimb = 0;
-
-    public static final double funnelP = 0;
-    public static final double funnelI = 0;
-    public static final double funnelD = 0;
-  }
-
   public static class ClimbConstants {
     public static final int climbingCurrentThreshold = 30;
     public static final int climbingVoltage = 10;
@@ -435,11 +426,12 @@ public final class Constants {
     public static final double climbingP = 1.0;
     public static final double climbingI = 0.0;
     public static final double climbingD = 0.0;
-    public static final double rotationTolerance = 0.1;
+    public static final double rotationTolerance = 1;
 
-    public static final double dropFunnel = 115;
-    public static final double prepClimb = 85;
-    public static final double climbed = -25;
+    public static final double dropFunnel = 126;
+    public static final double pushFunnel = 45;
+    public static final double prepClimb = 96;
+    public static final double climbed = -30;
 
 
   }

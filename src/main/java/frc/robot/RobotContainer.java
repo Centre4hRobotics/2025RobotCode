@@ -19,10 +19,12 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ScorerConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.commands.RotateClimber;
 import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithSpeed;
@@ -30,7 +32,6 @@ import frc.robot.commands.EjectCoralUntilOut;
 import frc.robot.commands.ElevatorToHeight;
 import frc.robot.commands.IntakeCoralUntilIn;
 import frc.robot.commands.ManipulateGamePiece;
-import frc.robot.commands.OperateClimberWithButtons;
 import frc.robot.commands.OperateClimberWithJoystick;
 import frc.robot.commands.OperateElevatorWithJoystick;
 import frc.robot.commands.OperateScorerWithJoystick;
@@ -39,7 +40,6 @@ import frc.robot.commands.RotateScorer;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Funnel;
 import frc.robot.subsystems.Scorer;
 import frc.robot.subsystems.Vision;
 
@@ -52,7 +52,6 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here..-
   private final Vision _vision = new Vision("RIGHT");
-  private final Funnel _funnel = new Funnel();
   private final Elevator _elevator = new Elevator();
   private final Drive _drive = new Drive(_elevator);
   private final Scorer _scorer = new Scorer();
@@ -241,10 +240,9 @@ public class RobotContainer {
     buttonBoard1[9].whileTrue(new EjectCoralUntilOut(_scorer));
     buttonBoard1[12].whileTrue(new ManipulateGamePiece(_scorer, gamepieceMode, true, true));
 
-    buttonBoard1[1].whileTrue(new OperateClimberWithButtons(_climb, false));
-    buttonBoard1[2].whileTrue(new OperateClimberWithButtons(_climb, true));
+    buttonBoard1[1].onTrue(new RotateClimber(_climb, ClimbConstants.dropFunnel).andThen(new RotateClimber(_climb, ClimbConstants.pushFunnel)).andThen(new RotateClimber(_climb, ClimbConstants.prepClimb)));
+    buttonBoard1[2].onTrue(new RotateClimber(_climb, ClimbConstants.climbed));
   
-
     // Syncs encoders   
     // m_driverController.b().onTrue(
     //   Commands.runOnce(() -> _drive.syncEncoders(), _drive) 
