@@ -375,11 +375,11 @@ public final class Constants {
 
   public static class ScorerConstants {
     //coral
-    public static double rotationCoralDefault = 0; 
-    public static double rotationL1 = 0; 
-    public static double rotationL2 = 4; 
-    public static double rotationL3 = 0;
-    public static double rotationL4 = 5.9; 
+    public static final double rotationCoralDefault = 0; 
+    public static final double rotationL1 = 0; 
+    public static final double rotationL2 = 4; 
+    public static final double rotationL3 = 0;
+    public static final double rotationL4 = 5.9; 
 
     // algae
     public static final double rotationAlgaeProcessor = 40;

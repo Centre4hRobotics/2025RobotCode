@@ -199,24 +199,13 @@ public class RobotContainer {
     buttonBoard2[7].onTrue(new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
     buttonBoard2[7].onFalse(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)));
     
-    // if any other height buttons are pressed when one is released, it will not go to default position so it stays at the position being held
-    BooleanSupplier heightButtonPressed = () -> buttonBoard1[6].getAsBoolean() || buttonBoard1[5].getAsBoolean() || buttonBoard1[8].getAsBoolean();
+    BooleanSupplier noHeightPressed = () -> !(buttonBoard1[6].getAsBoolean() || buttonBoard1[5].getAsBoolean() || buttonBoard1[8].getAsBoolean());
+    Trigger noHeightPressedTrigger = new Trigger(noHeightPressed);
 
-    buttonBoard1[6].onFalse(
-      Commands.either(new InstantCommand(), Commands.either(
-        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralDefault)), 
-        new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
-        gamepieceMode), heightButtonPressed));
-    buttonBoard1[5].onFalse(
-      Commands.either(new InstantCommand(), Commands.either(
-        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralDefault)), 
-        new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
-        gamepieceMode), heightButtonPressed));
-    buttonBoard1[8].onFalse(
-      Commands.either(new InstantCommand(), Commands.either(
-        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralDefault)), 
-        new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
-        gamepieceMode), heightButtonPressed));
+    noHeightPressedTrigger.whileTrue(Commands.either(
+      new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralDefault)), 
+      new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
+      gamepieceMode));
 
     // zero elevator encoder
     buttonBoard2[2].onTrue(
