@@ -162,8 +162,7 @@ public class RobotContainer {
         new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4)
             .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)),
         // algae mode
-        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeTop)
-            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeTop)), 
+        new InstantCommand(),
         gamepieceMode
       )
     );
@@ -173,8 +172,8 @@ public class RobotContainer {
         new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL3)
             .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL3)),
         // algae mode
-        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeBottom)
-            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeBottom)), 
+        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeTop)
+            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeTop)), 
         gamepieceMode)
     );
     buttonBoard1[8].whileTrue(
@@ -183,8 +182,8 @@ public class RobotContainer {
         new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2)
             .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL2)),
         // algae mode
-        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeOnCoral)
-            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeOnCoral)), 
+        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeBottom)
+            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeBottom)), 
         gamepieceMode)
     );
     buttonBoard1[4].whileTrue(
@@ -201,21 +200,22 @@ public class RobotContainer {
     buttonBoard2[7].onTrue(new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
     buttonBoard2[7].onFalse(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)));
     
+    // if any other height buttons are pressed when one is released, it will not go to default position so it stays at the position being held
     BooleanSupplier heightButtonPressed = () -> buttonBoard1[6].getAsBoolean() || buttonBoard1[5].getAsBoolean() || buttonBoard1[8].getAsBoolean();
 
     buttonBoard1[6].onFalse(
       Commands.either(new InstantCommand(), Commands.either(
-        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
+        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralDefault)), 
         new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
         gamepieceMode), heightButtonPressed));
     buttonBoard1[5].onFalse(
       Commands.either(new InstantCommand(), Commands.either(
-        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)), 
+        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralDefault)), 
         new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
         gamepieceMode), heightButtonPressed));
     buttonBoard1[8].onFalse(
       Commands.either(new InstantCommand(), Commands.either(
-        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)).withTimeout(2), 
+        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralDefault)), 
         new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
         gamepieceMode), heightButtonPressed));
 

@@ -345,17 +345,18 @@ public final class Constants {
 
   public static class ElevatorConstants {
     // coral
-    public static double heightCoralL1 = 0; 
-    public static double heightCoralL2 = 18.3;
-    public static double heightCoralL3 = 43.4;
-    public static double heightCoralL4 = 83; 
+    public static final double heightCoralL1 = 0; 
+    public static final double heightCoralL2 = 18.3;
+    public static final double heightCoralL3 = 43.4;
+    public static final double heightCoralL4 = 83; 
 
-    public static double heightAlgaeProcessor = 20; 
-    public static double heightAlgaeOnCoral = 18.4; 
-    public static double heightAlgaeDefault = 47;
-    public static double heightAlgaeBottom = 47; 
-    public static double heightAlgaeTop = 71; 
-    public static double heightAlgaeBarge = 40;
+    public static final double heightCoralDefault = heightCoralL1;
+
+    public static final double heightAlgaeProcessor = 20; 
+    public static final double heightAlgaeBottom = 21; 
+    public static final double heightAlgaeTop = 45; 
+
+    public static final double heightAlgaeDefault = heightAlgaeProcessor;
 
     public static final double maxHeight = 85;
     public static final double maxFullSpeedHeight = 20;
@@ -374,19 +375,19 @@ public final class Constants {
 
   public static class ScorerConstants {
     //coral
-    public static double rotationCoralDefault = 0; 
-    public static double rotationL1 = 0; 
-    public static double rotationL2 = 3; 
-    public static double rotationL3 = 0;
-    public static double rotationL4 = 5.9; 
+    public static final double rotationCoralDefault = 0; 
+    public static final double rotationL1 = 0; 
+    public static final double rotationL2 = 3; 
+    public static final double rotationL3 = 0;
+    public static final double rotationL4 = 5.9; 
 
     // algae
-    public static double rotationAlgaeTop = 36.5; 
-    public static double rotationAlgaeOnCoral = 34; 
-    public static double rotationAlgaeBottom = 36.5;
-    public static double rotationAlgaeDefault = 36.5; 
-    public static double rotationAlgaeProcessor = 40;
-    public static double rotationAlgaeBarge = 40; //this is a meme
+    public static final double rotationAlgaeProcessor = 40;
+    public static final double rotationAlgaeBottom = 21;
+    public static final double rotationAlgaeTop = 21; 
+
+    public static final double rotationAlgaeDefault = rotationAlgaeProcessor; 
+
 
     public static final double rotationP = 0.1;
     public static final double rotationI = 0;
