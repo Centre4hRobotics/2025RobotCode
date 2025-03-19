@@ -14,7 +14,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
-import frc.robot.Constants.ScorerConstants;
 
 public class Climb extends SubsystemBase{
     private SparkMax _climber;
@@ -72,8 +71,8 @@ public class Climb extends SubsystemBase{
     public void periodic() {
         // This method will be called once per scheduler run
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
-        nt.getTable("Climb").getEntry("encoder value").setValue(getPosition());
-        nt.getTable("Climb").getEntry("setpoint").setValue(getSetpoint());
+        nt.getTable("Climb").getEntry("climb encoder value").setValue(getPosition());
+        nt.getTable("Climb").getEntry("climb setpoint").setValue(getSetpoint());
     }
 
 

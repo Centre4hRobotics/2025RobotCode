@@ -2,12 +2,8 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants;
-import frc.robot.Constants.ClimbConstants;
 import frc.robot.subsystems.Climb;
 
 public class OperateClimberWithJoystick extends Command {
@@ -15,7 +11,6 @@ public class OperateClimberWithJoystick extends Command {
   private Climb _climb;
   private Joystick _joystick;
   private BooleanSupplier _mode;
-  private BooleanSupplier _zeroOverride;
 
   /**
    * This command is responsible for teleop drive.

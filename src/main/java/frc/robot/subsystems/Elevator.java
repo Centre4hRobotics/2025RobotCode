@@ -77,8 +77,8 @@ public class Elevator extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
-        nt.getTable("Elevator").getEntry("encoder value").setValue(getHeight()); 
-        nt.getTable("Elevator").getEntry("setpoint").setValue(_setpoint); 
+        nt.getTable("Elevator").getEntry("elevator encoder value").setValue(getHeight()); 
+        nt.getTable("Elevator").getEntry("elevator setpoint").setValue(_setpoint); 
     }
 
     private void configLeadMotor() {

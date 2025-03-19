@@ -111,9 +111,9 @@ public class Scorer extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         NetworkTableInstance nt = NetworkTableInstance.getDefault();
-        nt.getTable("Scorer").getEntry("rotation encoder value").setValue(getRotation());
-        nt.getTable("Scorer").getEntry("rotation setpoint").setValue(getSetpoint());
-        nt.getTable("Scorer").getEntry("scoring velocity").setValue(getScoringVelocity());
+        nt.getTable("Scorer").getEntry("scorer rotation encoder value").setValue(getRotation());
+        nt.getTable("Scorer").getEntry("scorer rotation setpoint").setValue(getSetpoint());
+        nt.getTable("Scorer").getEntry("scorer scoring velocity").setValue(getScoringVelocity());
         nt.getTable("Scorer").getEntry("limit switch value").setValue(_coralLimitSwitch.isPressed());
     }
 

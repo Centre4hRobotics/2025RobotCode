@@ -72,10 +72,10 @@ public class RobotContainer {
 
     // register pathplanner commands
 
-    BooleanSupplier coral = () -> true;
-    BooleanSupplier station = () -> true;
     NamedCommands.registerCommand("drive to left tag", new DriveToTag(_drive, _vision, 0, VisionConstants.centeredDeltaX, "LEFT"));
     NamedCommands.registerCommand("drive to right tag", new DriveToTag(_drive, _vision, 0, VisionConstants.centeredDeltaX, "RIGHT"));
+
+    NamedCommands.registerCommand("drop funnel", new RotateClimber(_climb, ClimbConstants.teleOp));
 
     NamedCommands.registerCommand("default coral position", new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault)
     .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
@@ -155,43 +155,42 @@ public class RobotContainer {
     BooleanSupplier overrideStops = () -> buttonBoard2[3].getAsBoolean();
 
     // prep to score buttons
-    buttonBoard1[6].whileTrue(
+    buttonBoard1[6].onTrue(
       Commands.either(
         // coral mode
         new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4)
-            .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)),
+            .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4).withTimeout(1)),
         // algae mode
         new InstantCommand(),
-        gamepieceMode
-      )
+        gamepieceMode)
     );
-    buttonBoard1[5].whileTrue(
+    buttonBoard1[5].onTrue(
       Commands.either(
         // coral mode
         new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL3)
-            .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL3)),
+            .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL3).withTimeout(1)),
         // algae mode
-        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeTop)
+        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeTop).withTimeout(1)
             .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeTop)), 
         gamepieceMode)
     );
-    buttonBoard1[8].whileTrue(
+    buttonBoard1[8].onTrue(
       Commands.either(
         // coral mode
         new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2)
-            .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL2)),
+            .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL2).withTimeout(1)),
         // algae mode
-        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeBottom)
+        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeBottom).withTimeout(1)
             .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeBottom)), 
-        gamepieceMode)
+        gamepieceMode).withTimeout(7)
     );
-    buttonBoard1[4].whileTrue(
+    buttonBoard1[4].onTrue(
       Commands.either(
         // coral mode
-        new RotateScorer(_scorer, ScorerConstants.rotationL1)
+        new RotateScorer(_scorer, ScorerConstants.rotationL1).withTimeout(1)
         .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)),
         // algae mode
-        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeProcessor)
+        new RotateScorer(_scorer, ScorerConstants.rotationAlgaeProcessor).withTimeout(1)
             .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeProcessor)), 
         gamepieceMode)
     );
@@ -199,20 +198,20 @@ public class RobotContainer {
     buttonBoard2[7].onTrue(new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
     buttonBoard2[7].onFalse(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)));
     
-    BooleanSupplier noHeightPressed = () -> !(buttonBoard1[6].getAsBoolean() || buttonBoard1[5].getAsBoolean() || buttonBoard1[8].getAsBoolean());
-    Trigger noHeightPressedTrigger = new Trigger(noHeightPressed);
+    // BooleanSupplier noHeightPressed = () -> !(buttonBoard1[6].getAsBoolean() || buttonBoard1[5].getAsBoolean() || buttonBoard1[8].getAsBoolean());
+    // Trigger noHeightPressedTrigger = new Trigger(noHeightPressed);
 
-    noHeightPressedTrigger.whileTrue(Commands.either(
-      new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralDefault)), 
-      new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
-      gamepieceMode));
+    // noHeightPressedTrigger.onTrue(Commands.either(
+    //   new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralDefault)), 
+    //   new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)),
+    //   gamepieceMode));
 
     // zero elevator encoder
     buttonBoard2[2].onTrue(
       Commands.runOnce(() -> _elevator.syncEncoders(), _elevator) 
     );
 
-    buttonBoard1[3].whileTrue(new DriveWithSpeed(_drive, 1));
+    buttonBoard1[3].onTrue(new RotateClimber(_climb, ClimbConstants.teleOp));
 
     // zero scorer rotation encoder
     buttonBoard2[1].onTrue(
@@ -252,7 +251,6 @@ public class RobotContainer {
   public void autoChooserInit() {
     String[] autoselector = {
       "e4, c4",
-      "f4, e4",
       "g4",
       "j4, l4"
     };

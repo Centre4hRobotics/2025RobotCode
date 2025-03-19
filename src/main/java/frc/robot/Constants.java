@@ -353,8 +353,8 @@ public final class Constants {
     public static final double heightCoralDefault = heightCoralL1;
 
     public static final double heightAlgaeProcessor = 20; 
-    public static final double heightAlgaeBottom = 21; 
-    public static final double heightAlgaeTop = 45; 
+    public static final double heightAlgaeBottom = 42.5; 
+    public static final double heightAlgaeTop = 66; 
 
     public static final double heightAlgaeDefault = heightAlgaeProcessor;
 
@@ -379,12 +379,12 @@ public final class Constants {
     public static final double rotationL1 = 0; 
     public static final double rotationL2 = 4; 
     public static final double rotationL3 = 0;
-    public static final double rotationL4 = 5.9; 
+    public static final double rotationL4 = 7.3; 
 
     // algae
-    public static final double rotationAlgaeProcessor = 40;
-    public static final double rotationAlgaeBottom = 21;
-    public static final double rotationAlgaeTop = 21; 
+    public static final double rotationAlgaeProcessor = 36.5;
+    public static final double rotationAlgaeBottom = 36.5;
+    public static final double rotationAlgaeTop = 36.5; 
 
     public static final double rotationAlgaeDefault = rotationAlgaeProcessor; 
 
@@ -428,10 +428,12 @@ public final class Constants {
     public static final double climbingD = 0.0;
     public static final double rotationTolerance = 1;
 
-    public static final double dropFunnel = 126;
-    public static final double pushFunnel = 45;
-    public static final double prepClimb = 96;
-    public static final double climbed = -30;
+    public static final double dropFunnel = 147;
+    public static final double pushFunnel = 66;
+    public static final double prepClimb = 117;
+    public static final double climbed = -60;
+
+    public static final double teleOp = 21;
 
 
   }

@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "start to g"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "start to g"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "drop funnel"
+                }
+              }
+            ]
           }
         },
         {
