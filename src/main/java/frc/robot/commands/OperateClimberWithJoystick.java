@@ -40,12 +40,16 @@ public class OperateClimberWithJoystick extends Command {
   public void execute() {
     if(_mode.getAsBoolean()) {
       double rotation = _climb.getSetpoint();
-    double input = -_joystick.getY();
+    double input = -_joystick.getX();
 
     if (input > 0.2) {
       _climb.setPosition(rotation + 3);
     } else if (input < -0.2) {
-      _climb.setPosition(rotation - 3);
+      if(rotation - 3 < -65) {
+        _climb.setPosition(rotation);
+      } else {
+        _climb.setPosition(rotation - 3);
+      }
     } else {
       _climb.setPosition(rotation);
     }

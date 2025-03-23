@@ -20,10 +20,9 @@ public class OperateScorerWithJoystick extends Command {
    * 
    * Comment By: EternalSyntaxError
    */
-  public OperateScorerWithJoystick(Scorer scorer, Joystick joystick, BooleanSupplier mode, BooleanSupplier override) {
+  public OperateScorerWithJoystick(Scorer scorer, Joystick joystick, BooleanSupplier override) {
     _scorer = scorer;
     _joystick = joystick;
-    _mode = mode;
     _override = override;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -38,7 +37,7 @@ public class OperateScorerWithJoystick extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!_mode.getAsBoolean()) {
+
       double rotation = _scorer.getSetpoint();
     double input = -_joystick.getY();
 
@@ -49,8 +48,6 @@ public class OperateScorerWithJoystick extends Command {
     } else {
       _scorer.setRotation(rotation);
     }
-    }
-
     // if(_controller.getLeftTriggerAxis() > 0)
     //     _scorer.setRotation(rotation + 0.4 * _controller.getLeftTriggerAxis());
     // else

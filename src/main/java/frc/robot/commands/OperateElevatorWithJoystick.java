@@ -12,6 +12,7 @@ public class OperateElevatorWithJoystick extends Command {
   private Elevator _elevator;
   private Joystick _joystick;
   private BooleanSupplier _override;
+  private BooleanSupplier _mode;
 
   /**
    * This command is responsible for teleop drive.
@@ -21,10 +22,11 @@ public class OperateElevatorWithJoystick extends Command {
    * 
    * Comment By: EternalSyntaxError
    */
-  public OperateElevatorWithJoystick(Elevator elevator, Joystick joystick, BooleanSupplier override) {
+  public OperateElevatorWithJoystick(Elevator elevator, Joystick joystick, BooleanSupplier override, BooleanSupplier mode) {
     _elevator = elevator;
     _joystick = joystick;
     _override = override;
+    _mode = mode;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_elevator);
@@ -39,6 +41,7 @@ public class OperateElevatorWithJoystick extends Command {
   @Override
 
   public void execute() {
+    if(!_mode.getAsBoolean()) {
     double input = -_joystick.getX();
     double height = _elevator.getSetpoint();
       if(input > 0.5 && (height < ElevatorConstants.maxHeight - 0.5 || _override.getAsBoolean())) {
@@ -54,6 +57,7 @@ public class OperateElevatorWithJoystick extends Command {
         // }
         _elevator.setHeight(height);
       }
+    }
   }
 
   // Returns true when the command should end.

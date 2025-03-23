@@ -430,8 +430,8 @@ public final class Constants {
 
     public static final double dropFunnel = 147;
     public static final double pushFunnel = 66;
-    public static final double prepClimb = 117;
-    public static final double climbed = -60;
+    public static final double prepClimb = 102;
+    public static final double climbed = -50;
 
     public static final double teleOp = 21;
 
