@@ -35,11 +35,11 @@ public class IntakeCoralUntilIn extends Command {
   public void execute() {
     switch(_state) {
       case spiningUp:
+      if(_scorer.getCoralIn()) {
+        _startingPos = _scorer.getScoringPosition();
+        _state = CoralStatus.backdriving;
+      }
         _scorer.setScoringVoltage(ScorerConstants.autoIntakingCoralVoltage);
-        if(_scorer.getCoralIn()) {
-          _startingPos = _scorer.getScoringPosition();
-          _state = CoralStatus.backdriving;
-        }
         break;
       case backdriving:
         _scorer.setScoringVoltage(ScorerConstants.autoBackdrivingCoralVoltage);

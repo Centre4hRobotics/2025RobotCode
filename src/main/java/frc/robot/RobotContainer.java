@@ -23,7 +23,6 @@ import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ScorerConstants;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.RotateClimber;
 import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
@@ -51,7 +50,7 @@ import frc.robot.subsystems.Vision;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here..-
-  private final Vision _vision = new Vision("RIGHT");
+  private final Vision _vision = new Vision();
   private final Elevator _elevator = new Elevator();
   private final Drive _drive = new Drive(_elevator);
   private final Scorer _scorer = new Scorer();
@@ -72,23 +71,39 @@ public class RobotContainer {
 
     // register pathplanner commands
 
-    NamedCommands.registerCommand("drive to left tag", new DriveToTag(_drive, _vision, 0, VisionConstants.centeredDeltaX, "LEFT"));
-    NamedCommands.registerCommand("drive to right tag", new DriveToTag(_drive, _vision, 0, VisionConstants.centeredDeltaX, "RIGHT"));
+    NamedCommands.registerCommand("drive to left of tag", new DriveToTag(_drive, _vision, "LEFT", null));
+    NamedCommands.registerCommand("drive to right of tag", new DriveToTag(_drive, _vision, "RIGHT", null));
+
+    NamedCommands.registerCommand("drive to A", new DriveToTag(_drive, _vision, "LEFT", "ab"));
+    NamedCommands.registerCommand("drive to B", new DriveToTag(_drive, _vision, "RIGHT", "ab"));
+    NamedCommands.registerCommand("drive to C", new DriveToTag(_drive, _vision, "LEFT", "cd"));
+    NamedCommands.registerCommand("drive to D", new DriveToTag(_drive, _vision, "RIGHT", "cd"));
+    NamedCommands.registerCommand("drive to E", new DriveToTag(_drive, _vision, "LEFT", "ef"));
+    NamedCommands.registerCommand("drive to F", new DriveToTag(_drive, _vision, "RIGHT", "ef"));
+    NamedCommands.registerCommand("drive to G", new DriveToTag(_drive, _vision, "LEFT", "gh"));
+    NamedCommands.registerCommand("drive to H", new DriveToTag(_drive, _vision, "RIGHT", "gh"));
+    NamedCommands.registerCommand("drive to I", new DriveToTag(_drive, _vision, "LEFT", "ij"));
+    NamedCommands.registerCommand("drive to J", new DriveToTag(_drive, _vision, "RIGHT", "ij"));
+    NamedCommands.registerCommand("drive to K", new DriveToTag(_drive, _vision, "LEFT", "kl"));
+    NamedCommands.registerCommand("drive to L", new DriveToTag(_drive, _vision, "RIGHT", "kl"));
 
     NamedCommands.registerCommand("drop funnel", new RotateClimber(_climb, ClimbConstants.teleOp));
 
-    NamedCommands.registerCommand("default coral position", new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault)
-    .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
-    NamedCommands.registerCommand("prep to score L2", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2)
-    .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL2)));
-    NamedCommands.registerCommand("prep to score L3", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL3)
-    .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL3)));
-    NamedCommands.registerCommand("prep to score L4", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4)
-    .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)));
-
-    NamedCommands.registerCommand("elevate to L2", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2));
-    NamedCommands.registerCommand("elevate to L3", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL3));
-    NamedCommands.registerCommand("elevate to L4", new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4));
+    NamedCommands.registerCommand("default coral position", 
+        new RotateScorer(_scorer, ScorerConstants.rotationL2).withTimeout(.5)
+          .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralDefault))
+          .andThen(new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault)));
+    NamedCommands.registerCommand("prep to score L2", 
+        new RotateScorer(_scorer, ScorerConstants.rotationL2).withTimeout(.5)
+          .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL2)));
+    NamedCommands.registerCommand("prep to score L3", 
+        new RotateScorer(_scorer, ScorerConstants.rotationL2).withTimeout(.5)
+          .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL3))
+          .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL3)));
+    NamedCommands.registerCommand("prep to score L4", 
+        new RotateScorer(_scorer, ScorerConstants.rotationL2).withTimeout(.5)
+          .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4))
+          .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)));
 
     NamedCommands.registerCommand("slow drive forwards", new DriveWithSpeed(_drive, 0.2));
     NamedCommands.registerCommand("slow drive backwards", new DriveWithSpeed(_drive, -0.2));
@@ -158,7 +173,8 @@ public class RobotContainer {
     buttonBoard1[6].onTrue(
       Commands.either(
         // coral mode
-        new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4)
+        new RotateScorer(_scorer, ScorerConstants.rotationL2)
+            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4))
             .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)),
         // algae mode
         new InstantCommand(),
@@ -167,7 +183,8 @@ public class RobotContainer {
     buttonBoard1[5].onTrue(
       Commands.either(
         // coral mode
-        new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL3)
+        new RotateScorer(_scorer, ScorerConstants.rotationL2)
+            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL3))
             .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL3)),
         // algae mode
         new RotateScorer(_scorer, ScorerConstants.rotationAlgaeTop)
@@ -239,10 +256,10 @@ public class RobotContainer {
 
     m_driverController.y().onTrue(new ResetGyro(_drive));
 
-    Command driveToRightTag = new DriveToTag(_drive, _vision, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY, "RIGHT");
+    Command driveToRightTag = new DriveToTag(_drive, _vision, "RIGHT", null);
     m_driverController.rightBumper().whileTrue(driveToRightTag);
 
-    Command driveToLeftTag = new DriveToTag(_drive, _vision, VisionConstants.centeredDeltaX, VisionConstants.centeredDeltaY, "LEFT");
+    Command driveToLeftTag = new DriveToTag(_drive, _vision, "LEFT", null);
     m_driverController.leftBumper().whileTrue(driveToLeftTag);
 
     // _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, m_functionController));

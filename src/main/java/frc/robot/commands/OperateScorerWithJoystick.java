@@ -10,7 +10,7 @@ public class OperateScorerWithJoystick extends Command {
 
   private Scorer _scorer;
   private Joystick _joystick;
-  private BooleanSupplier _mode, _override;
+  private BooleanSupplier _override;
 
   /**
    * This command is responsible for teleop drive.

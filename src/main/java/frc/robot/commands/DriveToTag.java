@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Drive;
@@ -18,6 +19,7 @@ public class DriveToTag extends Command {
   private Drive _drive;
   private Vision _vision;
   private String _side;
+  private int _tagID;
 
   private double _cameraRotationToTag, _cameraDistanceToTagX, _cameraDistanceToTagY;
   
@@ -32,17 +34,18 @@ public class DriveToTag extends Command {
   private Boolean _isFinished;
   
   /** Creates a new DriveToTag. */
-  public DriveToTag(Drive drive, Vision vision, double offsetX, double offsetY, String side) {
+  public DriveToTag(Drive drive, Vision vision, String side, String location) {
     _drive = drive;
     _vision = vision;
     _side = side;
+    _tagID = getTagID(location);
     _laserDistanceToTagX = -42.0;
+    _offsetY = VisionConstants.centeredReefDeltaY;
+    if(_side.equals("LEFT")) {_offsetY *= -1; }
 
     _visionHeadingPID = new PIDController(VisionConstants.tagTurningP, VisionConstants.tagTurningI, VisionConstants.tagTurningD);
     _visionDriveXPID = new PIDController(VisionConstants.tagDriveXP, VisionConstants.tagDriveXI, VisionConstants.tagDriveXD);
     _visionDriveYPID = new PIDController(VisionConstants.tagDriveYP, VisionConstants.tagDriveYI, VisionConstants.tagDriveYD);
-
-    _offsetY = 0;
     
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
@@ -54,12 +57,8 @@ public class DriveToTag extends Command {
     _isFinished = false;
 
     _vision.setCurrentSide(_side);
+    _vision.setCurrentTagID(_tagID);
 
-    if(_side.equals("LEFT")) {
-      _offsetY = -0.02;
-    } else {
-      _offsetY = 0.02;
-    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -129,5 +128,43 @@ public class DriveToTag extends Command {
   @Override
   public boolean isFinished() {
     return _isFinished;
+  }
+
+  public int getTagID(String location) {
+    if(location.equals(null)) { return 0; }
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      if (alliance.get() == DriverStation.Alliance.Red) {
+        switch(location) {
+          case "ab":
+            return 7;
+          case "cd":
+            return 8;
+          case "ef":
+            return 9;
+          case "gh":
+            return 10;
+          case "ij":
+            return 11;
+          case "kl":
+            return 6;
+        }
+      } else {
+        switch(location) {
+          case "ab":
+            return 18;
+          case "cd":
+            return 17;
+          case "ef":
+            return 22;
+          case "gh":
+            return 21;
+          case "ij":
+            return 20;
+          case "kl":
+            return 19;
+      }
+    }
+  } return 0;
   }
 }

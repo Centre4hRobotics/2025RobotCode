@@ -288,9 +288,9 @@ public final class Constants {
     public static final double distanceTolerance = 0.05;
     public static final double rotationTolerance = 0.05;
 
-    public static final double centeredDeltaX = RobotConstants.trackWidth/2.0;
+    public static final double againstWallDeltaX = 0;
     // Positive offset is to the right
-    public static final double centeredDeltaY = 0;
+    public static final double centeredReefDeltaY = 0.032;
     public static final double laserDistanceToReef = 0.28;
 
     // Tag refers to the april tag positioning system
@@ -411,7 +411,7 @@ public final class Constants {
     public static final double ejectingAlgaeVoltage = 6.0;
     public static final double holdingAlageVoltage = -1.0;
 
-    public static final double rotationTolerance = .2; //add
+    public static final double rotationTolerance = .5; //add
 
     public static final double lowestElevatingRotationCoral = 0; //add
     public static final double highestElevatingRotationCoral = 0; //add

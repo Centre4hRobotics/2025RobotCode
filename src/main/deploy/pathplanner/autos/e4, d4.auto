@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "start to j"
+                  "pathName": "start to e"
                 }
               }
             ]
@@ -30,7 +30,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "drive to left tag"
+                  "name": "drive to E"
                 }
               },
               {
@@ -40,7 +40,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "elevate to L4"
+                        "name": "prep to score L4"
                       }
                     },
                     {
@@ -94,7 +94,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "j to ns"
+                  "pathName": "e to ps"
                 }
               },
               {
@@ -128,7 +128,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ns to L"
+            "pathName": "ps to d"
           }
         },
         {
@@ -138,7 +138,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "drive to right tag"
+                  "name": "drive to D"
                 }
               },
               {
@@ -148,7 +148,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "elevate to L4"
+                        "name": "prep to score L4"
                       }
                     },
                     {
@@ -205,6 +205,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "not processor side coral",
+  "folder": null,
   "choreoAuto": false
 }
