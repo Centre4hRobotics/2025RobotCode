@@ -428,12 +428,12 @@ public final class Constants {
     public static final double climbingD = 0.0;
     public static final double rotationTolerance = 1;
 
-    public static final double dropFunnel = 147;
-    public static final double pushFunnel = 66;
-    public static final double prepClimb = 102;
-    public static final double climbed = -50;
+    public static final double dropFunnel = 408;
+    public static final double pushFunnel = 184;
+    public static final double prepClimb = 284;
+    public static final double climbed = -139;
 
-    public static final double teleOp = 21;
+    public static final double teleOp = 44;
 
 
   }

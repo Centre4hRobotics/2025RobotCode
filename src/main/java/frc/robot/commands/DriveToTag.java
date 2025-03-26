@@ -38,7 +38,7 @@ public class DriveToTag extends Command {
     _drive = drive;
     _vision = vision;
     _side = side;
-    _tagID = getTagID(location);
+    //_tagID = getTagID(location);
     _laserDistanceToTagX = -42.0;
     _offsetY = VisionConstants.centeredReefDeltaY;
     if(_side.equals("LEFT")) {_offsetY *= -1; }
