@@ -57,7 +57,7 @@ public class Vision extends SubsystemBase {
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         NetworkTable table = inst.getTable("AprilTag Vision");
         table.getEntry("Using Camera").setValue(_side);
-        table.getEntry("Targeting Tag ID").setValue(_tagID);
+        table.getEntry("Tag Choice").setValue(_tagID);
         _tagPresent = _tagPresenceSub.get();
         if(_tagPresent == true) {
             _rotationToTag = _rotationToTagSub.get();

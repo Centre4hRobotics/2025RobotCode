@@ -131,7 +131,7 @@ public class DriveToTag extends Command {
   }
 
   public int getTagID(String location) {
-    if(location.equals(null)) { return 0; }
+    if(location.equals("any")) { return 0; }
     var alliance = DriverStation.getAlliance();
     if (alliance.isPresent()) {
       if (alliance.get() == DriverStation.Alliance.Red) {

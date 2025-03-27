@@ -290,8 +290,8 @@ public final class Constants {
 
     public static final double againstWallDeltaX = 0;
     // Positive offset is to the right
-    public static final double centeredReefDeltaY = 0.032;
-    public static final double laserDistanceToReef = 0.28;
+    public static final double centeredReefDeltaY = 0.013462;
+    public static final double laserDistanceToReef = 0.26;
 
     // Tag refers to the april tag positioning system
     public static final double tagDriveXP;
@@ -311,15 +311,15 @@ public final class Constants {
       {
         case COMPETITION:
           // Forwards
-          tagDriveXP = 1; //.55
+          tagDriveXP = 1; //1
           tagDriveXI = 0; 
-          tagDriveXD = 0.1;
+          tagDriveXD = 0.1; //.1
           // Side
-          tagDriveYP = 2; 
+          tagDriveYP = 2; //2
           tagDriveYI = 0.0; 
-          tagDriveYD = 0.02; 
+          tagDriveYD = 0.02; //0.02
           // Turning
-          tagTurningP = 2; //.1
+          tagTurningP = 2; //2
           tagTurningI = 0.0; 
           tagTurningD = 0.0;
           break;
@@ -362,15 +362,15 @@ public final class Constants {
     public static final double maxFullSpeedHeight = 20;
     public static final double maxHeightVelocityPercent = 0.1;
 
-    public static final double elevatorP = 3.5;
-
+    public static final double elevatorP = 1;
     public static final double elevatorI = 0;
     public static final double elevatorD = 0;
+    public static final double elevatorG = .75;
 
     public static final double leadCurrentThreshold = 25;
     public static final double followCurrentThreshold = 25;
 
-    public static final double heightTolerance = 0.2;
+    public static final double heightTolerance = 1;
   }
 
   public static class ScorerConstants {

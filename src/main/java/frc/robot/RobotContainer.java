@@ -6,12 +6,14 @@ package frc.robot;
 
 import java.util.function.BooleanSupplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -23,7 +25,6 @@ import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ScorerConstants;
-import frc.robot.commands.RotateClimber;
 import frc.robot.commands.DriveToTag;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithSpeed;
@@ -35,12 +36,15 @@ import frc.robot.commands.OperateClimberWithJoystick;
 import frc.robot.commands.OperateElevatorWithJoystick;
 import frc.robot.commands.OperateScorerWithJoystick;
 import frc.robot.commands.ResetGyro;
+import frc.robot.commands.RotateClimber;
 import frc.robot.commands.RotateScorer;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Scorer;
 import frc.robot.subsystems.Vision;
+
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -55,6 +59,8 @@ public class RobotContainer {
   private final Drive _drive = new Drive(_elevator);
   private final Scorer _scorer = new Scorer();
   private final Climb _climb = new Climb();
+
+  private final SendableChooser<Command> autoChooser;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -71,8 +77,8 @@ public class RobotContainer {
 
     // register pathplanner commands
 
-    NamedCommands.registerCommand("drive to left of tag", new DriveToTag(_drive, _vision, "LEFT", null));
-    NamedCommands.registerCommand("drive to right of tag", new DriveToTag(_drive, _vision, "RIGHT", null));
+    NamedCommands.registerCommand("drive to left tag", new DriveToTag(_drive, _vision, "LEFT", "any"));
+    NamedCommands.registerCommand("drive to right tag", new DriveToTag(_drive, _vision, "RIGHT", "any"));
 
     NamedCommands.registerCommand("drive to A", new DriveToTag(_drive, _vision, "LEFT", "ab"));
     NamedCommands.registerCommand("drive to B", new DriveToTag(_drive, _vision, "RIGHT", "ab"));
@@ -110,16 +116,16 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("intake coral", new IntakeCoralUntilIn(_scorer).withTimeout(2));
     NamedCommands.registerCommand("eject coral", new EjectCoralUntilOut(_scorer));
+
+    // auto sillies
+     autoChooser = AutoBuilder.buildAutoChooser(); 
+     SmartDashboard.putData("Auto Mode", autoChooser);
     
 
     // Button board configuration 
     configureBindings();
 
-    // smartdashboard dropdown
-    autoChooserInit();
     
-    // Smartdashboard dropdown 
-    // error because doesn't exist lol
     
     // Resetting encoders
     _drive.syncEncoders();
@@ -256,10 +262,10 @@ public class RobotContainer {
 
     m_driverController.y().onTrue(new ResetGyro(_drive));
 
-    Command driveToRightTag = new DriveToTag(_drive, _vision, "RIGHT", null);
+    Command driveToRightTag = new DriveToTag(_drive, _vision, "RIGHT", "any");
     m_driverController.rightBumper().whileTrue(driveToRightTag);
 
-    Command driveToLeftTag = new DriveToTag(_drive, _vision, "LEFT", null);
+    Command driveToLeftTag = new DriveToTag(_drive, _vision, "LEFT", "any");
     m_driverController.leftBumper().whileTrue(driveToLeftTag);
 
     // _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, m_functionController));
@@ -268,9 +274,7 @@ public class RobotContainer {
 
   public void autoChooserInit() {
     String[] autoselector = {
-      "e4, c4",
-      "g4",
-      "j4, l4"
+      "f4, d4"
     };
     SmartDashboard.putStringArray("Auto List", autoselector);
     System.out.print("Loading selections");

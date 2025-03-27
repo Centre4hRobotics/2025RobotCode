@@ -6,6 +6,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -91,8 +92,9 @@ public class Elevator extends SubsystemBase {
         _leadConfiguration.Slot0.kP = ElevatorConstants.elevatorP;
         _leadConfiguration.Slot0.kI = ElevatorConstants.elevatorI;
         _leadConfiguration.Slot0.kD = ElevatorConstants.elevatorD;
+        _leadConfiguration.Slot0.kG = ElevatorConstants.elevatorG;
 
-        _leadConfiguration.Voltage.withPeakForwardVoltage(9).withPeakReverseVoltage(-6);
+        _leadConfiguration.Voltage.withPeakForwardVoltage(12).withPeakReverseVoltage(-10);
 
         _leadMotor.getConfigurator().apply(_leadConfiguration);
     }
