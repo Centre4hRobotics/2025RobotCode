@@ -4,6 +4,7 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ClimbConstants;
 import frc.robot.subsystems.Climb;
 
 public class OperateClimberWithJoystick extends Command {
@@ -45,7 +46,7 @@ public class OperateClimberWithJoystick extends Command {
     if (input > 0.2) {
       _climb.setPosition(rotation + 3);
     } else if (input < -0.2) {
-      if(rotation - 3 < -65) {
+      if(rotation - 3 < ClimbConstants.manualSoftstop) {
         _climb.setPosition(rotation);
       } else {
         _climb.setPosition(rotation - 3);

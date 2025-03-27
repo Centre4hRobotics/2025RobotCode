@@ -17,7 +17,7 @@ public class Vision extends SubsystemBase {
     private double _rotationToTag; 
 
     private boolean _tagPresent; 
-    private String _side;
+    private String _cameraSide;
     private int _tagID;
 
     private DoubleSubscriber _posToTagXSub; // “Tag Relative Pose X”
@@ -56,7 +56,7 @@ public class Vision extends SubsystemBase {
     public Transform2d getCameraToAprilTag() {
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         NetworkTable table = inst.getTable("AprilTag Vision");
-        table.getEntry("Using Camera").setValue(_side);
+        table.getEntry("Using Camera").setValue(_cameraSide);
         table.getEntry("Tag Choice").setValue(_tagID);
         _tagPresent = _tagPresenceSub.get();
         if(_tagPresent == true) {
@@ -70,7 +70,7 @@ public class Vision extends SubsystemBase {
 
     public void setCurrentSide(String side)
     {
-        _side = side;
+        _cameraSide = side;
     }
 
     public void setCurrentTagID(int tagID)

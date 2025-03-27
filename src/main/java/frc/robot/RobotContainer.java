@@ -25,6 +25,8 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ScorerConstants;
 import frc.robot.commands.DriveToTag;
+import frc.robot.commands.DriveToTag.CameraSide;
+import frc.robot.commands.DriveToTag.ReefSide;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithSpeed;
 import frc.robot.commands.EjectCoralUntilOut;
@@ -75,22 +77,21 @@ public class RobotContainer {
   public RobotContainer() {
 
     // register pathplanner commands
+    NamedCommands.registerCommand("drive to left tag", new DriveToTag(_drive, _vision, CameraSide.LEFT, ReefSide.any));
+    NamedCommands.registerCommand("drive to right tag", new DriveToTag(_drive, _vision, CameraSide.RIGHT, ReefSide.any));
 
-    NamedCommands.registerCommand("drive to left tag", new DriveToTag(_drive, _vision, "LEFT", "any"));
-    NamedCommands.registerCommand("drive to right tag", new DriveToTag(_drive, _vision, "RIGHT", "any"));
-
-    NamedCommands.registerCommand("drive to A", new DriveToTag(_drive, _vision, "LEFT", "ab"));
-    NamedCommands.registerCommand("drive to B", new DriveToTag(_drive, _vision, "RIGHT", "ab"));
-    NamedCommands.registerCommand("drive to C", new DriveToTag(_drive, _vision, "LEFT", "cd"));
-    NamedCommands.registerCommand("drive to D", new DriveToTag(_drive, _vision, "RIGHT", "cd"));
-    NamedCommands.registerCommand("drive to E", new DriveToTag(_drive, _vision, "LEFT", "ef"));
-    NamedCommands.registerCommand("drive to F", new DriveToTag(_drive, _vision, "RIGHT", "ef"));
-    NamedCommands.registerCommand("drive to G", new DriveToTag(_drive, _vision, "LEFT", "gh"));
-    NamedCommands.registerCommand("drive to H", new DriveToTag(_drive, _vision, "RIGHT", "gh"));
-    NamedCommands.registerCommand("drive to I", new DriveToTag(_drive, _vision, "LEFT", "ij"));
-    NamedCommands.registerCommand("drive to J", new DriveToTag(_drive, _vision, "RIGHT", "ij"));
-    NamedCommands.registerCommand("drive to K", new DriveToTag(_drive, _vision, "LEFT", "kl"));
-    NamedCommands.registerCommand("drive to L", new DriveToTag(_drive, _vision, "RIGHT", "kl"));
+    NamedCommands.registerCommand("drive to A", new DriveToTag(_drive, _vision, CameraSide.LEFT, ReefSide.ab));
+    NamedCommands.registerCommand("drive to B", new DriveToTag(_drive, _vision, CameraSide.RIGHT, ReefSide.ab));
+    NamedCommands.registerCommand("drive to C", new DriveToTag(_drive, _vision, CameraSide.LEFT, ReefSide.cd));
+    NamedCommands.registerCommand("drive to D", new DriveToTag(_drive, _vision, CameraSide.RIGHT, ReefSide.cd));
+    NamedCommands.registerCommand("drive to E", new DriveToTag(_drive, _vision, CameraSide.LEFT, ReefSide.ef));
+    NamedCommands.registerCommand("drive to F", new DriveToTag(_drive, _vision, CameraSide.RIGHT, ReefSide.ef));
+    NamedCommands.registerCommand("drive to G", new DriveToTag(_drive, _vision, CameraSide.LEFT, ReefSide.gh));
+    NamedCommands.registerCommand("drive to H", new DriveToTag(_drive, _vision, CameraSide.RIGHT, ReefSide.gh));
+    NamedCommands.registerCommand("drive to I", new DriveToTag(_drive, _vision, CameraSide.LEFT, ReefSide.ij));
+    NamedCommands.registerCommand("drive to J", new DriveToTag(_drive, _vision, CameraSide.RIGHT, ReefSide.ij));
+    NamedCommands.registerCommand("drive to K", new DriveToTag(_drive, _vision, CameraSide.LEFT, ReefSide.kl));
+    NamedCommands.registerCommand("drive to L", new DriveToTag(_drive, _vision, CameraSide.RIGHT, ReefSide.kl));
 
     NamedCommands.registerCommand("drop funnel", new RotateClimber(_climb, ClimbConstants.teleOp));
 
@@ -259,10 +260,10 @@ public class RobotContainer {
 
     m_driverController.y().onTrue(new ResetGyro(_drive));
 
-    Command driveToRightTag = new DriveToTag(_drive, _vision, "RIGHT", "any");
+    Command driveToRightTag = new DriveToTag(_drive, _vision, CameraSide.RIGHT, ReefSide.any);
     m_driverController.rightBumper().whileTrue(driveToRightTag);
 
-    Command driveToLeftTag = new DriveToTag(_drive, _vision, "LEFT", "any");
+    Command driveToLeftTag = new DriveToTag(_drive, _vision, CameraSide.LEFT, ReefSide.any);
     m_driverController.leftBumper().whileTrue(driveToLeftTag);
 
     // _scorer.setDefaultCommand(new OperateScorerWithJoystick(_scorer, m_functionController));

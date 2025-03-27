@@ -18,7 +18,7 @@ public class DriveToTag extends Command {
 
   private Drive _drive;
   private Vision _vision;
-  private String _side;
+  
   private int _tagID;
 
   private double _cameraRotationToTag, _cameraDistanceToTagX, _cameraDistanceToTagY;
@@ -27,6 +27,15 @@ public class DriveToTag extends Command {
 
   private double _offsetY;
 
+  public static enum CameraSide {
+    LEFT, RIGHT
+  }
+  public static enum ReefSide { 
+    any, ab, cd, ef, gh, ij, kl 
+  }
+
+  private CameraSide _cameraSide;
+
   private PIDController _visionHeadingPID; 
   private PIDController _visionDriveXPID;
   private PIDController _visionDriveYPID;
@@ -34,14 +43,14 @@ public class DriveToTag extends Command {
   private Boolean _isFinished;
   
   /** Creates a new DriveToTag. */
-  public DriveToTag(Drive drive, Vision vision, String side, String location) {
+  public DriveToTag(Drive drive, Vision vision, CameraSide cameraSide, ReefSide reefSide) {
     _drive = drive;
     _vision = vision;
-    _side = side;
-    //_tagID = getTagID(location);
+    _cameraSide = cameraSide;
+    _tagID = getTagID(reefSide);
     _laserDistanceToTagX = -42.0;
     _offsetY = VisionConstants.centeredReefDeltaY;
-    if(_side.equals("LEFT")) {_offsetY *= -1; }
+    if(_cameraSide == CameraSide.LEFT) {_offsetY *= -1; }
 
     _visionHeadingPID = new PIDController(VisionConstants.tagTurningP, VisionConstants.tagTurningI, VisionConstants.tagTurningD);
     _visionDriveXPID = new PIDController(VisionConstants.tagDriveXP, VisionConstants.tagDriveXI, VisionConstants.tagDriveXD);
@@ -56,7 +65,7 @@ public class DriveToTag extends Command {
   public void initialize() {
     _isFinished = false;
 
-    _vision.setCurrentSide(_side);
+    _vision.setCurrentSide(_cameraSide.toString());
     _vision.setCurrentTagID(_tagID);
 
   }
@@ -130,39 +139,43 @@ public class DriveToTag extends Command {
     return _isFinished;
   }
 
-  public int getTagID(String location) {
-    if(location.equals("any")) { return 0; }
+  public int getTagID(ReefSide reefSide) {
+    if(reefSide == ReefSide.any) { return 0; }
     var alliance = DriverStation.getAlliance();
     if (alliance.isPresent()) {
       if (alliance.get() == DriverStation.Alliance.Red) {
-        switch(location) {
-          case "ab":
+        switch(reefSide) {
+          case ab:
             return 7;
-          case "cd":
+          case cd:
             return 8;
-          case "ef":
+          case ef:
             return 9;
-          case "gh":
+          case gh:
             return 10;
-          case "ij":
+          case ij:
             return 11;
-          case "kl":
+          case kl:
             return 6;
+          default:
+            break;
         }
       } else {
-        switch(location) {
-          case "ab":
+        switch(reefSide) {
+          case ab:
             return 18;
-          case "cd":
+          case cd:
             return 17;
-          case "ef":
+          case ef:
             return 22;
-          case "gh":
+          case gh:
             return 21;
-          case "ij":
+          case ij:
             return 20;
-          case "kl":
+          case kl:
             return 19;
+          default:
+            break;
       }
     }
   } return 0;
