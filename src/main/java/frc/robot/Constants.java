@@ -311,15 +311,15 @@ public final class Constants {
       {
         case COMPETITION:
           // Forwards
-          tagDriveXP = 1; //1
+          tagDriveXP = 1;
           tagDriveXI = 0; 
-          tagDriveXD = 0.1; //.1
+          tagDriveXD = 0.1;
           // Side
-          tagDriveYP = 2; //2
+          tagDriveYP = 2;
           tagDriveYI = 0.0; 
-          tagDriveYD = 0.02; //0.02
+          tagDriveYD = 0.02;
           // Turning
-          tagTurningP = 2; //2
+          tagTurningP = 2;
           tagTurningI = 0.0; 
           tagTurningD = 0.0;
           break;

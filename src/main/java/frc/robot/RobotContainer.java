@@ -4,16 +4,15 @@
 
 package frc.robot;
 
+import java.util.HashMap;
 import java.util.function.BooleanSupplier;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -60,7 +59,7 @@ public class RobotContainer {
   private final Scorer _scorer = new Scorer();
   private final Climb _climb = new Climb();
 
-  private final SendableChooser<Command> autoChooser;
+  private HashMap<String, Command> _autoMap;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -117,11 +116,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("intake coral", new IntakeCoralUntilIn(_scorer).withTimeout(2));
     NamedCommands.registerCommand("eject coral", new EjectCoralUntilOut(_scorer));
 
-    // auto sillies
-     autoChooser = AutoBuilder.buildAutoChooser(); 
-     SmartDashboard.putData("Auto Mode", autoChooser);
-    
-
     // Button board configuration 
     configureBindings();
 
@@ -176,16 +170,17 @@ public class RobotContainer {
     BooleanSupplier overrideStops = () -> buttonBoard2[3].getAsBoolean();
 
     // prep to score buttons
+    // l4
     buttonBoard1[6].onTrue(
       Commands.either(
-        // coral mode
         new RotateScorer(_scorer, ScorerConstants.rotationL2)
-            .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4))
+            .alongWith(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4))
             .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)),
         // algae mode
         new InstantCommand(),
         gamepieceMode)
     );
+    // l3
     buttonBoard1[5].onTrue(
       Commands.either(
         // coral mode
@@ -197,6 +192,7 @@ public class RobotContainer {
             .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeTop)), 
         gamepieceMode)
     );
+    // l2
     buttonBoard1[8].onTrue(
       Commands.either(
         // coral mode
@@ -207,6 +203,7 @@ public class RobotContainer {
             .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeBottom)), 
         gamepieceMode).withTimeout(7)
     );
+    // default position
     buttonBoard1[4].onTrue(
       Commands.either(
         // coral mode
@@ -274,10 +271,14 @@ public class RobotContainer {
 
   public void autoChooserInit() {
     String[] autoselector = {
-      "f4, d4"
+      "f4, d4",
+      "h4"
     };
     SmartDashboard.putStringArray("Auto List", autoselector);
     System.out.print("Loading selections");
+    for(String auto : autoselector) {
+      _autoMap.put(auto, new PathPlannerAuto(auto));
+    }
     }
 
   /**
@@ -292,7 +293,7 @@ public class RobotContainer {
       () -> _drive.freezeWheels(), _drive
     );  //The default command will be to freeze if nothing is selected
     
-    autoCommand = new PathPlannerAuto(selection);
+    autoCommand = _autoMap.get(selection);
     return autoCommand;  
   }
 }

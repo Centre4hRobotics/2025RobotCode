@@ -41,23 +41,23 @@ public class OperateElevatorWithJoystick extends Command {
   @Override
 
   public void execute() {
-    // if(!_mode.getAsBoolean()) {
-    // double input = -_joystick.getX();
-    // double height = _elevator.getSetpoint();
-    //   if(input > 0.5 && (height < ElevatorConstants.maxHeight - 0.5 || _override.getAsBoolean())) {
-    //     height += 0.5;
-    //     // if(height > ElevatorConstants.maxHeight) {
-    //     //   height = ElevatorConstants.maxHeight;
-    //     // }
-    //     _elevator.setHeight(height);
-    //   } else if(input < -0.5 && (height > 0.5 || _override.getAsBoolean())) {
-    //     height -= 0.5;
-    //     // if(height < 0) {
-    //     //   height = 0;
-    //     // }
-    //     _elevator.setHeight(height);
-    //   }
-    // }
+    if(!_mode.getAsBoolean()) {
+    double input = -_joystick.getX();
+    double height = _elevator.getSetpoint();
+      if(input > 0.5 && (height < ElevatorConstants.maxHeight - 0.5 || _override.getAsBoolean())) {
+        height += 0.5;
+        // if(height > ElevatorConstants.maxHeight) {
+        //   height = ElevatorConstants.maxHeight;
+        // }
+        _elevator.setHeight(height);
+      } else if(input < -0.5 && (height > 0.5 || _override.getAsBoolean())) {
+        height -= 0.5;
+        // if(height < 0) {
+        //   height = 0;
+        // }
+        _elevator.setHeight(height);
+      }
+    }
   }
 
   // Returns true when the command should end.

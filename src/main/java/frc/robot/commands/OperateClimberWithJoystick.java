@@ -38,7 +38,7 @@ public class OperateClimberWithJoystick extends Command {
   @Override
 
   public void execute() {
-    //if(_mode.getAsBoolean()) {
+    if(_mode.getAsBoolean()) {
       double rotation = _climb.getSetpoint();
     double input = -_joystick.getX();
 
@@ -53,7 +53,7 @@ public class OperateClimberWithJoystick extends Command {
     } else {
       _climb.setPosition(rotation);
     }
-    //}
+    }
 
   }
 
