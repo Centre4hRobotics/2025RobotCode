@@ -93,7 +93,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("drive to K", new DriveToTag(_drive, _vision, CameraSide.LEFT, ReefSide.kl));
     NamedCommands.registerCommand("drive to L", new DriveToTag(_drive, _vision, CameraSide.RIGHT, ReefSide.kl));
 
-    NamedCommands.registerCommand("drop funnel", new RotateClimber(_climb, ClimbConstants.teleOp));
+    NamedCommands.registerCommand("drop funnel", new RotateClimber(_climb, ClimbConstants.lowerFunnel)
+    .andThen(new RotateClimber(_climb, ClimbConstants.lockFunnel)));
 
     NamedCommands.registerCommand("default coral position", 
         new RotateScorer(_scorer, ScorerConstants.rotationL2).withTimeout(.5)
@@ -174,7 +175,7 @@ public class RobotContainer {
     // l4
     buttonBoard1[6].onTrue(
       Commands.either(
-        new RotateScorer(_scorer, ScorerConstants.rotationL2)
+        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault)
             .alongWith(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4))
             .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)),
         // algae mode
@@ -185,7 +186,7 @@ public class RobotContainer {
     buttonBoard1[5].onTrue(
       Commands.either(
         // coral mode
-        new RotateScorer(_scorer, ScorerConstants.rotationL2)
+        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault)
             .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL3))
             .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL3)),
         // algae mode
@@ -208,7 +209,7 @@ public class RobotContainer {
     buttonBoard1[4].onTrue(
       Commands.either(
         // coral mode
-        new RotateScorer(_scorer, ScorerConstants.rotationL2)
+        new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault)
         .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralDefault))
         .andThen(new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault)),
         // algae mode
@@ -233,7 +234,7 @@ public class RobotContainer {
       Commands.runOnce(() -> _elevator.syncEncoders(), _elevator) 
     );
 
-    buttonBoard1[3].onTrue(new RotateClimber(_climb, ClimbConstants.teleOp));
+    buttonBoard1[3].onTrue(new RotateClimber(_climb, ClimbConstants.lowerFunnel).andThen(new RotateClimber(_climb, ClimbConstants.lockFunnel)));
 
     // zero scorer rotation encoder
     buttonBoard2[1].onTrue(
