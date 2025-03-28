@@ -30,6 +30,7 @@ import frc.robot.commands.DriveToTag.ReefSide;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithSpeed;
 import frc.robot.commands.EjectCoralUntilOut;
+import frc.robot.commands.ElevatorPastHeight;
 import frc.robot.commands.ElevatorToHeight;
 import frc.robot.commands.IntakeCoralUntilIn;
 import frc.robot.commands.ManipulateGamePiece;
@@ -176,8 +177,9 @@ public class RobotContainer {
     buttonBoard1[6].onTrue(
       Commands.either(
         new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault)
-            .alongWith(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4))
-            .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)),
+            .andThen(new ElevatorPastHeight(_elevator, ElevatorConstants.heightCoralL4))
+            .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)
+            .alongWith(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4))),
         // algae mode
         new InstantCommand(),
         gamepieceMode)
@@ -231,7 +233,8 @@ public class RobotContainer {
 
     // zero elevator encoder
     buttonBoard2[2].onTrue(
-      Commands.runOnce(() -> _elevator.syncEncoders(), _elevator) 
+      Commands.runOnce(() -> _elevator.syncEncoders(), _elevator)
+      .alongWith(Commands.runOnce(() -> _climb.syncEncoder(), _climb))
     );
 
     buttonBoard1[3].onTrue(new RotateClimber(_climb, ClimbConstants.lowerFunnel).andThen(new RotateClimber(_climb, ClimbConstants.lockFunnel)));

@@ -59,6 +59,10 @@ public class Elevator extends SubsystemBase {
         return Math.abs(getHeight() - target) < ElevatorConstants.heightTolerance;
     }
 
+    public boolean isCloseToTarget(double target) {
+        return Math.abs(getHeight() - target) < ElevatorConstants.closeToHeightTolerance;
+    }
+
     public double getHeightFraction() {    
         double heightDiff = getHeight() - ElevatorConstants.maxFullSpeedHeight;
         if(heightDiff > 0) {

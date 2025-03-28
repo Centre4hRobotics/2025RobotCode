@@ -371,6 +371,7 @@ public final class Constants {
     public static final double followCurrentThreshold = 25;
 
     public static final double heightTolerance = 1;
+    public static final double closeToHeightTolerance = 10;
   }
 
   public static class ScorerConstants {

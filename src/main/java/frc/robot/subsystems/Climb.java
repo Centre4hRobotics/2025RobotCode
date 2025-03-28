@@ -42,6 +42,7 @@ public class Climb extends SubsystemBase{
 
     public void syncEncoder() {
         _climbEncoder.setPosition(0);
+        setPosition(0);
     }
 
     public double getPosition() {
