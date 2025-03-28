@@ -222,6 +222,9 @@ public class RobotContainer {
   
     buttonBoard2[7].onTrue(new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
     buttonBoard2[7].onFalse(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)));
+
+    buttonBoard2[6].onTrue(Commands.runOnce(() -> _drive.disableYawLock(), _drive));
+    buttonBoard2[6].onFalse(Commands.runOnce(() -> _drive.enableYawLock(), _drive));
     
     // BooleanSupplier noHeightPressed = () -> !(buttonBoard1[6].getAsBoolean() || buttonBoard1[5].getAsBoolean() || buttonBoard1[8].getAsBoolean());
     // Trigger noHeightPressedTrigger = new Trigger(noHeightPressed);
