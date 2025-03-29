@@ -143,7 +143,7 @@ public final class Constants {
         case COMPETITION:
           bottomLeftEncoderOffset = 6.23;
           bottomRightEncoderOffset = 3.51;
-          topLeftEncoderOffset = 2.13;
+          topLeftEncoderOffset = 2.165;
           topRightEncoderOffset = 3.14;
           inverted = InvertedValue.Clockwise_Positive;
           break;
@@ -352,11 +352,11 @@ public final class Constants {
 
     public static final double heightCoralDefault = heightCoralL1;
 
-    public static final double heightAlgaeProcessor = 20; 
+    public static final double heightAlgaeProcessor = 15; 
     public static final double heightAlgaeBottom = 42.5; 
     public static final double heightAlgaeTop = 66; 
 
-    public static final double heightAlgaeDefault = heightAlgaeProcessor;
+    public static final double heightAlgaeDefault = 20;
 
     public static final double maxHeight = 85;
     public static final double maxFullSpeedHeight = 20;
@@ -429,18 +429,18 @@ public final class Constants {
     public static final double climbingD = 0.0;
     public static final double rotationTolerance = 1;
 
-    public static final double dropFunnel = 408;
-    public static final double pushFunnel = 184;
-    public static final double prepClimb = 284;
-    public static final double climbed = -139;
-    public static final double lowerFunnel = 78;
-    public static final double lockFunnel = 57;
+    public static final double dropFunnel = 390;
+    public static final double pushFunnel = 213;
+    public static final double prepClimb = 330;
+    public static final double climbed = -118;
+    public static final double lowerFunnel = 66;
+    public static final double lockFunnel = 40;
     public static final double manualSoftstop = -200;
-
 
   }
 
   public static enum FieldSide {
     LEFT, RIGHT
   }
+
 }

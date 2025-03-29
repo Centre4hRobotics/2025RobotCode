@@ -11,7 +11,8 @@ public class OperateClimberWithJoystick extends Command {
 
   private Climb _climb;
   private Joystick _joystick;
-  private BooleanSupplier _mode;
+  private BooleanSupplier _climbMode;
+  private BooleanSupplier _overrideStops;
 
   /**
    * This command is responsible for teleop drive.
@@ -21,10 +22,10 @@ public class OperateClimberWithJoystick extends Command {
    * 
    * Comment By: EternalSyntaxError
    */
-  public OperateClimberWithJoystick(Climb climb, Joystick joystick, BooleanSupplier mode) {
+  public OperateClimberWithJoystick(Climb climb, Joystick joystick, BooleanSupplier climbMode,BooleanSupplier overrideStops) {
     _climb = climb;
     _joystick = joystick;
-    _mode = mode;
+    _climbMode = climbMode;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_climb);
@@ -39,14 +40,14 @@ public class OperateClimberWithJoystick extends Command {
   @Override
 
   public void execute() {
-    if(_mode.getAsBoolean()) {
+    if(_climbMode.getAsBoolean()) {
       double rotation = _climb.getSetpoint();
     double input = -_joystick.getX();
 
     if (input > 0.2) {
       _climb.setPosition(rotation + 3);
     } else if (input < -0.2) {
-      if(rotation - 3 < ClimbConstants.manualSoftstop) {
+      if(rotation - 3 < ClimbConstants.manualSoftstop && !_overrideStops.getAsBoolean()) {
         _climb.setPosition(rotation);
       } else {
         _climb.setPosition(rotation - 3);

@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-
 import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathCommand;
@@ -55,7 +53,7 @@ public class Drive extends SubsystemBase {
 
   private double _desiredHeading;
   private PIDController _headingPIDController;
-  private boolean _inYawLock = false;
+  private boolean _inYawLock = true;
 
   private SlewRateLimiter _slewRateLimiterX = new SlewRateLimiter(RobotConstants.maxSlewRate);
   private SlewRateLimiter _slewRateLimiterY = new SlewRateLimiter(RobotConstants.maxSlewRate);
@@ -193,12 +191,12 @@ public class Drive extends SubsystemBase {
     // in deadzone
     if (angularVelocity == 0) {
       // if not already locked (stick just released)
-      if (!_inYawLock && _yawLockEnabled) {
+      if (!_inYawLock) {
         if(Math.abs(getGyroAngularVelocity()) < .5) {
           _inYawLock = true;
           _desiredHeading = getHeading();
         }
-      } else { 
+      } else if(_yawLockEnabled){ 
         // yaw is locked
         angularVelocity = _headingPIDController.calculate(getHeading(), _desiredHeading);
         // limit angular velocity to maxRotationSpeed
@@ -232,7 +230,7 @@ public class Drive extends SubsystemBase {
    */
   public void setDesiredHeading(double heading) {
     _desiredHeading = heading; // + compensationAngle;
-    _inYawLock = _yawLockEnabled;
+    _inYawLock = true;
   }
 
   public void setHeading(double angle) {
@@ -247,7 +245,6 @@ public class Drive extends SubsystemBase {
 
   public void disableYawLock() {
     _yawLockEnabled = false;
-    _inYawLock = false;
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {
