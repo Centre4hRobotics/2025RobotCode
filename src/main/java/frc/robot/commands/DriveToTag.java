@@ -34,6 +34,8 @@ public class DriveToTag extends Command {
     any, ab, cd, ef, gh, ij, kl 
   }
 
+  private ReefSide _reefSide;
+
   private CameraSide _cameraSide;
 
   private PIDController _visionHeadingPID; 
@@ -47,8 +49,9 @@ public class DriveToTag extends Command {
     _drive = drive;
     _vision = vision;
     _cameraSide = cameraSide;
-    _tagID = getTagID(reefSide);
+    _reefSide = reefSide;
     _laserDistanceToTagX = -42.0;
+    _tagID = 0;
     _offsetY = VisionConstants.centeredReefDeltaY;
     if(_cameraSide == CameraSide.LEFT) {_offsetY *= -1; }
 
@@ -65,8 +68,11 @@ public class DriveToTag extends Command {
   public void initialize() {
     _isFinished = false;
 
+    _tagID = getTagID(_reefSide);
     _vision.setCurrentSide(_cameraSide.toString());
     _vision.setCurrentTagID(_tagID);
+
+  
 
   }
 

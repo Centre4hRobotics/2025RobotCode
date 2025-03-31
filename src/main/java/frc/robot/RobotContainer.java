@@ -113,7 +113,7 @@ public class RobotContainer {
           .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4))
           .andThen(new RotateScorer(_scorer, ScorerConstants.rotationL4)));
 
-    NamedCommands.registerCommand("elevatore to L4", 
+    NamedCommands.registerCommand("elevate to L4", 
           new RotateScorer(_scorer, ScorerConstants.rotationL2).withTimeout(.5)
             .andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL4)));
 
@@ -301,6 +301,8 @@ public class RobotContainer {
   public void autoChooserInit() {
     String[] autoselector = {
       "f4, d4",
+      "i4, k4",
+      "i4, k4, push",
       "h4"
     };
     SmartDashboard.putStringArray("Auto List", autoselector);

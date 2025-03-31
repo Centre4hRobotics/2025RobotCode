@@ -3,7 +3,10 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "characterization"
+    "center",
+    "characterization",
+    "left",
+    "right"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.5,

@@ -399,7 +399,7 @@ public final class Constants {
     public static final double scoringCurrentWithCoral = 20;
 
     public static final double numRotationsAutoBackdrive = 0.2;
-    public static final double numRotationsToEject = 5;
+    public static final double numRotationsToEject = 10;
     
     public static final double intakingCoralVoltage = 2.0;
     public static final double ejectingCoralVoltage = 2.0;
