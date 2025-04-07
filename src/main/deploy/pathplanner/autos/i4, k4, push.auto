@@ -213,6 +213,12 @@
               }
             ]
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "push to leave"
+          }
         }
       ]
     }

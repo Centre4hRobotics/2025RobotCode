@@ -120,7 +120,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("slow drive forwards", new DriveWithSpeed(_drive, 0.2));
     NamedCommands.registerCommand("slow drive backwards", new DriveWithSpeed(_drive, -0.2));
 
-    NamedCommands.registerCommand("intake coral", new IntakeCoralUntilIn(_scorer).withTimeout(2));
+    NamedCommands.registerCommand("intake coral", new IntakeCoralUntilIn(_scorer));
     NamedCommands.registerCommand("eject coral", new EjectCoralUntilOut(_scorer));
 
     // Button board configuration 
@@ -241,9 +241,6 @@ public class RobotContainer {
   
     buttonBoard2[7].onTrue(new RotateScorer(_scorer, ScorerConstants.rotationCoralDefault).andThen(new ElevatorToHeight(_elevator, ElevatorConstants.heightCoralL1)));
     buttonBoard2[7].onFalse(new ElevatorToHeight(_elevator, ElevatorConstants.heightAlgaeDefault).andThen(new RotateScorer(_scorer, ScorerConstants.rotationAlgaeDefault)));
-
-    buttonBoard2[6].onTrue(Commands.runOnce(() -> _drive.disableYawLock(), _drive));
-    buttonBoard2[6].onFalse(Commands.runOnce(() -> _drive.enableYawLock(), _drive));
     
     // BooleanSupplier noHeightPressed = () -> !(buttonBoard1[6].getAsBoolean() || buttonBoard1[5].getAsBoolean() || buttonBoard1[8].getAsBoolean());
     // Trigger noHeightPressedTrigger = new Trigger(noHeightPressed);
@@ -278,7 +275,7 @@ public class RobotContainer {
     buttonBoard1[9].whileTrue(new EjectCoralUntilOut(_scorer));
     buttonBoard1[12].whileTrue(new ManipulateGamePiece(_scorer, gamepieceMode, true, true));
 
-    buttonBoard1[1].onTrue(new RotateClimber(_climb, ClimbConstants.dropFunnel).andThen(new RotateClimber(_climb, ClimbConstants.pushFunnel)).andThen(new RotateClimber(_climb, ClimbConstants.prepClimb)));
+    buttonBoard1[1].onTrue(new RotateClimber(_climb, ClimbConstants.dropFunnel).andThen(new RotateClimber(_climb, ClimbConstants.prepClimb)));
     buttonBoard1[2].onTrue(new RotateClimber(_climb, ClimbConstants.climbed));
   
     // Syncs encoders   

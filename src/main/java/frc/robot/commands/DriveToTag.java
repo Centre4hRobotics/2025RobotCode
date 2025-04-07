@@ -52,8 +52,8 @@ public class DriveToTag extends Command {
     _reefSide = reefSide;
     _laserDistanceToTagX = -42.0;
     _tagID = 0;
-    _offsetY = VisionConstants.centeredReefDeltaY;
-    if(_cameraSide == CameraSide.LEFT) {_offsetY *= -1; }
+    if(_cameraSide == CameraSide.LEFT) {_offsetY = VisionConstants.centeredReefLEFTDeltaY; }
+    else {_offsetY = VisionConstants.centeredReefRIGHTDeltaY;}
 
     _visionHeadingPID = new PIDController(VisionConstants.tagTurningP, VisionConstants.tagTurningI, VisionConstants.tagTurningD);
     _visionDriveXPID = new PIDController(VisionConstants.tagDriveXP, VisionConstants.tagDriveXI, VisionConstants.tagDriveXD);

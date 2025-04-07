@@ -66,14 +66,12 @@ public class Drive extends SubsystemBase {
   private RobotConfig _config;
   private SwerveDriveKinematics _kinematics;
   private Elevator _elevator;
-  private boolean _yawLockEnabled;
 
   /** Creates a new DriveSubsystem. */
   public Drive(Elevator elevator) {
 
     _kinematics = RobotConstants.driveKinematics;
     _elevator = elevator;
-    _yawLockEnabled = true;
     
     try{
       _config = RobotConfig.fromGUISettings();
@@ -196,7 +194,7 @@ public class Drive extends SubsystemBase {
           _inYawLock = true;
           _desiredHeading = getHeading();
         }
-      } else if(_yawLockEnabled){ 
+      } else { 
         // yaw is locked
         angularVelocity = _headingPIDController.calculate(getHeading(), _desiredHeading);
         // limit angular velocity to maxRotationSpeed
@@ -209,7 +207,7 @@ public class Drive extends SubsystemBase {
     }
 
     if (Math.abs(xVelocity) < .02 && Math.abs(yVelocity) < .02 && Math.abs(angularVelocity) < .5) { 
-      setWheelsO();
+      setDesiredStates(0, 0, 0);
     } else {
       setDesiredStates(_slewRateLimiterX.calculate(xVelocity), _slewRateLimiterY.calculate(yVelocity), angularVelocity);
     } 
@@ -221,7 +219,6 @@ public class Drive extends SubsystemBase {
     nt.getTable("SwerveDrive").getEntry("angle difference").setValue(getGyroAngle() - _desiredHeading);
     nt.getTable("SwerveDrive").getEntry("gyro angular velocity").setValue(getGyroAngularVelocity());
     nt.getTable("SwerveDrive").getEntry("in yaw lock").setValue(_inYawLock);
-    nt.getTable("SwerveDrive").getEntry("yaw lock enabled").setValue(_yawLockEnabled);
   }
   
   /**
@@ -237,14 +234,6 @@ public class Drive extends SubsystemBase {
     Pose2d pose = new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(angle));
     this.resetOdometry(pose);
     this.setDesiredHeading(angle);
-  }
-
-  public void enableYawLock() {
-    _yawLockEnabled = true;
-  }
-
-  public void disableYawLock() {
-    _yawLockEnabled = false;
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {

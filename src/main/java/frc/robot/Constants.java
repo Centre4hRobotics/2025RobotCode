@@ -141,10 +141,10 @@ public final class Constants {
       switch (robotType)
       {
         case COMPETITION:
-          bottomLeftEncoderOffset = 6.23;
-          bottomRightEncoderOffset = 3.51;
-          topLeftEncoderOffset = 2.165;
-          topRightEncoderOffset = 3.14;
+          bottomLeftEncoderOffset = 3.092 + Math.PI; //3.095
+          bottomRightEncoderOffset = 3.501; //3.503
+          topLeftEncoderOffset = 5.283 - Math.PI; //5.282
+          topRightEncoderOffset = 3.14; //3.140
           inverted = InvertedValue.Clockwise_Positive;
           break;
         case PRACTICE:
@@ -290,7 +290,8 @@ public final class Constants {
 
     public static final double againstWallDeltaX = 0;
     // Positive offset is to the right
-    public static final double centeredReefDeltaY = 0.013462;
+    public static final double centeredReefLEFTDeltaY = -0.0;
+    public static final double centeredReefRIGHTDeltaY = 0.0; //0.027
     public static final double laserDistanceToReef = 0.26;
 
     // Tag refers to the april tag positioning system
@@ -348,7 +349,7 @@ public final class Constants {
     public static final double heightCoralL1 = 0; 
     public static final double heightCoralL2 = 18.3;
     public static final double heightCoralL3 = 43.4;
-    public static final double heightCoralL4 = 83; 
+    public static final double heightCoralL4 = 79.5; 
 
     public static final double heightCoralDefault = heightCoralL1;
 
@@ -380,7 +381,7 @@ public final class Constants {
     public static final double rotationL1 = 0; 
     public static final double rotationL2 = 4; 
     public static final double rotationL3 = 0;
-    public static final double rotationL4 = 7.3; 
+    public static final double rotationL4 = 6.8; 
 
     // algae
     public static final double rotationAlgaeProcessor = 36.5;
@@ -429,12 +430,12 @@ public final class Constants {
     public static final double climbingD = 0.0;
     public static final double rotationTolerance = 1;
 
-    public static final double dropFunnel = 390;
+    public static final double dropFunnel = 436;
     public static final double pushFunnel = 213;
     public static final double prepClimb = 330;
-    public static final double climbed = -118;
+    public static final double climbed = -73;
     public static final double lowerFunnel = 66;
-    public static final double lockFunnel = 40;
+    public static final double lockFunnel = 44;
     public static final double manualSoftstop = -200;
 
   }

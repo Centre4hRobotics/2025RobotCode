@@ -42,9 +42,9 @@ public class OperateScorerWithJoystick extends Command {
     double input = -_joystick.getY();
 
     if (input > 0.2) {
-      _scorer.setRotation(rotation + 0.1);
+      _scorer.setRotation(rotation + 0.6);
     } else if (input < -0.2 && (rotation >= 0.0 || _override.getAsBoolean())) {
-      _scorer.setRotation(rotation - 0.1);
+      _scorer.setRotation(rotation - 0.6);
     } else {
       _scorer.setRotation(rotation);
     }
