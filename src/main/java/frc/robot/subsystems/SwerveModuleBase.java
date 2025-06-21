@@ -5,18 +5,19 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import com.ctre.phoenix6.hardware.CANcoder;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 
 public abstract class SwerveModuleBase {
 
-    private AnalogEncoder _absoluteTurningEncoder;
+    private CANcoder _absoluteTurningEncoder;
     private SwerveModuleState _desiredState;
     private double _absoluteEncoderAngleOffset;
 
     private String _name;
 
     public SwerveModuleBase(int absoluteEncoderId, double absoluteEncoderAngleOffset, String name) {
-        _absoluteTurningEncoder = new AnalogEncoder(absoluteEncoderId);
+        _absoluteTurningEncoder = new CANcoder(absoluteEncoderId);
         _absoluteEncoderAngleOffset = absoluteEncoderAngleOffset;
 
         _name = name;
@@ -120,14 +121,14 @@ public abstract class SwerveModuleBase {
      * @return
      */
     public double getAbsoluteRotationPositionRotations() {
-        return _absoluteTurningEncoder.get() - (_absoluteEncoderAngleOffset / (2 * Math.PI));
+        return _absoluteTurningEncoder.getAbsolutePosition().getValueAsDouble() - (_absoluteEncoderAngleOffset / (2 * Math.PI));
     }
 
     /**
      * Get absolute rotation in radians
      */
     public double getAbsoluteRotationPositionRad() {
-        double _rotation = _absoluteTurningEncoder.get() * 2*Math.PI - _absoluteEncoderAngleOffset;
+        double _rotation = _absoluteTurningEncoder.getAbsolutePosition().getValueAsDouble() * 2*Math.PI - _absoluteEncoderAngleOffset;
         return correctAngle(_rotation);
     }
 
@@ -163,7 +164,7 @@ public abstract class SwerveModuleBase {
         _absoluteEncoderAngleOffset = absoluteEncoderAngleOffset;
     }
 
-    public AnalogEncoder getAbsoluteTurningEncoder() {
+    public CANcoder getAbsoluteTurningEncoder() {
         return _absoluteTurningEncoder;
     }
 

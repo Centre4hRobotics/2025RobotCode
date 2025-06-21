@@ -141,18 +141,18 @@ public final class Constants {
       switch (robotType)
       {
         case COMPETITION:
-          bottomLeftEncoderOffset = 3.092 + Math.PI; //3.095
-          bottomRightEncoderOffset = 3.501; //3.503
-          topLeftEncoderOffset = 5.283 - Math.PI; //5.282
-          topRightEncoderOffset = 3.14; //3.140
+          bottomLeftEncoderOffset = 0.0; //3.095
+          bottomRightEncoderOffset = 0.0; //3.503
+          topLeftEncoderOffset = 0.0; //5.282
+          topRightEncoderOffset = 0.0; //3.140
           inverted = InvertedValue.Clockwise_Positive;
           break;
         case PRACTICE:
         default:
-          topLeftEncoderOffset = 4.338;
-          topRightEncoderOffset = 2.928;
-          bottomLeftEncoderOffset = 4.988;
-          bottomRightEncoderOffset = 5.859;
+          topLeftEncoderOffset = 0.0;
+          topRightEncoderOffset = 0.0;
+          bottomLeftEncoderOffset = 0.0;
+          bottomRightEncoderOffset = 0.0;
           inverted = InvertedValue.CounterClockwise_Positive;
           break;
       }
@@ -160,10 +160,10 @@ public final class Constants {
 
     public static KrakenSwerveModule[] getSwerveModules() {
       return new KrakenSwerveModule[] {
-        new KrakenSwerveModule(3, 4, 0, topLeftEncoderOffset, "top left"), 
-        new KrakenSwerveModule(5, 6, 1, topRightEncoderOffset, "top right"),
-        new KrakenSwerveModule(1, 2, 2, bottomLeftEncoderOffset, "bottom left"),
-        new KrakenSwerveModule(7, 8, 3, bottomRightEncoderOffset, "bottom right")
+        new KrakenSwerveModule(3, 4, 51, topLeftEncoderOffset, "top left"), 
+        new KrakenSwerveModule(5, 6, 52, topRightEncoderOffset, "top right"),
+        new KrakenSwerveModule(1, 2, 53, bottomLeftEncoderOffset, "bottom left"),
+        new KrakenSwerveModule(7, 8, 54, bottomRightEncoderOffset, "bottom right")
       };
     }
 
